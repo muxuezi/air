@@ -4,7 +4,13 @@ title: About Me
 permalink: /about/
 ---
 
-This is where you put the contents of your *About* page. Like all your pages, it's in [Markdown](https://guides.github.com/features/mastering-markdown/) format.
+# 个人介绍
+
+奶爸，Pythonista一枚，数据从业者（爬虫、ETL、EDA、Web）
+
+# 兴趣爱好
+
+热爱生活，喜欢翻译，擅长看文档
 
 This website is powered by **[fastpages](https://github.com/fastai/fastpages)** [^1].
 
