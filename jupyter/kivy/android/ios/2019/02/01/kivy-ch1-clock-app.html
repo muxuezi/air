@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>时钟app | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="时钟app" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="一个仿iOS和Android内置时钟应用的app" />
+<meta property="og:description" content="一个仿iOS和Android内置时钟应用的app" />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/02/01/kivy-ch1-clock-app.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/02/01/kivy-ch1-clock-app.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/1.1clockapp.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-02-01T00:00:00-06:00" />
+<script type="application/ld+json">
+{"description":"一个仿iOS和Android内置时钟应用的app","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/02/01/kivy-ch1-clock-app.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/02/01/kivy-ch1-clock-app.html","headline":"时钟app","dateModified":"2019-02-01T00:00:00-06:00","datePublished":"2019-02-01T00:00:00-06:00","image":"https://asyncfor.com/kbpic/1.1clockapp.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>时钟app | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="时钟app" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="一个仿iOS和Android内置时钟应用的app" />
+<meta property="og:description" content="一个仿iOS和Android内置时钟应用的app" />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/02/01/kivy-ch1-clock-app.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/02/01/kivy-ch1-clock-app.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/1.1clockapp.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-02-01T00:00:00-06:00" />
+<script type="application/ld+json">
+{"description":"一个仿iOS和Android内置时钟应用的app","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/02/01/kivy-ch1-clock-app.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/02/01/kivy-ch1-clock-app.html","headline":"时钟app","dateModified":"2019-02-01T00:00:00-06:00","datePublished":"2019-02-01T00:00:00-06:00","image":"https://asyncfor.com/kbpic/1.1clockapp.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">时钟app</h1><p class="page-description">一个仿iOS和Android内置时钟应用的app</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2019-02-01T00:00:00-06:00" itemprop="datePublished">
+        Feb 1, 2019
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      3 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#jupyter">jupyter</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Kivy">Kivy</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Android">Android</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#iOS">iOS</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/muxuezi/air/tree/master/_notebooks/2019-02-01-kivy-ch1-clock-app.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/muxuezi/air/master?filepath=_notebooks%2F2019-02-01-kivy-ch1-clock-app.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/muxuezi/air/blob/master/_notebooks/2019-02-01-kivy-ch1-clock-app.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#起点">起点 </a></li>
+<li class="toc-entry toc-h2"><a href="#新UI">新UI </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#设计灵感">设计灵感 </a></li>
+<li class="toc-entry toc-h3"><a href="#加载自定义字体">加载自定义字体 </a></li>
+<li class="toc-entry toc-h3"><a href="#字体格式">字体格式 </a></li>
+<li class="toc-entry toc-h3"><a href="#改变背景色">改变背景色 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#显示时间">显示时间 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#更新屏幕上的时间">更新屏幕上的时间 </a></li>
+<li class="toc-entry toc-h3"><a href="#用属性绑定部件">用属性绑定部件 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#布局基础">布局基础 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#完成布局">完成布局 </a></li>
+<li class="toc-entry toc-h3"><a href="#减少重复">减少重复 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#命名类">命名类 </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#按钮样式">按钮样式 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#9-patch-scaling">9-patch scaling </a></li>
+<li class="toc-entry toc-h3"><a href="#使用9-patch图">使用9-patch图 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#计时功能">计时功能 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#秒表时间格式">秒表时间格式 </a></li>
+<li class="toc-entry toc-h3"><a href="#计算时间">计算时间 </a></li>
+<li class="toc-entry toc-h3"><a href="#实现秒表">实现秒表 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#秒表控件">秒表控件 </a></li>
+<li class="toc-entry toc-h2"><a href="#总结">总结 </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2019-02-01-kivy-ch1-clock-app.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>一个仿iOS和Android内置时钟应用的app。分两部分：</p>
+<ol>
+<li>个没有交互的数字时钟，简述Kivy的事件驱动(event-driven)方法，引入计时器的功能，持续更新。</li>
+<li>交互的秒表功能，设计流畅的自适应布局。</li>
+</ol>
+<!-- TEASER_END-->
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>学习大纲：</p>
+<ul>
+<li>Kivy语言基础，DSL(domain-specific language)处理部件(widgets)</li>
+<li>Kivy布局方式</li>
+<li>自定义字体和文字样式</li>
+<li>事件管理</li>
+</ul>
+<p>app最终效果如下，只要60行代码，Python代码和kv代码各一半。</p>
+<p><img src="/images/copied_from_nb/kbpic/1.1clockapp.png" alt="clockapp" title="clockapp"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="起点">
+<a class="anchor" href="#%E8%B5%B7%E7%82%B9" aria-hidden="true"><span class="octicon octicon-link"></span></a>起点<a class="anchor-link" href="#%E8%B5%B7%E7%82%B9"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>将kivy的<code>helloworld</code>稍作修改。增加一个布局容器(layout container)，<code>BoxLayout</code>，后面可增加更多部件。</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># %load ../0_Hello/main.py</span>
+<span class="kn">from</span> <span class="nn">kivy.app</span> <span class="kn">import</span> <span class="n">App</span>
+
+
+<span class="k">class</span> <span class="nc">ClockApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">ClockApp</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="c1"># clock.kv</span>
+<span class="nt">BoxLayout</span><span class="p">:</span>
+    <span class="nt">orientation</span><span class="p">:</span> <span class="s">'vertical'</span>
+
+    <span class="nt">Label</span><span class="p">:</span>
+        <span class="nt">text</span><span class="p">:</span> <span class="s">'00:00:00'</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>BoxLayout</code>容器可以包含多个子部件，水平或垂直堆放。由于<code>kv</code>只有一个子部件，<code>BoxLayout</code>就会让它充满所有空间。</p>
+<blockquote>
+<p>当运行<code>main.py</code>文件时，Kivy自动调用<code>clock.kv</code>。类名是<code>ClockApp</code>，<code>.kv</code>文件名就是<code>clock</code>，类名小写并去掉<code>App</code>。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="新UI">
+<a class="anchor" href="#%E6%96%B0UI" aria-hidden="true"><span class="octicon octicon-link"></span></a>新UI<a class="anchor-link" href="#%E6%96%B0UI"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>扁平化设计模式(flat design paradigm)如日中天，覆盖Web，移动，桌面应用领域，兴起于iOS7和Win8。互联网公司也追随，于Google I/O 2014出Material design，其他HTML5框架，如Bootstrap亦如是。</p>
+<p>扁平化设计强调内容胜于外观，忽略逼真图片的阴影和细致的质地，支持纯色和简单几何图形。强调比学院派的仿真设计（skeuomorphic design）更简单的程序化创造，前者倾向于丰富视觉效果和艺术感。</p>
+<blockquote>
+<p>仿真主义是用户界面设计的主流方法。认为应用程序属于真实世界的一部分，比如一个带按钮的计算器app应该被做成廉价的、物质的计算器的感觉，有助于提升用户体验（得看是谁用）。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>如今，放弃视觉细节而转向简单、流线型界面仿佛是共识。另一方面，仅靠一堆彩色框框就想做成惊世骇俗的作品很有难度。扁平化设计成了文字排版好的代名词原因就是文字成了UI设计中重要的部分，所有我们要让文字好看。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="设计灵感">
+<a class="anchor" href="#%E8%AE%BE%E8%AE%A1%E7%81%B5%E6%84%9F" aria-hidden="true"><span class="octicon octicon-link"></span></a>设计灵感<a class="anchor-link" href="#%E8%AE%BE%E8%AE%A1%E7%81%B5%E6%84%9F"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>模仿Android 4.1 Jelly Bean的时钟设计。字体是Google的<a href="http://www.fontsquirrel.com/fonts/roboto">Roboto</a>字体，取代了Android 4.0 Ice Cream Sandwich的Droid字体。</p>
+<p><img src="/images/copied_from_nb/kbpic/1.2android4.1clockUI.png" alt="clockui" title="clockui"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="加载自定义字体">
+<a class="anchor" href="#%E5%8A%A0%E8%BD%BD%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E4%BD%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>加载自定义字体<a class="anchor-link" href="#%E5%8A%A0%E8%BD%BD%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E4%BD%93"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Kivy默认是Droid Sans字体，通过<code>font_name</code>属性可设置自定义字体。这里只有一种字体，可以直接将<code>.ttf</code>文件名放上。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="c1"># clock.kv</span>
+<span class="nt">Label</span><span class="p">:</span>
+    <span class="nt">font_name</span><span class="p">:</span> <span class="s">'Loster.ttf'</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>但是我们要好几种字体，一个属性就不够了。因为不同字体都是单个文件，而属性只能跟一个文件名。涉及多种字体可以用<code>LabelBase.register</code>方法可以接受多种字体，如下所示：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">LabelBase</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"Roboto"</span><span class="p">,</span>
+    <span class="n">fn_regular</span><span class="o">=</span><span class="s2">"Roboto-Regular.ttf"</span><span class="p">,</span>
+    <span class="n">fn_bold</span><span class="o">=</span><span class="s2">"Roboto-Bold.ttf"</span><span class="p">,</span>
+    <span class="n">fn_italic</span><span class="o">=</span><span class="s2">"Roboto-Italic.ttf"</span><span class="p">,</span>
+    <span class="n">fn_bolditalic</span><span class="o">=</span><span class="s2">"Roboto-BoldItalic.ttf"</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>改进之后，一个部件的<code>font_name</code>属性可设置多种自定义字体了。但这种方法有两个限制：</p>
+<ol>
+<li>kivy只接受TrueType的<code>.ttf</code>字体。如果是OpenType的<code>.otf</code>或者网页字体如<code>.woff</code>，得先<a href="http://fontforge.org/">转换</a>。</li>
+<li>字体normal，italic，bold，bold italic四种样式有最大值。旧字体没问题，如Droid Sans。但是新字体都有4到20多种样式，其高度和其他特征也不同。Roboto至少有12种样式。</li>
+</ol>
+<p>第二点迫使我们选择app字体时要把12种样式全放进去，这么做会增大app的体积，Roboto字体有1.7M。</p>
+<p>本例中我们只要两种样式：浅色(<code>Roboto-Thin.ttf</code>)和加粗(<code>Roboto-Medium.ttf</code>)</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.core.text</span> <span class="kn">import</span> <span class="n">LabelBase</span>
+
+<span class="n">LabelBase</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"Roboto"</span><span class="p">,</span> <span class="n">fn_regular</span><span class="o">=</span><span class="s2">"Roboto-Thin.ttf"</span><span class="p">,</span> <span class="n">fn_bold</span><span class="o">=</span><span class="s2">"Roboto-Medium.ttf"</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面我们来使用字体，放到<code>Label</code>后面即可。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="highlight"><pre><span></span><span class="c1"># clock.kv</span>
+<span class="nt">Label</span><span class="p">:</span>
+    <span class="nt">text</span><span class="p">:</span> <span class="s">'00:00:00'</span>
+    <span class="nt">font_name</span><span class="p">:</span> <span class="s">'Roboto'</span>
+    <span class="nt">font_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">60</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="字体格式">
+<a class="anchor" href="#%E5%AD%97%E4%BD%93%E6%A0%BC%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>字体格式<a class="anchor-link" href="#%E5%AD%97%E4%BD%93%E6%A0%BC%E5%BC%8F"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>markup语言毋庸置疑HTML。Kivy实现了另外一种BBCode的markup语言，用[]作标签。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">BBCode tag</th>
+<th style="text-align:center">Effect on text</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">[b]...[/b]</td>
+<td style="text-align:center"><strong>Effect on text</strong></td>
+</tr>
+<tr>
+<td style="text-align:center">[i]...[/i]</td>
+<td style="text-align:center"><em>Italic</em></td>
+</tr>
+<tr>
+<td style="text-align:center">[font=Lobster]...[/font]</td>
+<td style="text-align:center">Change font</td>
+</tr>
+<tr>
+<td style="text-align:center">[color=#FF0000]...[/color]</td>
+<td style="text-align:center">Set color with CSS-like syntax</td>
+</tr>
+<tr>
+<td style="text-align:center">[sub]...[/sub]</td>
+<td style="text-align:center">Subscript (text below the line)</td>
+</tr>
+<tr>
+<td style="text-align:center">[sup]...[/sup]</td>
+<td style="text-align:center">Superscript (text above the line)</td>
+</tr>
+<tr>
+<td style="text-align:center">[ref=name]...[/ref]</td>
+<td style="text-align:center">Clickable zone, <code>&lt;a href="..."&gt;</code> in HTML</td>
+</tr>
+<tr>
+<td style="text-align:center">[anchor=name]</td>
+<td style="text-align:center">Named location, <code>&lt;a name="..."&gt;</code> in HTML</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>由于Kivy发展很快，以上内容绝非最终版本，详情查阅<a href="http://kivy.org">kivy文档</a>。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>再看看图2，我们要实现小时数字加粗的效果就easy了。</p>
+<div class="highlight"><pre><span></span><span class="c1"># clock.kv</span>
+<span class="nt">Label</span><span class="p">:</span>
+    <span class="nt">text</span><span class="p">:</span> <span class="s">'[b]00[/b]:00:00'</span>
+    <span class="nt">markup</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+<p>Kivy的BBCode需要将markup属性设置为True。</p>
+<blockquote>
+<p>如果要整行加粗，可以直接设bold属性为True。其他斜体、颜色、字体、大小同理。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="改变背景色">
+<a class="anchor" href="#%E6%94%B9%E5%8F%98%E8%83%8C%E6%99%AF%E8%89%B2" aria-hidden="true"><span class="octicon octicon-link"></span></a>改变背景色<a class="anchor-link" href="#%E6%94%B9%E5%8F%98%E8%83%8C%E6%99%AF%E8%89%B2"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面我们来调整窗口背景色，是<code>Window</code>对象的一个属性。可以在<code>__name__ == '__main__'</code>后面增加代码：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.core.window</span> <span class="kn">import</span> <span class="n">Window</span>
+<span class="kn">from</span> <span class="nn">kivy.utils</span> <span class="kn">import</span> <span class="n">get_color_from_hex</span>
+
+<span class="n">Window</span><span class="o">.</span><span class="n">clearcolor</span> <span class="o">=</span> <span class="n">get_color_from_hex</span><span class="p">(</span><span class="s2">"#101216"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>函数<code>get_color_from_hex</code>允许使用<a href="https://%0Adeveloper.mozilla.org/en-US/docs/Web/Guide/CSS/Getting_started/Color">CSS的RGB颜色值(<code>#RRGGBB</code>)</a>，也可以用其他函数。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="显示时间">
+<a class="anchor" href="#%E6%98%BE%E7%A4%BA%E6%97%B6%E9%97%B4" aria-hidden="true"><span class="octicon octicon-link"></span></a>显示时间<a class="anchor-link" href="#%E6%98%BE%E7%A4%BA%E6%97%B6%E9%97%B4"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>大多数UI框架都是事件驱动，Kivy也不例外。这种方式相比通常的程序更简单——事件驱动的代码需要不断返回到主循环（<code>main loop</code>）；但是，这么做不能处理用户行为（点击鼠标，改变窗口），而且界面会冻结（<code>freeze</code>），Windows经常这样<code>程序停止响应</code>。</p>
+<p>总之，不能在程序里面加无限循环实现。</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Don't do this</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">update_time</span><span class="p">()</span>  <span class="c1"># some function that displays time</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>理论上可行，但UI实际会失去相应，直到系统或用户关闭进程才结束。记住Kivy内部一直运行主循环，我们可以通过事件与计算器来利用它。</p>
+<p>事件驱动还意味着我们需要对不同事件作出响应，可能是用户输入，网络行为，或超时等等。</p>
+<p>很多程序监听共同事件之一就是<code>App.on_start</code>，定义在类里面，在app初始化的时候调用。另一个常见的是<code>on_press</code>，当用户点击，tap，或其他按钮操作时启用。</p>
+<p>通过时间和计时器，我们就可以用Kivy自带的Clock类实现想要的功能。两个方法：</p>
+<ul>
+<li>
+<code>Clock.schedule_once</code>：在一段时间后运行一次</li>
+<li>
+<code>Clock.schedule_interval</code>：周期性的运行</li>
+</ul>
+<blockquote>
+<p>和JavaScript中的<code>window.setTimeout</code>和<code>window.setInterval</code>类似。其实Kivy和JS很像，即使API完全不同。</p>
+</blockquote>
+<p><code>Clock</code>所有的计时事件都是Kivy主循环的一部分。这种方法与线程不同，这样调用一个阻塞函数可能会阻止其他事件被及时唤醒。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="更新屏幕上的时间">
+<a class="anchor" href="#%E6%9B%B4%E6%96%B0%E5%B1%8F%E5%B9%95%E4%B8%8A%E7%9A%84%E6%97%B6%E9%97%B4" aria-hidden="true"><span class="octicon octicon-link"></span></a>更新屏幕上的时间<a class="anchor-link" href="#%E6%9B%B4%E6%96%B0%E5%B1%8F%E5%B9%95%E4%B8%8A%E7%9A%84%E6%97%B6%E9%97%B4"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>要接入显示时间的<code>Label</code>部件，需要给它一个<code>id</code>，通过<code>id</code>属性来获取部件，这和Web开发类似。</p>
+<div class="highlight"><pre><span></span><span class="c1"># clock.kv</span>
+<span class="nt">Label</span><span class="p">:</span>
+    <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">time</span>
+</pre></div>
+<p>之后就可以通过<code>root.ids.time</code>来接入<code>Label</code>部件了。这里<code>root</code>就是<code>BoxLayout</code>。</p>
+<p>给<code>ClockApp</code>类增加一个<code>update_time</code>方法来更新时间：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">update_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">strftime</span><span class="p">(</span><span class="s2">"[b]%H[/b]:%M:%S"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>再增加一个调度功能，让程序更新后每秒更新一次：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">Clock</span><span class="o">.</span><span class="n">schedule_interval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_time</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>运行程序看看是不是开始更新了。代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># %load main.py</span>
+<span class="kn">from</span> <span class="nn">kivy.app</span> <span class="kn">import</span> <span class="n">App</span>
+<span class="kn">from</span> <span class="nn">kivy.clock</span> <span class="kn">import</span> <span class="n">Clock</span>
+<span class="kn">from</span> <span class="nn">kivy.core.window</span> <span class="kn">import</span> <span class="n">Window</span>
+<span class="kn">from</span> <span class="nn">kivy.utils</span> <span class="kn">import</span> <span class="n">get_color_from_hex</span>
+
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">strftime</span>
+
+
+<span class="k">class</span> <span class="nc">ClockApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">strftime</span><span class="p">(</span><span class="s2">"[b]%H[/b]:%M:%S"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Clock</span><span class="o">.</span><span class="n">schedule_interval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_time</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+
+    <span class="n">Window</span><span class="o">.</span><span class="n">clearcolor</span> <span class="o">=</span> <span class="n">get_color_from_hex</span><span class="p">(</span><span class="s2">"#301216"</span><span class="p">)</span>
+    <span class="n">ClockApp</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>看看python的<code>time</code>标准库<code>strftime</code>函数是如何与Kivy的BBCode组合成C语言字符串的。</p>
+<div class="highlight"><pre><span></span><span class="c1"># %load clock.kv</span>
+<span class="nt">BoxLayout</span><span class="p">:</span>
+    <span class="nt">orientation</span><span class="p">:</span> <span class="s">'vertical'</span>
+
+    <span class="nt">Label</span><span class="p">:</span>
+        <span class="nt">text</span><span class="p">:</span> <span class="s">'[b]00[/b]:00:00'</span>
+        <span class="nt">markup</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+        <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">time</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="用属性绑定部件">
+<a class="anchor" href="#%E7%94%A8%E5%B1%9E%E6%80%A7%E7%BB%91%E5%AE%9A%E9%83%A8%E4%BB%B6" aria-hidden="true"><span class="octicon octicon-link"></span></a>用属性绑定部件<a class="anchor-link" href="#%E7%94%A8%E5%B1%9E%E6%80%A7%E7%BB%91%E5%AE%9A%E9%83%A8%E4%BB%B6"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>除了ID绑定部件，还可以新建一个属性，在kv文件中进行绑定。这么做更符合DRY原则，只是多几行代码。如下所示：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># In main.py</span>
+<span class="kn">from</span> <span class="nn">kivy.properties</span> <span class="kn">import</span> <span class="n">ObjectProperty</span>
+<span class="kn">from</span> <span class="nn">kivy.uix.boxlayout</span> <span class="kn">import</span> <span class="n">BoxLayout</span>
+
+
+<span class="k">class</span> <span class="nc">ClockLayout</span><span class="p">(</span><span class="n">BoxLayout</span><span class="p">):</span>
+    <span class="n">time_prop</span> <span class="o">=</span> <span class="n">ObjectProperty</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们在这段代码用<code>BoxLayout</code>写了个新root部件类，它有一个自定义属性<code>time_prop</code>，将连接<code>Label</code>部件。</p>
+<p>在<code>clock.kv</code>文件里，我们把属性绑定<code>id</code>，自定义属性和默认属性语法一致：</p>
+<div class="highlight"><pre><span></span><span class="c1"># %load clock.kv</span>
+<span class="nt">ClockLayout</span><span class="p">:</span>
+    <span class="nt">time_prop</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">time</span>
+
+    <span class="nt">Label</span><span class="p">:</span>
+        <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">time</span>
+</pre></div>
+<p>这样，Python代码不需要知道<code>id</code>就可以连接<code>Label</code>部件，用新属性<code>root.time_prop.text = "demo"</code>。</p>
+<p>这样做使代码的可移植性更好，消除了反射（refactor）时Python代码同步的问题。靠属性还是<code>root.ids</code>去连接Python代码这事儿，只是代码风格问题，不重要。后面还会介绍其他Kivy属性的用法，让数据绑定更容易。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="布局基础">
+<a class="anchor" href="#%E5%B8%83%E5%B1%80%E5%9F%BA%E7%A1%80" aria-hidden="true"><span class="octicon octicon-link"></span></a>布局基础<a class="anchor-link" href="#%E5%B8%83%E5%B1%80%E5%9F%BA%E7%A1%80"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Kivy提供了一堆<code>Layout</code>类来布局。<code>Layout</code>又是<code>Widget</code>类的子类，是个容器类。每个布局都是影响其子类位置和尺寸。</p>
+<p>在这个app中，我们的UI很直接，不需要什么神奇，如下所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/1.3layout.png" alt="layout" title="layout"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>做这种界面就要<code>BoxLayout</code>，一种一维网格。在<code>clock.kv</code>里面已经有<code>BoxLayout</code>了，只有一个子部件。Kivy的布局默认充满屏幕，所以自动适应屏幕。</p>
+<p>如果增加一个<code>Layout</code>，就会分一半屏幕，<code>vertical</code>和<code>horizontal</code>决定分割的方向。</p>
+<p>我们这里就用<code>vertical</code>分三块，然后中间那块用<code>horizontal</code>分两块，Esay吧。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="完成布局">
+<a class="anchor" href="#%E5%AE%8C%E6%88%90%E5%B8%83%E5%B1%80" aria-hidden="true"><span class="octicon octicon-link"></span></a>完成布局<a class="anchor-link" href="#%E5%AE%8C%E6%88%90%E5%B8%83%E5%B1%80"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>由于中间这块是按钮，不应该比时间还大，可以增加一个<code>height</code>属性，然后设置<code>size_hint</code>属性为<code>None</code>。<code>size_hint</code>属性是一个元组<code>(宽, 高)</code>，影响部件的宽和高。如果你想用绝对高度和宽度，就要设置<code>size_hint</code>属性为<code>None</code>，否则高度和宽度设置无效，部件会自动计算尺寸。代码如下：</p>
+<div class="highlight"><pre><span></span><span class="c1"># %load clock.kv</span>
+<span class="nt">BoxLayout</span><span class="p">:</span>
+    <span class="nt">orientation</span><span class="p">:</span> <span class="s">'vertical'</span>
+    <span class="nt">Label</span><span class="p">:</span>
+        <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">time</span>
+        <span class="nt">text</span><span class="p">:</span> <span class="s">'[b]00[/b]:00:00'</span>
+        <span class="nt">font_name</span><span class="p">:</span> <span class="s">'Roboto'</span>
+        <span class="nt">font_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">60</span>
+        <span class="nt">markup</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+    <span class="nt">BoxLayout</span><span class="p">:</span>
+        <span class="nt">height</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">90</span>
+        <span class="nt">orientation</span><span class="p">:</span> <span class="s">'horizontal'</span>
+        <span class="nt">padding</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">20</span>
+        <span class="nt">spacing</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">20</span>
+        <span class="nt">size_hint</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(1, None)</span>
+        <span class="nt">Button</span><span class="p">:</span>
+            <span class="nt">text</span><span class="p">:</span> <span class="s">'Start'</span>
+            <span class="nt">font_name</span><span class="p">:</span> <span class="s">'Roboto'</span>
+            <span class="nt">font_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">25</span>
+            <span class="nt">bold</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+        <span class="nt">Button</span><span class="p">:</span>
+            <span class="nt">text</span><span class="p">:</span> <span class="s">'Reset'</span>
+            <span class="nt">font_name</span><span class="p">:</span> <span class="s">'Roboto'</span>
+            <span class="nt">font_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">25</span>
+            <span class="nt">bold</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+    <span class="nt">Label</span><span class="p">:</span>
+        <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">stopwatch</span>
+        <span class="nt">text</span><span class="p">:</span> <span class="s">'00:00.[size=40]00[/size]'</span>
+        <span class="nt">font_name</span><span class="p">:</span> <span class="s">'Roboto'</span>
+        <span class="nt">font_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">60</span>
+        <span class="nt">markup</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+<p>运行代码，会发现按钮没有完全填充<code>BoxLayout</code>，因为用了<code>padding</code>和<code>spacing</code>属性，与CSS类似。<code>main.py</code>代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># %load main.py</span>
+<span class="kn">from</span> <span class="nn">kivy.app</span> <span class="kn">import</span> <span class="n">App</span>
+<span class="kn">from</span> <span class="nn">kivy.clock</span> <span class="kn">import</span> <span class="n">Clock</span>
+<span class="kn">from</span> <span class="nn">kivy.core.window</span> <span class="kn">import</span> <span class="n">Window</span>
+<span class="kn">from</span> <span class="nn">kivy.utils</span> <span class="kn">import</span> <span class="n">get_color_from_hex</span>
+<span class="kn">from</span> <span class="nn">kivy.core.text</span> <span class="kn">import</span> <span class="n">LabelBase</span>
+
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">strftime</span>
+
+<span class="n">LabelBase</span><span class="o">.</span><span class="n">register</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"Roboto"</span><span class="p">,</span> <span class="n">fn_regular</span><span class="o">=</span><span class="s2">"Roboto-Thin.ttf"</span><span class="p">,</span> <span class="n">fn_bold</span><span class="o">=</span><span class="s2">"Roboto-Medium.ttf"</span>
+<span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">ClockApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">strftime</span><span class="p">(</span><span class="s2">"[b]%H[/b]:%M:%S"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Clock</span><span class="o">.</span><span class="n">schedule_interval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_time</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+
+    <span class="n">Window</span><span class="o">.</span><span class="n">clearcolor</span> <span class="o">=</span> <span class="n">get_color_from_hex</span><span class="p">(</span><span class="s2">"#123456"</span><span class="p">)</span>
+    <span class="n">ClockApp</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="减少重复">
+<a class="anchor" href="#%E5%87%8F%E5%B0%91%E9%87%8D%E5%A4%8D" aria-hidden="true"><span class="octicon octicon-link"></span></a>减少重复<a class="anchor-link" href="#%E5%87%8F%E5%B0%91%E9%87%8D%E5%A4%8D"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>之前的kv代码一堆重复，其实可以借助CSS的方法是代码更精炼，更DRY。在<code>BoxLayout</code>外面增加一个新定义：</p>
+<div class="highlight"><pre><span></span><span class="c1"># %load clock.kv</span>
+<span class="nt">&lt;Label&gt;</span><span class="p">:</span>
+    <span class="nt">font_name</span><span class="p">:</span> <span class="s">'Roboto'</span>
+    <span class="nt">font_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">60</span>
+    <span class="nt">markup</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+<p>这是一个类，与CSS的selector类似。每个<code>Label</code>都会带<code>&lt;Label&gt;</code>类特性。</p>
+<p>这样就可以把<code>clock.kv</code>里面每个<code>Label</code>的<code>font_name</code>，<code>font_size</code>和<code>markup</code>属性都删掉了。如果想改变一个属性的值，就直接写上，会覆盖原来的值，与CSS完全一样。</p>
+<blockquote>
+<p>定义类并没有创造一个新部件，只是一个属性集合。增加一个定义类，如果不使用就不会改变app的布局。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="命名类">
+<a class="anchor" href="#%E5%91%BD%E5%90%8D%E7%B1%BB" aria-hidden="true"><span class="octicon octicon-link"></span></a>命名类<a class="anchor-link" href="#%E5%91%BD%E5%90%8D%E7%B1%BB"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>前面kv代码里类的处理有点问题，类只能有一个名字叫<code>Label</code>。当我们要为同一种部件加不同的属性定义类时，可以自定义类。如果直接改写<code>Label</code>和<code>Button</code>这些标准类，之后再用到通过类部件时改前改后一堆麻烦。所幸，命名类可以解决这一问题，<code>RobotoButton</code>是一种<code>Button</code>：</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;RobotoButton@Button&gt;</span><span class="p">:</span>
+    <span class="nt">font_name</span><span class="p">:</span> <span class="s">'Roboto'</span>
+    <span class="nt">font_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">25</span>
+    <span class="nt">bold</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+<p><code>@</code>前面是新类的名称，后面是部件类型，本质是面向对象的子类<code>class RobotoButton(Button)</code>，在kv代码里使用时，可以直接用命名类代替原来的<code>Button</code>类：</p>
+<div class="highlight"><pre><span></span><span class="nt">RobotoButton</span><span class="p">:</span>
+    <span class="nt">text</span><span class="p">:</span> <span class="s">'Start'</span>
+</pre></div>
+<p>命名类可以精简代码，而且可以改良部件。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="按钮样式">
+<a class="anchor" href="#%E6%8C%89%E9%92%AE%E6%A0%B7%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>按钮样式<a class="anchor-link" href="#%E6%8C%89%E9%92%AE%E6%A0%B7%E5%BC%8F"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>UI设计的死角是可点击元素，像按钮之类，没有一个统一样式。Win8的Metro风格十分激进，点击部分完全是纯色矩形，很小甚至基本没图案。Apple使用弧度；还有一种使用圆角的趋势，尤其在CSS3风格里。轻微的阴影也开始使用。</p>
+<p>Kivy在这方面很灵活，不强制任何一种风格，而且提供一堆特性帮你实现任意风格。其中之一就是9-patch缩放功能。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="9-patch-scaling">
+<a class="anchor" href="#9-patch-scaling" aria-hidden="true"><span class="octicon octicon-link"></span></a>9-patch scaling<a class="anchor-link" href="#9-patch-scaling"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>传统UI开发中，如果背景的大小不一样，一般需要为每种大小都制作一张图片，这在button中尤为明显。当然我们也可以一小块一小块水平重复的画，也可以垂直的话。在android中专门有一种叫9-patch图片（以9.png结尾）来解决背景大小不一样时，只用一张背景图片。无论横屏还是竖屏，高分辨率还是低分辨率，都能自动填充满，而且不失真。</p>
+<p>缩放算法的目的就是尽可能的适应不同场合的像素要求，尤其是包含一堆文字的按钮。等比放缩图片容易实现，但是由于变形比例问题，质量不太好。</p>
+<p>非等比的9-patch放大可以产生不失真的效果。其理念就是把图片分成若干静止的、可缩放的块。假设下图是个可缩放按钮。黄色部分是操作区，其他颜色都是边：</p>
+<p><img src="/images/copied_from_nb/kbpic/1.4scalablebutton.png" alt="scalebutton" title="scalablebutton"></p>
+<p>当红色区域被压缩时，蓝色区域大小不变。如下图所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/1.5stretchedbutton.png" alt="stretchedbutton" title="stretchedbutton"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>蓝色的角是不变的，红色的边可以垂直、水平缩放。图片中唯一等比变化的部分就是黄色的操作区，通常都是用纯色，也可以加上文字。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="使用9-patch图">
+<a class="anchor" href="#%E4%BD%BF%E7%94%A89-patch%E5%9B%BE" aria-hidden="true"><span class="octicon octicon-link"></span></a>使用9-patch图<a class="anchor-link" href="#%E4%BD%BF%E7%94%A89-patch%E5%9B%BE"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>本例中，我们用一个简单的1px边的纯色按钮，改下颜色就可以重用。如下所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/1.61pxbutton.png" alt="1pxbutton" title="1pxbutton"></p>
+<p>按下去的状态就用相反的颜色，如下所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/1.7inversionbutton.png" alt="inversionbutton" title="inversionbutton"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在在<code>clock.kv</code>中添加9-patch图，我们需要告诉Kivy图像边的像素，因为默认是等比变化的。</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;RobotoButton@Button&gt;</span><span class="p">:</span>
+    <span class="nt">background_normal</span><span class="p">:</span> <span class="s">'button_normal.png'</span>
+    <span class="nt">background_down</span><span class="p">:</span> <span class="s">'button_down.png'</span>
+    <span class="nt">border</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(2, 2, 2, 2)</span>
+</pre></div>
+<p><code>border</code>属性与CSS一致是顺时针：上，右，下，左。不过，不能像CSS里面直接写统一值<code>border: 2</code>，暂时还不行。</p>
+<blockquote>
+<p>当然用Python语法<code>border:[2] * 4</code>是最短的。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>前面说过，与CSS类似，后面的属性会覆盖前面同名的属性，比如新建<code>Reset</code>按钮，就可以在<code>RobotoButton</code>下修改：</p>
+<div class="highlight"><pre><span></span><span class="nt">RobotoButton</span><span class="p">:</span>
+    <span class="nt">text</span><span class="p">:</span> <span class="s">'Reset'</span>
+    <span class="nt">background_normal</span><span class="p">:</span> <span class="s">'red_button_normal.png'</span>
+    <span class="nt">background_down</span><span class="p">:</span> <span class="s">'red_button_down.png'</span>
+</pre></div>
+<p>这样按钮就搞定了，但是还不能运行，下面我们来实现秒表功能。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="计时功能">
+<a class="anchor" href="#%E8%AE%A1%E6%97%B6%E5%8A%9F%E8%83%BD" aria-hidden="true"><span class="octicon octicon-link"></span></a>计时功能<a class="anchor-link" href="#%E8%AE%A1%E6%97%B6%E5%8A%9F%E8%83%BD"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>秒表不只是显示时间，还需要暂停、复位，比普通的钟表要复杂一点。反映到程序上，就是Python的<code>datatime</code>模块和<code>strftime()</code>函数的区别。后者可以直接将现在的时间格式化，正是秒表显示所要的。</p>
+<p>首先，我们要建立一个计时器。由于Kivy的<code>Clock.schedule_interval</code>事件handler支持时间参数，所以不通过Python的时间函数也容易实现。</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">Clock</span><span class="o">.</span><span class="n">schedule_interval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">,</span> <span class="mf">0.016</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>时间单位是秒，就是说app每秒运行60次(60fps)为1帧，平均间隔时间为
+
+$$\frac{1}{60} = 0.016(6)$$
+</p>
+<p>然后就是时间持续更新：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">ClockApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="n">sw_seconds</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sw_seconds</span> <span class="o">+=</span> <span class="n">nap</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们先做时间显示功能，然后再实现停止功能。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="秒表时间格式">
+<a class="anchor" href="#%E7%A7%92%E8%A1%A8%E6%97%B6%E9%97%B4%E6%A0%BC%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>秒表时间格式<a class="anchor-link" href="#%E7%A7%92%E8%A1%A8%E6%97%B6%E9%97%B4%E6%A0%BC%E5%BC%8F"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>对于主时间显示，格式很简单，因为标准模块<code>strftime</code>提供了<code>datetime</code>时间转换字符串的功能。但是这个函数有一些不足：</p>
+<ul>
+<li>只接受Python的<code>datetime</code>时间格式（但是秒表需要秒用小数显示<code>sw_seconds</code>）</li>
+<li>没有十进制秒的转换功能</li>
+</ul>
+<p><code>datetime</code>的不足容易克服：可以将<code>sw_seconds</code>转换为<code>datetime</code>时间格式。但是有点多余，因为我们最后还是需要小数显示，所以<code>strftime</code>格式不行。那么我们就自己做个轮子。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="计算时间">
+<a class="anchor" href="#%E8%AE%A1%E7%AE%97%E6%97%B6%E9%97%B4" aria-hidden="true"><span class="octicon octicon-link"></span></a>计算时间<a class="anchor-link" href="#%E8%AE%A1%E7%AE%97%E6%97%B6%E9%97%B4"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>首先计算分、秒和分秒，<code>divmode</code>函数输出(商，余数)。</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">minutes</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_seconds</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>divmode</code>函数只计算一次，普通<code>/</code>和<code>%</code>运算需要两次。如果我们每一帧画面都有大量这样的浮点数除法，就像游戏或仿真，CPU就费劲了。</p>
+<blockquote>
+<p>不太同意所谓“过早优化是魔鬼”，许多差的实践导致程序性能低下，其实一开始很容易避免，而且不影响代码质量，不去做才是魔鬼。</p>
+</blockquote>
+<p>要注意<code>divmode</code>函数结果都还是浮点数，所以要去争：<code>int(minutes)</code>和 <code>int(seconds)</code>。</p>
+<p>现在就剩下分秒了，可以这样获得：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">int</span><span class="p">(</span><span class="n">seconds</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">%</span> <span class="mi">100</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="实现秒表">
+<a class="anchor" href="#%E5%AE%9E%E7%8E%B0%E7%A7%92%E8%A1%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>实现秒表<a class="anchor-link" href="#%E5%AE%9E%E7%8E%B0%E7%A7%92%E8%A1%A8"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在所有的数值都有了，让我们组合一下。Python的字符串处理有很多格式，与The Zen of Python（打开Python输入import this）的 "There should be one—and preferably only one—obvious way to do it"并不一致，呵呵。最简单的就是%为代表的C语言风格。</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">update_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sw_seconds</span> <span class="o">+=</span> <span class="n">nap</span>
+    <span class="n">minutes</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_seconds</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">stopwatch</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">"</span><span class="si">%02d</span><span class="s2">:</span><span class="si">%02d</span><span class="s2">.[size=40]</span><span class="si">%02d</span><span class="s2">[/size]"</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">minutes</span><span class="p">),</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">seconds</span><span class="p">),</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">seconds</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">%</span> <span class="mi">100</span><span class="p">),</span>
+    <span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在有分秒了，之前用的更新频率1fps就不适用了。让我们把<code>update_time</code>时间间隔改为0，即每一帧都更新：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">Clock</span><span class="o">.</span><span class="n">schedule_interval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_time</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote>
+<p>目前，大多数显示都是60fps，我们的值精确到1/100s，1秒钟100次更新。但是这么做没啥意义，因为在普通硬件上，人不会识别出100fps和60fps的区别。</p>
+<p>就是说，很多时候你的代码应该与帧率分离，因为它的效果依赖于用户的硬件，硬件种类千差万别，没法儿预测你的app会down在什么机子上。</p>
+</blockquote>
+<p>运行程序会看到时间更新，但是还缺少控件，下面就是。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="秒表控件">
+<a class="anchor" href="#%E7%A7%92%E8%A1%A8%E6%8E%A7%E4%BB%B6" aria-hidden="true"><span class="octicon octicon-link"></span></a>秒表控件<a class="anchor-link" href="#%E7%A7%92%E8%A1%A8%E6%8E%A7%E4%BB%B6"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>用按钮来控制应用是最简单的。下面就是所有代码：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">start_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">start_stop</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">"Start"</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sw_started</span> <span class="k">else</span> <span class="s2">"Stop"</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sw_started</span> <span class="o">=</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">sw_started</span>
+
+
+<span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sw_started</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">start_stop</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">"Start"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sw_started</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sw_seconds</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>第一个事件handler是<strong>Start</strong>和<strong>Stop</strong>按钮，由<code>sw_started</code>改变状态实现。第二个handler是<strong>Reset</strong>按钮。</p>
+<p>还需要增加状态属性跟踪秒表是否在运行：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">ClockApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="n">sw_started</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">sw_seconds</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">update_clock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sw_started</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sw_seconds</span> <span class="o">+=</span> <span class="n">nap</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们改变<code>update_clock</code>函数只有秒表开始<code>sw_started</code>为<code>True</code>才更新，秒表开始默认为停止状态。</p>
+<p>在<code>clock.kv</code>文件里，我们把方法绑定到<code>on_press</code>事件上：</p>
+<div class="highlight"><pre><span></span><span class="nt">RobotoButton</span><span class="p">:</span>
+    <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">start_stop</span>
+    <span class="nt">text</span><span class="p">:</span> <span class="s">'Start'</span>
+    <span class="nt">on_press</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">app.start_stop()</span>
+
+<span class="nt">RobotoButton</span><span class="p">:</span>
+    <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">reset</span>
+    <span class="nt">text</span><span class="p">:</span> <span class="s">'Reset'</span>
+    <span class="nt">on_press</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">app.reset()</span>
+</pre></div>
+<blockquote>
+<p>在Kivy语言里面，有几个上下文相关的参考：</p>
+<ul>
+<li>self：引用当前部件；</li>
+<li>root：整个程序中最外层的部件；</li>
+<li>app：应用类的一个实例。</li>
+</ul>
+</blockquote>
+<p>你会发觉，按钮事件处理一点也不难。就这样，我们的app实现了秒表的交互功能，允许用户开始，停止，复位。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="总结">
+<a class="anchor" href="#%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>总结<a class="anchor-link" href="#%E6%80%BB%E7%BB%93"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这一章我们做了一个app，如果要打包并发布到Google Play或其他商店供大家用，还需要一点工作，因为涉及到具体的平台，但是最难的部分——编程——已经结束。</p>
+<p>通过个app，我们学习了ivy应用开发的很多方面，并不需要太多复杂代码就搞定了。Kivy的主要特点就是短小精悍的代码，允许快速迭代。一点点旧代码就可以获得很多新特性。Kivy生命力旺盛，将长盛不衰。</p>
+<p>这本书所以内容的共同基础是，无论我们的程序还是Kivy，都不是凭空产生的。一切都源自Python的<code>cheese shop</code>——<a href="http://pypi.python.org">Python Package Index (PyPI)</a>——以及其他工具包，包括操作系统底层服务。</p>
+<p>我们还更新了许多网页应用开发的资源，如CSS框架Bootstrap中的字体、颜色和阴影。当然也希望你看看Google的<code>Material design principles</code>——不仅只是设计资源集合，也是一个完整教程，教我们实现风格统一、界面友好的UI，同时保留app的"个性"和特点。</p>
+<p>当然，这才刚刚开始。欲知后事如何，请听下回分解。</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="muxuezi/air"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/jupyter/kivy/android/ios/2019/02/01/kivy-ch1-clock-app.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

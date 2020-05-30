@@ -1,0 +1,1969 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>2048 app | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="2048 app" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="实现老少皆宜的2048游戏" />
+<meta property="og:description" content="实现老少皆宜的2048游戏" />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/07/01/kivy-ch6-2048-app.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/07/01/kivy-ch6-2048-app.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/6.1.2048board.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-07-01T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"实现老少皆宜的2048游戏","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/07/01/kivy-ch6-2048-app.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/07/01/kivy-ch6-2048-app.html","headline":"2048 app","dateModified":"2019-07-01T00:00:00-05:00","datePublished":"2019-07-01T00:00:00-05:00","image":"https://asyncfor.com/kbpic/6.1.2048board.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>2048 app | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="2048 app" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="实现老少皆宜的2048游戏" />
+<meta property="og:description" content="实现老少皆宜的2048游戏" />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/07/01/kivy-ch6-2048-app.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/07/01/kivy-ch6-2048-app.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/6.1.2048board.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-07-01T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"实现老少皆宜的2048游戏","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/07/01/kivy-ch6-2048-app.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/07/01/kivy-ch6-2048-app.html","headline":"2048 app","dateModified":"2019-07-01T00:00:00-05:00","datePublished":"2019-07-01T00:00:00-05:00","image":"https://asyncfor.com/kbpic/6.1.2048board.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">2048 app</h1><p class="page-description">实现老少皆宜的2048游戏</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2019-07-01T00:00:00-05:00" itemprop="datePublished">
+        Jul 1, 2019
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      6 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#jupyter">jupyter</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Kivy">Kivy</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Android">Android</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#iOS">iOS</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/muxuezi/air/tree/master/_notebooks/2019-07-01-kivy-ch6-2048-app.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/muxuezi/air/master?filepath=_notebooks%2F2019-07-01-kivy-ch6-2048-app.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/muxuezi/air/blob/master/_notebooks/2019-07-01-kivy-ch6-2048-app.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#游戏介绍">游戏介绍 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#游戏概念简介">游戏概念简介 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#随机性">随机性 </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#2048设计思路">2048设计思路 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#选2048的理由">选2048的理由 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#简化特性">简化特性 </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#实现2048网格">实现2048网格 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#构建所有格子">构建所有格子 </a></li>
+<li class="toc-entry toc-h3"><a href="#生成空格子">生成空格子 </a></li>
+<li class="toc-entry toc-h3"><a href="#网格数据结构">网格数据结构 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#变量的命名方式">变量的命名方式 </a></li>
+<li class="toc-entry toc-h4"><a href="#reset()函数调用">reset()函数调用 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#稳定性测试">稳定性测试 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#实现方块">实现方块 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#方块初始化">方块初始化 </a></li>
+<li class="toc-entry toc-h3"><a href="#缩放方块">缩放方块 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#实现游戏">实现游戏 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#移动方块">移动方块 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#控制迭代器序列">控制迭代器序列 </a></li>
+<li class="toc-entry toc-h4"><a href="#实现move()方法">实现move()方法 </a></li>
+<li class="toc-entry toc-h4"><a href="#绑定触摸控件">绑定触摸控件 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#合并方块">合并方块 </a></li>
+<li class="toc-entry toc-h3"><a href="#增加方块">增加方块 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#同步回合">同步回合 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#游戏结束">游戏结束 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#游戏胜利的情况">游戏胜利的情况 </a></li>
+<li class="toc-entry toc-h4"><a href="#游戏失败的情况">游戏失败的情况 </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#下一步计划">下一步计划 </a></li>
+<li class="toc-entry toc-h2"><a href="#总结">总结 </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2019-07-01-kivy-ch6-2048-app.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>后面的章节，我们将逐步加深难度来介绍Kivy在游戏领域的开发过程，包括状态的管理，角色控制，音效和图象快速渐变的实现等。</p>
+<p>这里提到的内容都是当今游戏开发中不可或缺的，因此有很多软件可以基于同样的算法和性能来实现这些功能，就像视频游戏一样。</p>
+<p>但是，不积跬步，无以至千里。我们要踏出的第一步就是实现老少皆宜的<strong>2048</strong>游戏。</p>
+<!-- TEASER_END-->
+
+<p>教学大纲如下：</p>
+<ul>
+<li>创建具有可视化的外观和行为的Kivy部件</li>
+<li>用自带的图形命令在画板上绘制</li>
+<li>用屏幕上的绝对位置随意排列部件（非结构化布局）</li>
+<li>用Kivy自带的动画支持平滑移动部件</li>
+</ul>
+<p>在前面用过布局部件之后，用绝对坐标放置部件听着像是一种倒退，但是在需要很多交互的应用和游戏里面，实乃必要之举。例如，虽然在很多游戏里面的矩形块可以用<code>GridLayout</code>部件来表示，但是要实现从一个位置到了一个位置的简单移动都很麻烦。这是由于部件要不断重新绘制，用固定的布局来实现效率极低。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="游戏介绍">
+<a class="anchor" href="#%E6%B8%B8%E6%88%8F%E4%BB%8B%E7%BB%8D" aria-hidden="true"><span class="octicon octicon-link"></span></a>游戏介绍<a class="anchor-link" href="#%E6%B8%B8%E6%88%8F%E4%BB%8B%E7%BB%8D"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="http://gabrielecirulli.github.io/2048/">2048游戏</a>是一个数学游戏，在一个4x4的表格里玩。里面有2，4，8，...，2048，4096，8192共13种方块（可以调节难度，一般玩到2048，所以游戏叫2048），每次随机出现一种方块，可以通过上、下、左、右四个方向把所有方块直线移动最大范围，对把相同的相邻方块相加，数字翻倍，然后消除旧方块，同时出现新方块，循环往复，直到所有的表格都被填满，且没有相邻的数字可以相加为止，游戏结束。</p>
+<p>纸上得来终觉浅，绝知此事要躬行。说那么多不如玩一把，如下图所示：
+<img src="/images/copied_from_nb/kbpic/6.1.2048board.png" alt="2048board"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="游戏概念简介">
+<a class="anchor" href="#%E6%B8%B8%E6%88%8F%E6%A6%82%E5%BF%B5%E7%AE%80%E4%BB%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>游戏概念简介<a class="anchor-link" href="#%E6%B8%B8%E6%88%8F%E6%A6%82%E5%BF%B5%E7%AE%80%E4%BB%8B"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>游戏有很多不同的状态：通过一系列的状态完成，像开始界面，地图界面，塔防界面等等，不同的游戏都有具体的界面组合。每个游戏都不一样，也没有多少共性。</p>
+<p>但有一个基本特性是大多数游戏都是关于输赢的。这虽然微不足道，但是玩家对游戏的感知最终是通过游戏的界面和输赢来体现的。</p>
+<blockquote>
+<p>很多游戏并不注重“GAME OVER”的设计，有的甚至没有，这会给玩家留下很不好的感受。这样的游戏通常也提供了一个强大的本土优势和劣势状态来弥补。
+比如，如果你在魔兽世界或其他MMPRPG(Massive Multiplayer Online Role Playing Game，大型多人在线角色扮演游戏)里面不能赢也不会彻底挂掉，那你一定会在线复活或者修理设备这样的任务来回血。
+如果你的游戏确实非常棒，时间久了以后，你也会获得一群游戏达人，这在只论输赢的游戏里面是没有的（也免不了菜鸟玩家）。这就需要不断的提供大BOSS，保持挑战性。</p>
+</blockquote>
+<p>2048这个游戏的设计挺好，随着方块的出现，越来越多的方块不能被合并，游戏的难度几何级增大。</p>
+<p>刚开始的时候很简单，玩家可以随意移动不需要动脑子。随着游戏的继续，更多的方块沉淀下来，没有找到合并的机会，可用空间不断减少，危机感来了，合理的合并策略就是必须深思熟虑的了。</p>
+<p>2048的游戏理念非常值得借鉴：开始的时候很容易，让人爱不释手，游戏的难度不断增加，引人入胜。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="随机性">
+<a class="anchor" href="#%E9%9A%8F%E6%9C%BA%E6%80%A7" aria-hidden="true"><span class="octicon octicon-link"></span></a>随机性<a class="anchor-link" href="#%E9%9A%8F%E6%9C%BA%E6%80%A7"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>由于每次所有的16个方块都会移动，玩家如果不注意可能结果是难以预料的。尽管是完全确定的，算法还会被认为是有一点随机性。这就让2048看起来更像街机游戏，有点靠运气，也会带来惊喜。</p>
+<p>随机性的好处就是永远不知道下一个巧克力是什么味道的，这让游戏变得更好玩。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="2048设计思路">
+<a class="anchor" href="#2048%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>2048设计思路<a class="anchor-link" href="#2048%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们的设计思路如下：</p>
+<ul>
+<li>一个4x4的网格</li>
+<li>每一回合都会执行下面的动作：<ul>
+<li>玩家只可以沿一个方向移动所有方块</li>
+<li>把相同的两个方块相加生成一个新方块</li>
+<li>新的2个方块在空白的格子里面产生</li>
+</ul>
+</li>
+<li>玩家得到一个2048就赢了</li>
+<li>当网格中没有空白，也不能合并时就输了</li>
+</ul>
+<p>上述几条就是2048的设计思路，后面我们就一步一步来实现它。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="选2048的理由">
+<a class="anchor" href="#%E9%80%892048%E7%9A%84%E7%90%86%E7%94%B1" aria-hidden="true"><span class="octicon octicon-link"></span></a>选2048的理由<a class="anchor-link" href="#%E9%80%892048%E7%9A%84%E7%90%86%E7%94%B1"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>有人可能会问，我们为什么要做一个已经家喻户晓的游戏，而不是做个新的。下面说说这么做的道理：</p>
+<p>这里先说点儿软件开发的事情，虽然有点离题，但重建一个知名项目的合理性并不是每个人都知道。如果这里不把事情说清楚，下一章依然跳不过这道坎。</p>
+<p>重建2048（可谓重做轮子）的根本原因是游戏开发实在太复杂，具体解释如下：</p>
+<ul>
+<li>好的游戏方案很难得到，因为那需要一堆创意</li>
+<li>好游戏不能太复杂，要能快速上手，但是又不能太简单无聊，要有后劲。这一点更难了</li>
+<li>不同算法实现难易程度迥异。在静态的二维网格里查找路径，比在动态的三维空间里做难度要小得多；用AI（artificial intelligence，人工智能）来做射击游戏虽然很简单，还是可以取得不错的成果。如果用AI来做策略游戏，那就可以让电脑更聪明、更难以捉摸，让游戏呈现出足够的挑战性和多样性</li>
+<li>注重细节和不断优化是好游戏不可或缺的，这需要大量的专业人员来共同努力</li>
+</ul>
+<p>这里只是抛砖引玉，并不是要吓唬大家远离游戏开发，但是游戏开发中有太多地方会出错了，所以不要犹豫把搞不定的部分外包出去。这会大大降低你的投入成本，提高产品发布的效率。</p>
+<p>一个务实的游戏开发项目（特别是像本书这种零预算的项目）就应该是避免高成本的创造性探索，特别是在游戏内容设计方面。如果你不能为这个项目获得投资，它的独创性就没什么价值了。这就是为什么做游戏的时候首先考虑已有的项目。</p>
+<p>不过，也没必要完全抄袭别人的创意——调整游戏的一些部分可以更好玩，同时也能锻炼自己的能力。</p>
+<p>实际上，大多数游戏都是借用其他人的创意，玩法，有时候游戏场景都和以前的游戏类似，甚至没什么多样性（无论质量孰优孰劣，这总不是什么好事，就如今天的工业产品一般）。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="简化特性">
+<a class="anchor" href="#%E7%AE%80%E5%8C%96%E7%89%B9%E6%80%A7" aria-hidden="true"><span class="octicon octicon-link"></span></a>简化特性<a class="anchor-link" href="#%E7%AE%80%E5%8C%96%E7%89%B9%E6%80%A7"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>回到2048游戏，值得注意的是，它的规则非常简单，看着十分普通。但是它好玩的地方就是它也非常的难；2048一直很流行，在许多应用商店和网页上都有。</p>
+<p>2048的流行实在太流行了，从头开始重建很有价值，不仅仅只是为了学习它。现在，你应该相信做2048是一个多么酷的事情了吧，那就让我们开始吧。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="实现2048网格">
+<a class="anchor" href="#%E5%AE%9E%E7%8E%B02048%E7%BD%91%E6%A0%BC" aria-hidden="true"><span class="octicon octicon-link"></span></a>实现2048网格<a class="anchor-link" href="#%E5%AE%9E%E7%8E%B02048%E7%BD%91%E6%A0%BC"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>到目前为止，我们都是用Kivy自带的部件，这一章我们打算建造自己的部件：<code>Board</code>（2048的网格）和<code>Tile</code>（里面的方块，像地上的瓷砖）。</p>
+<p>让我们从创建背景色这些简单任务入手。一种做法可能是用背景图片，这种方法会遇到屏幕尺寸的问题（我们前面说过）。</p>
+<p>我们要用的方法是创建一个<code>Board</code>部件，在画布上绘制网格。这样，网格的位置和大小就可以通过Kivy来定义，这和我们前面学过的文本框和按钮一样。</p>
+<p>最简单的起点就是设置网格的尺寸和位置。有效的做法是用<code>FloatLayout</code>部件；这是Kivy提供的一个布局类，支持尺寸和位置的设置。建立<code>game.kv</code>文件，其代码如下：</p>
+<div class="highlight"><pre><span></span><span class="c1">#:set padding 20</span>
+<span class="nt">FloatLayout</span><span class="p">:</span>
+    <span class="nt">Board</span><span class="p">:</span>
+        <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">board</span>
+        <span class="nt">pos_hint</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="s">'center_x'</span><span class="p p-Indicator">:</span> <span class="nv">0.5</span><span class="p p-Indicator">,</span> <span class="s">'center_y'</span><span class="p p-Indicator">:</span> <span class="nv">0.5</span><span class="p p-Indicator">}</span>
+        <span class="nt">size_hint</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(None, None)</span>
+        <span class="nt">center</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root.center</span>
+        <span class="nt">size</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">min(root.width</span><span class="p p-Indicator">,</span> <span class="nv">root.height) - 2 * padding</span><span class="p p-Indicator">]</span> <span class="err">*</span> <span class="l l-Scalar l-Scalar-Plain">2</span>
+</pre></div>
+<p><code>Board</code>部件位于整个屏幕的正中间的正方形，上下、左右边距分别对称。为了尽可能的占有屏幕空间，我们在屏幕的宽和高中选择最小值，然后去掉左右边距。</p>
+<p>要看到结果，就需要在Python文件中定义<code>Board</code>部件，然后加载一些内容（空部件也是看不见的）。在<code>main.py</code>文件中添加代码：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.graphics</span> <span class="kn">import</span> <span class="n">BorderImage</span>
+<span class="kn">from</span> <span class="nn">kivy.uix.widget</span> <span class="kn">import</span> <span class="n">Widget</span>
+
+<span class="n">spacing</span> <span class="o">=</span> <span class="mi">15</span>
+
+
+<span class="k">class</span> <span class="nc">Board</span><span class="p">(</span><span class="n">Widget</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Board</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resize</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">resize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cell_size</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.25</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">spacing</span><span class="p">),)</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">before</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">before</span><span class="p">:</span>
+            <span class="n">BorderImage</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">"board.png"</span><span class="p">)</span>
+
+
+<span class="n">on_pos</span> <span class="o">=</span> <span class="n">resize</span>
+<span class="n">on_size</span> <span class="o">=</span> <span class="n">resize</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>类似于<code>game.kv</code>里面的<code>padding</code>定义，我们在Python文件的开头定义了<code>spacing</code>。这是网格内构成格子的网的厚度，用来表示后面出现方块的边距，这样在视觉上就显得轻松一些，不那么拥挤。因为是4x4的网格，自然代码里面要剪掉5条边距。</p>
+<p><code>resize()</code>方法在<code>Board</code>部件初始化阶段（<code>__init__()</code>）创建，或者由<code>on_pos</code>和<code>on_size</code>事件调用。当部件绘制完成后，就计算方块的大小<code>cell_size</code>：</p>
+<p>
+$$方块尺寸(cell\ size) = \frac {{ 网格尺寸 - (方块数量 + 1) \times 边距 }} {{方块数量}}$$
+</p>
+<p>这里的尺寸（<code>size</code>）是指宽度或高度，因为它们都是方块，用哪个都一样。</p>
+<p>然后我们渲染背景色，先清除之前的图象指令组<code>canvas.before</code>，然后用元素填充（暂时先用<code>BorderImage</code>）。<code>canvas.before</code>与<code>canvas.after</code>和<code>canvas</code>相反，是在部件渲染之前执行的。这样就做是为了让背景色处于所有元素的下面。</p>
+<blockquote>
+<p>画布指令组是Kivy组织底层图形操作的方式，比如在画布上复制图象，画线，执行OpenGL命令等。关于画布的介绍可以参见第二章画图app。
+每个画布指令都在<code>kivy.graphics</code>命名空间里面，都是<code>canvas</code>对象的子类，如<code>canvas.before</code>与<code>canvas.after</code>，类似于子部件与容器部件或根部件的继承关系。
+这种子部件的不同在于其具有一个复杂的生命周期，可以布置在屏幕上，响应事件和其他一些动作。但是，渲染指令却相反，就是用来绘制图形的，功能单一。比如，<code>Color</code>指令就是改变颜色，<code>Image</code>指令就是画图形等等。</p>
+</blockquote>
+<p>这里的背景图片是一个有圆角矩形，因为<code>BorderImage</code>指令渲染用的背景图片<code>board.png</code>是第一章介绍过的9-patch图，类似于按钮是有的图形。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="构建所有格子">
+<a class="anchor" href="#%E6%9E%84%E5%BB%BA%E6%89%80%E6%9C%89%E6%A0%BC%E5%AD%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>构建所有格子<a class="anchor-link" href="#%E6%9E%84%E5%BB%BA%E6%89%80%E6%9C%89%E6%A0%BC%E5%AD%90"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们的网格是二维的，通过两个<code>for</code>构建二维数组可以实现：</p>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="c1"># code that uses cell at (x, y)</span>
+</pre></div>
+<p>这样的代码需要两次缩进不太好看，而且程序里面经常用到，这里我们用Python生成器来改善一下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># In main.py</span>
+<span class="k">def</span> <span class="nf">all_cells</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这样每次用到的时候就直接调用函数即可：</p>
+<div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">all_cells</span><span class="p">():</span>
+    <span class="c1"># code that uses cell at (x, y)</span>
+</pre></div>
+<p>这和在两个循环内执行代码基本一致，只是隐藏了细节，让代码更简洁，而且用起来更加灵活。</p>
+<p>下面，我们就使用网格坐标<code>board_x</code>和<code>board_y</code>，这是用来定位每一个格子的，不是屏幕上的像素坐标。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="生成空格子">
+<a class="anchor" href="#%E7%94%9F%E6%88%90%E7%A9%BA%E6%A0%BC%E5%AD%90" aria-hidden="true"><span class="octicon octicon-link"></span></a>生成空格子<a class="anchor-link" href="#%E7%94%9F%E6%88%90%E7%A9%BA%E6%A0%BC%E5%AD%90"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>网格的大小和位置都由<code>Board</code>部件决定，但是每个格子的位置是不确定的。下面，我们就计算每个格子在屏幕上的坐标值，并把它们在画布上画出来。</p>
+<p>屏幕上的一个格子的位置需要考虑<code>spacing</code>，计算如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># In main.py</span>
+<span class="k">class</span> <span class="nc">Board</span><span class="p">(</span><span class="n">Widget</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">cell_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">board_x</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">spacing</span><span class="p">)</span> <span class="o">+</span> <span class="n">spacing</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">board_y</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">spacing</span><span class="p">)</span> <span class="o">+</span> <span class="n">spacing</span><span class="p">,</span>
+        <span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>画布操作通常都是绝对坐标值，所以我们计算的时候要增加<code>Board</code>的位置（<code>self.x</code>和<code>self.y</code>）。</p>
+<p>现在我们重复算法就可以算出所有格子的位置，之后就是在画布上画出来。调整一下<code>canvas.before</code>就可以了：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.graphics</span> <span class="kn">import</span> <span class="n">Color</span><span class="p">,</span> <span class="n">BorderImage</span>
+<span class="kn">from</span> <span class="nn">kivy.utils</span> <span class="kn">import</span> <span class="n">get_color_from_hex</span>
+
+<span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">before</span><span class="p">:</span>
+    <span class="n">BorderImage</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">"board.png"</span><span class="p">)</span>
+    <span class="n">Color</span><span class="p">(</span><span class="o">*</span><span class="n">get_color_from_hex</span><span class="p">(</span><span class="s2">"CCC0B4"</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span> <span class="ow">in</span> <span class="n">all_cells</span><span class="p">():</span>
+        <span class="n">BorderImage</span><span class="p">(</span>
+            <span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_pos</span><span class="p">(</span><span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_size</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="s2">"cell.png"</span>
+        <span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>渲染图片时，<code>Color</code>指令和第二章画图app里面取色功能一样：可以用同样的白色图片或者底色把每个方块涂成不同的颜色。</p>
+<p>还要注意<code>cell_pos</code>和<code>cell_size</code>的使用——都是真实屏幕的坐标值。它们会随着窗口的尺寸改变而变化，经过计算再画到屏幕上。这里我们用更简单的<code>board_x</code>和<code>board_y</code>坐标。网格截图如下：</p>
+<p><img src="/images/copied_from_nb/kbpic/6.2.renderscreen.png" alt="renderscreen"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="网格数据结构">
+<a class="anchor" href="#%E7%BD%91%E6%A0%BC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" aria-hidden="true"><span class="octicon octicon-link"></span></a>网格数据结构<a class="anchor-link" href="#%E7%BD%91%E6%A0%BC%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>根据游戏的设计思路，现在我们需要让网格保持一个自动的内部实现，要实现它，我们可以用一个简单的二维数组来表示：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">[</span>
+    <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+    <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+    <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+    <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+<span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这里<code>None</code>表示格子里面是空的，没有方块。这个数据结构可以通过嵌套的<code>for</code>循环来实现：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Board</span><span class="p">(</span><span class="n">Widget</span><span class="p">):</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们把<code>reset()</code>函数放在前面的位置，除了可以初始化游戏的状态，还可以在游戏失败之后生成一个新游戏。</p>
+<p>这里，用Python的列表综合（list comprehension）并不是必须的；只是为了让代码显得紧凑点。如果你不喜欢这种方式，也可以用带缩进的两个带<code>for</code>语句来实现。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="变量的命名方式">
+<a class="anchor" href="#%E5%8F%98%E9%87%8F%E7%9A%84%E5%91%BD%E5%90%8D%E6%96%B9%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>变量的命名方式<a class="anchor-link" href="#%E5%8F%98%E9%87%8F%E7%9A%84%E5%91%BD%E5%90%8D%E6%96%B9%E5%BC%8F"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在这里，变量<code>b</code>是可以的，因为这个变量是类的属性，不会在API上用。后面的代码里还会经常出现这个变量，这么用可以少敲几次键盘。类似的做法还有在<code>for</code>循环里面用<code>i</code>和<code>j</code>。</p>
+<p>在Python里面，私有属性一般在前面加一个下划线，<code>_name</code>。我们这么不这么用，因为这里变量很短，加下划线显得累赘。整个类都是在app内部使用，基本上就是一个独立的模块。</p>
+<p>把<code>Board.b</code>当作是一个局部变量，尤其因为<code>Board</code>在我们的app里面是一个单独的部件：任何时候都应该只有一个实例。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="reset()函数调用">
+<a class="anchor" href="#reset()%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>reset()</code>函数调用<a class="anchor-link" href="#reset()%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在游戏初始化阶段应该调用<code>Board.reset()</code>来复位整个网格。做这件事的事件是<code>on_start</code>，如下所示：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># In main.py</span>
+<span class="kn">from</span> <span class="nn">kivy.app</span> <span class="kn">import</span> <span class="n">App</span>
+
+
+<span class="k">class</span> <span class="nc">GameApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">on_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">board</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">board</span>
+        <span class="n">board</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="稳定性测试">
+<a class="anchor" href="#%E7%A8%B3%E5%AE%9A%E6%80%A7%E6%B5%8B%E8%AF%95" aria-hidden="true"><span class="octicon octicon-link"></span></a>稳定性测试<a class="anchor-link" href="#%E7%A8%B3%E5%AE%9A%E6%80%A7%E6%B5%8B%E8%AF%95"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们还没有为网格添加任何内容，但我们也写一个稳定性测试，<code>can_move()</code>。这个辅助函数用来测试是否我们可以把方块放在具体的格子里面。</p>
+<p>这个测试有两部分。首先，我们需要保证坐标值都是可用的（不会超出网格），这部分检查放在<code>valid_cell()</code>函数里。然后，我们检查网格上的格子，看看它是不是空的（等于<code>None</code>）。如果可以移动过去，而且格子是空的就返回<code>True</code>，否则就返回<code>False</code>。代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># In main.py, under class Board:</span>
+<span class="k">def</span> <span class="nf">valid_cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">board_x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">board_y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">board_x</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">board_y</span> <span class="o">&lt;=</span> <span class="mi">3</span>
+
+
+<span class="k">def</span> <span class="nf">can_move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_cell</span><span class="p">(</span><span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">board_x</span><span class="p">][</span><span class="n">board_y</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这些方法在实现方块移动的时候会用到，现在我们来创建方块。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="实现方块">
+<a class="anchor" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%9D%97" aria-hidden="true"><span class="octicon octicon-link"></span></a>实现方块<a class="anchor-link" href="#%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%9D%97"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这节是介绍实现方块的<code>Tile</code>部件。方块比<code>Board</code>部件更动态化。我们要为<code>Tile</code>类创建一个Kivy属性，来实现方块因任何变化而引起的自动重新绘制。</p>
+<p>Kivy属性不同于Python的地方就是：Python的属性基本上就是绑定到一个类的实例上，可能再加上getter和setter函数。Kivy的属性还有一个功能，那就是它们发出的事件改变时，你就可以观察到有趣的属性，并相应调整其他相关变量，或者重绘屏幕。</p>
+<p>这些工作绝大部分都是在自动完成的：让你做出一个改变，比如部件的<code>pos</code>或<code>size</code>属性，事件<code>on_pos</code>或<code>on_size</code>就被触发。</p>
+<p>有趣的是，<code>.kv</code>文件里面的所有属性都是自动传播的。比如，你写了如下代码：</p>
+<div class="highlight"><pre><span></span><span class="nt">Label</span><span class="p">:</span>
+    <span class="nt">pos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root.pos</span>
+</pre></div>
+<p>当<code>root.pos</code>属性改变时，<code>pos</code>值也发生了变化，它们会一直保持同步。我们创建<code>Tile</code>部件时要用这个特性。首先，我们声明渲染部件需要用到的属性：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># In main.py</span>
+<span class="kn">from</span> <span class="nn">kivy.properties</span> <span class="kn">import</span> <span class="n">ListProperty</span><span class="p">,</span> <span class="n">NumericProperty</span>
+
+
+<span class="k">class</span> <span class="nc">Tile</span><span class="p">(</span><span class="n">Widget</span><span class="p">):</span>
+    <span class="n">font_size</span> <span class="o">=</span> <span class="n">NumericProperty</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="n">NumericProperty</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Text shown on the tile</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">ListProperty</span><span class="p">(</span><span class="n">get_color_from_hex</span><span class="p">(</span><span class="n">tile_colors</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="n">number_color</span> <span class="o">=</span> <span class="n">ListProperty</span><span class="p">(</span><span class="n">get_color_from_hex</span><span class="p">(</span><span class="s2">"776E65"</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这就是我们画一个方块需要的代码；属性名称应该足够清楚了，<code>color</code>属性是方块的背景色，<code>number</code>属性是方块的显示的数值。</p>
+<blockquote>
+<p>如果你们想现在就运行代码，请把<code>tile_colors[2]</code>替换成一个可用的颜色值，比如<code>'#EEE4DA'</code>，后面我们会实现这个列表。</p>
+</blockquote>
+<p>然后，在<code>game.kv</code>里面，我们定义部件：</p>
+<div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">&lt;Tile&gt;:canvas</span><span class="p p-Indicator">:</span>        <span class="nt">Color</span><span class="p">:</span>
+            <span class="nt">rgb</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.color</span>
+<span class=" -Error">        </span><span class="nt">BorderImage</span><span class="p">:</span>
+            <span class="nt">pos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.pos</span>
+            <span class="nt">size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.size</span>
+            <span class="nt">source</span><span class="p">:</span> <span class="s">'cell.png'</span>
+<span class=" -Error">    </span><span class="nt">Label</span><span class="p">:</span>
+        <span class="nt">pos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root.pos</span>
+        <span class="nt">size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root.size</span>
+        <span class="nt">bold</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+        <span class="nt">color</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root.number_color</span>
+        <span class="nt">font_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root.font_size</span>
+        <span class="nt">text</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">str(root.number)</span>
+</pre></div>
+<p><code>Label</code>的后三个属性是自定义属性。<code>canvas</code>里面的<code>self</code>是指<code>&lt;Tile&gt;</code>，并不是<code>canvas</code>自己。这是因为<code>canvas</code>只是部件的一个属性。另外，<code>Label</code>是一个内嵌的部件，所以它用<code>root.XXX</code>来表示<code>&lt;Tile&gt;</code>的属性。这里，<code>&lt;Tile&gt;</code>是一个顶层的定义，所以可以运行。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="方块初始化">
+<a class="anchor" href="#%E6%96%B9%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96" aria-hidden="true"><span class="octicon octicon-link"></span></a>方块初始化<a class="anchor-link" href="#%E6%96%B9%E5%9D%97%E5%88%9D%E5%A7%8B%E5%8C%96"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在2048游戏里面，不同数值的方块颜色是不一样的，我们也要可以实现这种效果，这需要一个颜色-数值映射关系，下面是原始2048的颜色：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># In main.py</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"EEE4DA"</span><span class="p">,</span>
+    <span class="s2">"EDE0C8"</span><span class="p">,</span>
+    <span class="s2">"F2B179"</span><span class="p">,</span>
+    <span class="s2">"F59563"</span><span class="p">,</span>
+    <span class="s2">"F67C5F"</span><span class="p">,</span>
+    <span class="s2">"F65E3B"</span><span class="p">,</span>
+    <span class="s2">"EDCF72"</span><span class="p">,</span>
+    <span class="s2">"EDCC61"</span><span class="p">,</span>
+    <span class="s2">"EDC850"</span><span class="p">,</span>
+    <span class="s2">"EDC53F"</span><span class="p">,</span>
+    <span class="s2">"EDC22E"</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>为了把颜色匹配到数值，可以用指数计算来实现：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tile_colors</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span> <span class="o">**</span> <span class="n">i</span><span class="p">:</span> <span class="n">color</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">)}</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这样就可以获得我们想要的效果了：</p>
+<div class="highlight"><pre><span></span><span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="s1">'EEE4DA'</span><span class="p">,</span>
+<span class="mi">4</span><span class="p">:</span> <span class="s1">'EDE0C8'</span><span class="p">,</span>
+<span class="c1"># ...</span>
+<span class="mi">1024</span><span class="p">:</span> <span class="s1">'EDC53F'</span><span class="p">,</span>
+<span class="mi">2048</span><span class="p">:</span> <span class="s1">'EDC22E'</span><span class="p">}</span>
+</pre></div>
+<p>颜色完成之后，我们就可以实现<code>Tile</code>类的初始化<code>Tile.__init__</code>方法了。</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Tile</span><span class="p">(</span><span class="n">Widget</span><span class="p">):</span>
+    <span class="n">font_size</span> <span class="o">=</span> <span class="n">NumericProperty</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span>
+    <span class="n">number</span> <span class="o">=</span> <span class="n">NumericProperty</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">ListProperty</span><span class="p">(</span><span class="n">get_color_from_hex</span><span class="p">(</span><span class="n">tile_colors</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+    <span class="n">number_color</span> <span class="o">=</span> <span class="n">ListProperty</span><span class="p">(</span><span class="n">get_color_from_hex</span><span class="p">(</span><span class="s2">"776E65"</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">number</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Tile</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">font_size</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="n">number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_colors</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">update_colors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">get_color_from_hex</span><span class="p">(</span><span class="n">tile_colors</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">number</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">number_color</span> <span class="o">=</span> <span class="n">get_color_from_hex</span><span class="p">(</span><span class="s2">"F9F6F2"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>简单解释一下：</p>
+<ul>
+<li>
+<code>font_size</code>：设置成<code>cell_size</code>的一半，这是随意设置的。当然也不能放一个绝对字号在这里，因为屏幕传递尺寸是不统一的，所有最好的办法是保持字号的弹性</li>
+<li>
+<code>number</code>：方块的数值，默认值为2</li>
+<li>
+<code>color</code>：方块的背景色，是由前面<code>number</code>映射得到的</li>
+<li>
+<code>number_color</code>：这也是基于数值<code>number</code>的属性，但是变化更少。只有两种颜色，一种深色的用于浅色背景，一种浅色的用于亮色背景；因此需要检查<code>if self.number &gt; 4</code>
+</li>
+</ul>
+<p>其他的属性都是通过<code>kwargs</code>参数传递到父类的，包括位置和尺寸属性，下一小节会详述。</p>
+<p>颜色值放在<code>update_colors()</code>辅助函数里面，因为合并方块的时候需要用到。</p>
+<p>现在，你可以通过下面代码来创建一个方块：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tile</span> <span class="o">=</span> <span class="n">Tile</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_pos</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_size</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这样，一个新的方块就出现在屏幕上了。上面的代码应该在<code>Board</code>类里面。还要把<code>self</code>改成<code>Board</code>的一个实例。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="缩放方块">
+<a class="anchor" href="#%E7%BC%A9%E6%94%BE%E6%96%B9%E5%9D%97" aria-hidden="true"><span class="octicon octicon-link"></span></a>缩放方块<a class="anchor-link" href="#%E7%BC%A9%E6%94%BE%E6%96%B9%E5%9D%97"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>另一个关于方块的问题还没解决，就是需要让方块与网格等比例缩放。我们先做一个辅助函数来一次更新所有<code>Tile</code>属性：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Tile</span><span class="p">(</span><span class="n">Widget</span><span class="p">):</span>
+    <span class="c1"># Other methods skipped to save space</span>
+    <span class="k">def</span> <span class="nf">resize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">font_size</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>经过这个方法不是必须的，但它可以让代码更简练。</p>
+<p>真正的代码将被放<code>Board.resize()</code>方面的最后，将由绑定的Kivy属性触发。通过计算<code>cell_size</code>和<code>cell_pos</code>的新数值，把方法应用到所有的方块上：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">resize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="c1"># Previously-seen code omitted</span>
+    <span class="k">for</span> <span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span> <span class="ow">in</span> <span class="n">all_cells</span><span class="p">():</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">board_x</span><span class="p">][</span><span class="n">board_y</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">tile</span><span class="p">:</span>
+            <span class="n">tile</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_pos</span><span class="p">(</span><span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_size</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这个方法和我们前面用的自动属性绑定方法完全相反：我们用一种中心化、明确的方式来重新放缩所有部件。有些人可能会发觉这种方法更容易读，少一些Python代码的神奇变化（比如，通过Python代码你可以在属性handler里面放置断点；Kivy的<code>.kv</code>文件里要是出错很难调试，只能等错误出来）。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="实现游戏">
+<a class="anchor" href="#%E5%AE%9E%E7%8E%B0%E6%B8%B8%E6%88%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>实现游戏<a class="anchor-link" href="#%E5%AE%9E%E7%8E%B0%E6%B8%B8%E6%88%8F"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在我们已经把各个模块都做出来了，下面就按照游戏的思路来实现它。我们需要生成方块、移动方块、合并方块。</p>
+<p>生成方块就是在空格里面随机产生方块，思路如下：</p>
+<ol>
+<li>找出所有的空格</li>
+<li>随机选择一个空格</li>
+<li>在空格位置生成一个方块</li>
+<li>把方块加到网格里（<code>Board.b</code>），然后用<code>add_widget()</code>把方块显示出来</li>
+</ol>
+<p>生成方块的Python代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># In main.py, a method of class Board:</span>
+<span class="k">def</span> <span class="nf">new_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">empty_cells</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">all_cells</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">]</span>  <span class="c1"># Step 1</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">empty_cells</span><span class="p">)</span>  <span class="c1"># Step 2</span>
+    <span class="n">tile</span> <span class="o">=</span> <span class="n">Tile</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_pos</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_size</span><span class="p">)</span>  <span class="c1"># Step 3</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile</span>  <span class="c1"># Step 4</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在游戏开始和每次移动之后都会生成方块。马上我们就来实现移动方块，现在我们可以生成方块了：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="p">[[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>  <span class="c1"># same as before</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">new_tile</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">new_tile</span><span class="p">()</span>  <span class="c1"># put down 2 tiles</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>如果你执行代码，你就会看到有两个方块随机出现在网格里。</p>
+<p><img src="/images/copied_from_nb/kbpic/6.3.randomtile.png" alt="randomtile"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="移动方块">
+<a class="anchor" href="#%E7%A7%BB%E5%8A%A8%E6%96%B9%E5%9D%97" aria-hidden="true"><span class="octicon octicon-link"></span></a>移动方块<a class="anchor-link" href="#%E7%A7%BB%E5%8A%A8%E6%96%B9%E5%9D%97"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>要让方块移动更高效，我们需要把每一个输入事件映射到一个方向矢量中。然后，<code>Board.move()</code>方法接受这个矢量再重新排列网格。一个方向矢量是标准的（它的长度等于1），在我们的app里，我们只要把它加到方块目前的坐标值上，就可以获得方块的新位置。</p>
+<p>2048游戏允许4个方向，所有映射函数很简单：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.core.window</span> <span class="kn">import</span> <span class="n">Keyboard</span>
+
+<span class="n">key_vectors</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">Keyboard</span><span class="o">.</span><span class="n">keycodes</span><span class="p">[</span><span class="s2">"up"</span><span class="p">]:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="n">Keyboard</span><span class="o">.</span><span class="n">keycodes</span><span class="p">[</span><span class="s2">"right"</span><span class="p">]:</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">Keyboard</span><span class="o">.</span><span class="n">keycodes</span><span class="p">[</span><span class="s2">"down"</span><span class="p">]:</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">Keyboard</span><span class="o">.</span><span class="n">keycodes</span><span class="p">[</span><span class="s2">"left"</span><span class="p">]:</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+<span class="p">}</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这里的<code>'up'</code>，<code>'right'</code>，<code>'down'</code>和<code>'left'</code>是Kviy的键盘映射<code>keycodes</code>代码。</p>
+<p>用<code>Window.bind()</code>就可以监听Kivy的键盘事件了：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># In main.py, under class Board:</span>
+<span class="k">def</span> <span class="nf">on_key_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">key_vectors</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="o">*</span><span class="n">key_vectors</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+
+
+<span class="c1"># Then, during the initialization (in GameApp.on_start())</span>
+<span class="n">Window</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">on_key_down</span><span class="o">=</span><span class="n">board</span><span class="o">.</span><span class="n">on_key_down</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>Board.move()</code>方法就可以调用了。它接受方向矢量的<code>dir_x</code>和<code>dir_y</code>值，从<code>key_vectors[key]</code>里面获取，<code>*args</code>就是依次获取元组、列表的元素作为参数。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="控制迭代器序列">
+<a class="anchor" href="#%E6%8E%A7%E5%88%B6%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%BA%8F%E5%88%97" aria-hidden="true"><span class="octicon octicon-link"></span></a>控制迭代器序列<a class="anchor-link" href="#%E6%8E%A7%E5%88%B6%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%BA%8F%E5%88%97"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在实现<code>Board.move()</code>方法之前，我们需要做一个<code>all_cells()</code>生成器函数；正确的迭代顺序依赖于移动的方向。</p>
+<p>比如，当向上移动的时候，我们要从最上面第一的格子开始。这样我们就可以确保所有的方块都可以紧密的排列到最上方。如果迭代的方式不对，网格里面就会看到洞，因为下面的格子没有正确的移动到最上方的空格子里。</p>
+<p>正确迭代的代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">all_cells</span><span class="p">(</span><span class="n">flip_x</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">flip_y</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span> <span class="k">if</span> <span class="n">flip_x</span> <span class="k">else</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span> <span class="k">if</span> <span class="n">flip_y</span> <span class="k">else</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="实现move()方法">
+<a class="anchor" href="#%E5%AE%9E%E7%8E%B0move()%E6%96%B9%E6%B3%95" aria-hidden="true"><span class="octicon octicon-link"></span></a>实现<code>move()</code>方法<a class="anchor-link" href="#%E5%AE%9E%E7%8E%B0move()%E6%96%B9%E6%B3%95"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这样，我们就可以实现最简单版本的<code>Board.move()</code>函数了。现在，我们只能移动方块，马上我们就把合并功能也加上。</p>
+<p>这是移动方块的思路：</p>
+<ol>
+<li>遍历所有存在的方块</li>
+<li>对每个方块都沿着指定的方向向前移动到底</li>
+<li>如果方块的坐标值不再变化，再到下一个方块</li>
+<li>把方块转换到新的坐标值，再到下一个方块</li>
+</ol>
+<p>Python代码实现如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span> <span class="ow">in</span> <span class="n">all_cells</span><span class="p">(</span><span class="n">dir_x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dir_y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">board_x</span><span class="p">][</span><span class="n">board_y</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tile</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_move</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dir_y</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">x</span> <span class="o">+=</span> <span class="n">dir_x</span>
+            <span class="n">y</span> <span class="o">+=</span> <span class="n">dir_y</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile</span>
+
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">board_x</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">==</span> <span class="n">board_y</span><span class="p">:</span>
+            <span class="k">continue</span>  <span class="c1"># nothing has happened</span>
+        <span class="n">anim</span> <span class="o">=</span> <span class="n">Animation</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_pos</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">transition</span><span class="o">=</span><span class="s2">"linear"</span><span class="p">)</span>
+        <span class="n">anim</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这里的<code>can_move()</code>函数我们前面已经做过。</p>
+<p>这个<code>Animation</code>的API和浏览器里面的CSS变换效果一样。我们需要提供：</p>
+<ul>
+<li>我们想变换的属性值（这里是<code>pos</code>）</li>
+<li>变换持续时间（）</li>
+<li>变换类型（<code>'linear'</code>表示变换的速度不变）</li>
+</ul>
+<p>这样，Kivy就可以将一个部件普从一个状态平滑的变换成另一个状态。</p>
+<blockquote>
+<p>Kivy提供了很多变换类型，具体可以参考<a href="http://kivy.org/docs/api-kivy.animation.html">文档</a>。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="绑定触摸控件">
+<a class="anchor" href="#%E7%BB%91%E5%AE%9A%E8%A7%A6%E6%91%B8%E6%8E%A7%E4%BB%B6" aria-hidden="true"><span class="octicon octicon-link"></span></a>绑定触摸控件<a class="anchor-link" href="#%E7%BB%91%E5%AE%9A%E8%A7%A6%E6%91%B8%E6%8E%A7%E4%BB%B6"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>除了键盘绑定，然我们在增加一个触摸控件绑定。由于鼠标输入事件和Kivy的触摸功能一样，我们的代码同样可以支持鼠标操作。</p>
+<p>我们需在<code>Board</code>类中增加一个事件handler：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.vector</span> <span class="kn">import</span> <span class="n">Vector</span>
+
+<span class="c1"># A method of class Board:</span>
+<span class="k">def</span> <span class="nf">on_touch_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">touch</span><span class="p">):</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="n">touch</span><span class="o">.</span><span class="n">pos</span><span class="p">)</span> <span class="o">-</span> <span class="n">Vector</span><span class="p">(</span><span class="n">touch</span><span class="o">.</span><span class="n">opos</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">length</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">y</span><span class="p">):</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">v</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">normalize</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>要让<code>Board.move()</code>运行，我们得把每一个手势都转换成一个单位矢量。代码解释如下：</p>
+<ol>
+<li>
+<code>if v.length() &lt; 20</code>：检查手势移动是否足够长。如果移动距离特别短，就当成是点击或者切换，不算移动</li>
+<li>
+<code>if abs(v.x) &gt; abs(v.y)</code>：手势的横坐标和纵坐标比较，把较小的坐标设为0，方向就沿着较大坐标那一侧</li>
+<li>把矢量标准化，然后提供给<code>Board.move()</code>
+</li>
+</ol>
+<p>最后一点充分解释了为什么你不能用自己的方式随意实现像方向这样的数学表达式。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="合并方块">
+<a class="anchor" href="#%E5%90%88%E5%B9%B6%E6%96%B9%E5%9D%97" aria-hidden="true"><span class="octicon octicon-link"></span></a>合并方块<a class="anchor-link" href="#%E5%90%88%E5%B9%B6%E6%96%B9%E5%9D%97"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在把同样数值方块相加合并成另一个，代码实现很容易。我们建一个新的辅助函数<code>can_combine()</code>，与<code>can_move()</code>类似，这个函数返回<code>True</code>如果我们可以把当前的方块与一个位置上的方块合并，如果坐标值是一样的，而且方块的数值相同。</p>
+<p>这就是实现的方法。如果与<code>can_move()</code>对比，会发现基本一样：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">can_combine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_cell</span><span class="p">(</span><span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">board_x</span><span class="p">][</span><span class="n">board_y</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">board_x</span><span class="p">][</span><span class="n">board_y</span><span class="p">]</span><span class="o">.</span><span class="n">number</span> <span class="o">==</span> <span class="n">number</span>
+    <span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们可以为<code>Board.move()</code>实现方块合并的功能了。</p>
+<p>就是把下面的代码加到<code>while self.can_move()</code>后面：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_combine</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dir_y</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">number</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="n">dir_x</span>
+    <span class="n">y</span> <span class="o">+=</span> <span class="n">dir_y</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">remove_widget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile</span>
+    <span class="n">tile</span><span class="o">.</span><span class="n">number</span> <span class="o">*=</span> <span class="mi">2</span>
+    <span class="n">tile</span><span class="o">.</span><span class="n">update_colors</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这段代码把移动方块那部分也加进来了，不过这里用<code>remove_widget()</code>来移除被组合的方块，然后把新方块的数值翻倍，同时把对应的颜色也调整过来。</p>
+<p>这样，我们的方块组合就完成了。现在游戏已经还不能玩，我们还要增加一些。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="增加方块">
+<a class="anchor" href="#%E5%A2%9E%E5%8A%A0%E6%96%B9%E5%9D%97" aria-hidden="true"><span class="octicon octicon-link"></span></a>增加方块<a class="anchor-link" href="#%E5%A2%9E%E5%8A%A0%E6%96%B9%E5%9D%97"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>每一轮结束之后，我们还要生成新的方块。要完成这样，生成新方块需要在方块合并序列的末尾，在上一轮方块完成移动的时候。</p>
+<p>好在有一个合适的事件<code>Animation.on_complete</code>可以解决问题。由于我们同时运行了很多数值相等的方块的合并，我们就只需要把事件绑定第底一个<code>Animation</code>实例上——它们都是同时运行的，有相同的持续时间，所有在同时批量处理第一个和最后一个合并时不应该有明显的时间差。</p>
+<p>这个实现和我们前面的<code>Board.move()</code>方法类似：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
+        <span class="k">return</span>
+
+    <span class="n">dir_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dir_x</span><span class="p">)</span>
+    <span class="n">dir_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dir_y</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span> <span class="ow">in</span> <span class="n">all_cells</span><span class="p">(</span><span class="n">dir_x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dir_y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">board_x</span><span class="p">][</span><span class="n">board_y</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tile</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">board_x</span><span class="p">,</span> <span class="n">board_y</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_move</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dir_y</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">x</span> <span class="o">+=</span> <span class="n">dir_x</span>
+            <span class="n">y</span> <span class="o">+=</span> <span class="n">dir_y</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_combine</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dir_y</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">number</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">x</span> <span class="o">+=</span> <span class="n">dir_x</span>
+            <span class="n">y</span> <span class="o">+=</span> <span class="n">dir_y</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remove_widget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile</span>
+            <span class="n">tile</span><span class="o">.</span><span class="n">number</span> <span class="o">*=</span> <span class="mi">2</span>
+            <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">number</span> <span class="o">==</span> <span class="mi">2048</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"You win the game"</span><span class="p">)</span>
+
+            <span class="n">tile</span><span class="o">.</span><span class="n">update_colors</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">board_x</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">==</span> <span class="n">board_y</span><span class="p">:</span>
+            <span class="k">continue</span>  <span class="c1"># nothing has happened</span>
+
+        <span class="n">anim</span> <span class="o">=</span> <span class="n">Animation</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_pos</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">transition</span><span class="o">=</span><span class="s2">"linear"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
+            <span class="n">anim</span><span class="o">.</span><span class="n">on_complete</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_tile</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">moving</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">anim</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>一旦合并结束，<code>on_complete</code>事件都触发，<code>new_tile()</code>就被调用，游戏继续。</p>
+<p>这里使用一个布尔值<code>moving</code>是为了保证<code>new_tile()</code>不会在一轮被调用两次。如果不检查，就可能网格立刻被堆满。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="同步回合">
+<a class="anchor" href="#%E5%90%8C%E6%AD%A5%E5%9B%9E%E5%90%88" aria-hidden="true"><span class="octicon octicon-link"></span></a>同步回合<a class="anchor-link" href="#%E5%90%8C%E6%AD%A5%E5%9B%9E%E5%90%88"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>你可能已经发现，在当前实现的方块合并部分有一个bug：玩家可以在前面一轮还没结束之前启动新一轮。解决这个bug最简单的方法就是增加移动方块的持续时间，比如设置成10秒：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># This is for demonstration only</span>
+<span class="n">anim</span> <span class="o">=</span> <span class="n">Animation</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_pos</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">transition</span><span class="o">=</span><span class="s2">"linear"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这种解决方法忽略了在方块已经准备生成后<code>move()</code>调用的顺序。要考虑这些就要增加前面用过的<code>moving</code>。现在，它要成为<code>Board</code>类的属性。另外，还有调整一些代码：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Board</span><span class="p">(</span><span class="n">Widget</span><span class="p">):</span>
+    <span class="n">moving</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_x</span><span class="p">,</span> <span class="n">dir_y</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
+            <span class="k">return</span>
+
+            <span class="c1"># ......</span>
+            <span class="n">anim</span> <span class="o">=</span> <span class="n">Animation</span><span class="p">(</span>
+                <span class="n">pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cell_pos</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">duration</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">transition</span><span class="o">=</span><span class="s2">"linear"</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving</span><span class="p">:</span>
+                <span class="n">anim</span><span class="o">.</span><span class="n">on_complete</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_tile</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">moving</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">anim</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">tile</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>别忘了在<code>new_tile()</code>里面把<code>moving</code>设置成<code>False</code>，否则在第一轮之后其他的方块会被移除。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="游戏结束">
+<a class="anchor" href="#%E6%B8%B8%E6%88%8F%E7%BB%93%E6%9D%9F" aria-hidden="true"><span class="octicon octicon-link"></span></a>游戏结束<a class="anchor-link" href="#%E6%B8%B8%E6%88%8F%E7%BB%93%E6%9D%9F"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>还有一件事就是游戏结束的处理。在本章开始的时候我们讨论过赢与输的条件，所以这里我们用同样的逻辑来实现它们。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="游戏胜利的情况">
+<a class="anchor" href="#%E6%B8%B8%E6%88%8F%E8%83%9C%E5%88%A9%E7%9A%84%E6%83%85%E5%86%B5" aria-hidden="true"><span class="octicon octicon-link"></span></a>游戏胜利的情况<a class="anchor-link" href="#%E6%B8%B8%E6%88%8F%E8%83%9C%E5%88%A9%E7%9A%84%E6%83%85%E5%86%B5"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>测试玩家是否已经到达2048很简单，就是找出<code>Board.move()</code>函数里面是否出现一个合并成2048的方块：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tile</span><span class="o">.</span><span class="n">number</span> <span class="o">*=</span> <span class="mi">2</span>
+<span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">number</span> <span class="o">==</span> <span class="mi">2048</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"You win the game"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote>
+<p>这里把赢得游戏的UI设计忽略了，你可以做一个好看的界面来表达胜利的喜悦，自己试试看吧。</p>
+<p>另外，如果要测试，建议把难道调低，可以把<code>2048</code>改成<code>64</code>，这样测试起来方便。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="游戏失败的情况">
+<a class="anchor" href="#%E6%B8%B8%E6%88%8F%E5%A4%B1%E8%B4%A5%E7%9A%84%E6%83%85%E5%86%B5" aria-hidden="true"><span class="octicon octicon-link"></span></a>游戏失败的情况<a class="anchor-link" href="#%E6%B8%B8%E6%88%8F%E5%A4%B1%E8%B4%A5%E7%9A%84%E6%83%85%E5%86%B5"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>游戏失败的算法有点复杂，当然可以用不同的方式来表达。最简单的方式就是在每次移动之前遍历整个网格，查看方块是否死锁了：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">is_deadlocked</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">all_cells</span><span class="p">():</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># Step 1</span>
+
+        <span class="n">number</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">number</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_combine</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">number</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_combine</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">number</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># Step 2</span>
+    <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># Step 3</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们需要对网格中的每一个方块进行以下测试：</p>
+<ol>
+<li>如果发现空格子，这就意味着没死锁——其他的方块可以移动到这里</li>
+<li>否则，如果方块还可以合并，那么游戏继续</li>
+<li>如果以上测试都失败了，我们不能发现任何一个方块满足以上测试，那么游戏失败</li>
+</ol>
+<p><img src="/images/copied_from_nb/kbpic/6.4.gamefail.png" alt="gamefail"></p>
+<p>在<code>new_tile()</code>里面实现这些测试比较合适：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">new_tile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">empty_cells</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">all_cells</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">]</span>
+
+    <span class="c1"># 生成一个新方块（忽略）</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">empty_cells</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_deadlocked</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Game over (board is deadlocked)"</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">moving</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># 看前面的“回合同步”</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>前置条件<code>len(empty_cells) == 1</code>可以减少检查的次数，如果还有空格就不检查。需要注意这时<code>is_deadlocked()</code>方法可能就是返回<code>False</code>，因此这就是一个优化，不会影响游戏的运行。</p>
+<blockquote>
+<p>这也是一个次优的，性能优先，可以继续改进的方法，代价是代码变长了。还有个优化方法就是跳过最后一行和一列，这样每次迭代时就不用检查边界，就是<code>can_combine()</code>做的事情。</p>
+<p>但是，在这里使用效果可以忽略，因为每一轮都至少有一次检查，我们大部分时间都在等玩家完成操作。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="下一步计划">
+<a class="anchor" href="#%E4%B8%8B%E4%B8%80%E6%AD%A5%E8%AE%A1%E5%88%92" aria-hidden="true"><span class="octicon octicon-link"></span></a>下一步计划<a class="anchor-link" href="#%E4%B8%8B%E4%B8%80%E6%AD%A5%E8%AE%A1%E5%88%92"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>游戏这下可以玩了，不过还有很多值得值得改进。如果你想进一步完善2048，可以参考下面的建议：</p>
+<ul>
+<li>增加更多动画——它们可以重新出更强的交互性</li>
+<li>增加一个记分板，可以保持分数，然后传递到服务器端，形成高分榜</li>
+<li>改造游戏规则，做成其他类似2048的游戏</li>
+<li>做一个算法来提前预测游戏结果。比如提示玩家，“不管怎么玩，再玩7轮就GAME OVER了，谢谢参与”</li>
+<li>彻底改变规则，增加一个多玩家PK模式<blockquote>
+<p>如果你想看更复杂的2048游戏，可以看<a href="https://github.com/tito/2048">这里</a>。这个项目由Kivy的核心开发者Mathieu Virbel创建，整合了Google Play，最佳成绩，高分榜等等  &gt;读其他人的代码是学习编程的好方法。</p>
+</blockquote>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="总结">
+<a class="anchor" href="#%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>总结<a class="anchor-link" href="#%E6%80%BB%E7%BB%93"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这一章，我们重建了2048游戏。也展现了许多其他项目里可以重用代码的实现细节:</p>
+<ul>
+<li>创建一个可缩放的面板，适应任意分辨率、任意方向的屏幕</li>
+<li>通过Kivy的<code>Animation</code>的API来实现平滑移动</li>
+<li>同时实现触摸屏手势和键盘方向键控制方向的功能</li>
+</ul>
+<p>可见，Kivy框架可以很好的支持游戏开发，画布渲染和动画支持在开发视频游戏是更加重要。Kivy的原型设计也很容易，虽然比JavaScript要难一点（现代浏览器是非常强大的平台，在快速原型方面基本不可能被打败）。</p>
+<p>如果你不使用某个平台的系统级API，Python的跨平台能力依然闪亮。也就是说，你的游戏可以在任何平台上运行，让更多的玩家参与。</p>
+<p>Kivy也不会和主流的应用发布平台冲突，可以在Apple AppStore，Google Play，甚至Steam上发布。</p>
+<p>当然，与成熟的游戏引擎像Unreal Engine或Unity相比，Kivy缺少很多特性和大多数交叉编译工具链。这是由于Kivy是一个一般目的的UI框架，并不是专业的游戏引擎；把不同类别的软件进行比较是不太合理的。</p>
+<p>总之，Kivy在偶尔独立开发游戏时是个不错的选择。愤怒的小鸟就曾通过Python和Kivy来实现，想想咱们错过的机会多大啊。（不过也不要沮丧，这更是一种鼓励。Rivio的游戏道理也不是一番风顺的。）</p>
+<p>下一章我们打算用Kivy写一个街机游戏。它将以一种非常规的方式，用类似Kivy部件的概念来创建一个交互的横向卷轴模式（Side-Scrolling），源自另一块流行的、单人开发的休闲游戏，飞翔的小鸟（Flappy Bird）。</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="muxuezi/air"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/jupyter/kivy/android/ios/2019/07/01/kivy-ch6-2048-app.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

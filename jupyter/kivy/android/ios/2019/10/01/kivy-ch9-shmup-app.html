@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>射击app | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="射击app" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="An easy to use blogging platform with support for Jupyter Notebooks." />
+<meta property="og:description" content="An easy to use blogging platform with support for Jupyter Notebooks." />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/10/01/kivy-ch9-shmup-app.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/10/01/kivy-ch9-shmup-app.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/9.1.shmup.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-10-01T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"An easy to use blogging platform with support for Jupyter Notebooks.","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/10/01/kivy-ch9-shmup-app.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/10/01/kivy-ch9-shmup-app.html","headline":"射击app","dateModified":"2019-10-01T00:00:00-05:00","datePublished":"2019-10-01T00:00:00-05:00","image":"https://asyncfor.com/kbpic/9.1.shmup.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>射击app | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="射击app" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="An easy to use blogging platform with support for Jupyter Notebooks." />
+<meta property="og:description" content="An easy to use blogging platform with support for Jupyter Notebooks." />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/10/01/kivy-ch9-shmup-app.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/10/01/kivy-ch9-shmup-app.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/9.1.shmup.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-10-01T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"An easy to use blogging platform with support for Jupyter Notebooks.","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/10/01/kivy-ch9-shmup-app.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/10/01/kivy-ch9-shmup-app.html","headline":"射击app","dateModified":"2019-10-01T00:00:00-05:00","datePublished":"2019-10-01T00:00:00-05:00","image":"https://asyncfor.com/kbpic/9.1.shmup.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">射击app</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2019-10-01T00:00:00-05:00" itemprop="datePublished">
+        Oct 1, 2019
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      7 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#jupyter">jupyter</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Kivy">Kivy</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Android">Android</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#iOS">iOS</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/muxuezi/air/tree/master/_notebooks/2019-10-01-kivy-ch9-shmup-app.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/muxuezi/air/master?filepath=_notebooks%2F2019-10-01-kivy-ch9-shmup-app.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/muxuezi/air/blob/master/_notebooks/2019-10-01-kivy-ch9-shmup-app.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#项目的限制">项目的限制 </a></li>
+<li class="toc-entry toc-h2"><a href="#纹理图集简介">纹理图集简介 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#创建一个图集">创建一个图集 </a></li>
+<li class="toc-entry toc-h3"><a href="#图集结构">图集结构 </a></li>
+<li class="toc-entry toc-h3"><a href="#Kivy使用图集的简易方法">Kivy使用图集的简易方法 </a></li>
+<li class="toc-entry toc-h3"><a href="#在GLSL代码使用图集">在GLSL代码使用图集 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#UV映射的数据结构">UV映射的数据结构 </a></li>
+<li class="toc-entry toc-h4"><a href="#图集加载器">图集加载器 </a></li>
+<li class="toc-entry toc-h4"><a href="#从图集中渲染合并图形">从图集中渲染合并图形 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#设计重用粒子系统">设计重用粒子系统 </a></li>
+<li class="toc-entry toc-h3"><a href="#类继续关系">类继续关系 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#PSWidget渲染类">PSWidget渲染类 </a></li>
+<li class="toc-entry toc-h4"><a href="#Particle类">Particle类 </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#制作游戏">制作游戏 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#实现星星">实现星星 </a></li>
+<li class="toc-entry toc-h3"><a href="#实现宇宙飞船">实现宇宙飞船 </a></li>
+<li class="toc-entry toc-h3"><a href="#实现飞船的尾巴或火焰">实现飞船的尾巴或火焰 </a></li>
+<li class="toc-entry toc-h3"><a href="#实现子弹">实现子弹 </a></li>
+<li class="toc-entry toc-h3"><a href="#实现敌人">实现敌人 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#碰撞检测">碰撞检测 </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#改善功能">改善功能 </a></li>
+<li class="toc-entry toc-h2"><a href="#总结">总结 </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2019-10-01-kivy-ch9-shmup-app.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>前面提到过，在这一章我们来做射击（shoot-em-up，简写shmup）app，一个快节奏的射击游戏，比魂斗罗简单许多。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="/images/copied_from_nb/kbpic/9.1.shmup.png" alt="shmup"></p>
+<p>做一个在屏幕上同时移动不同内容的游戏，需要大量的渲染来实现，在移动端（或多平台支持）也是如此。这一章我们就来做这些事情，上一章的知识和源代码已经带我们入了门。</p>
+<p>教学大纲如下：</p>
+<ul>
+<li>用Kivy的纹理图集（Texture atlases）完成本来需要用底层代码实现的纹理坐标值的设置工作</li>
+<li>继续用GLSL开发一个质点原型，然后用这个原型做不同的游戏角色</li>
+<li>实现二维射击游戏的——一个控件，鼠标和触摸屏，基本冲突发现子弹</li>
+</ul>
+<p>后面会涉及到大量细节，如果看不明白就运行一下文末的源代码。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="项目的限制">
+<a class="anchor" href="#%E9%A1%B9%E7%9B%AE%E7%9A%84%E9%99%90%E5%88%B6" aria-hidden="true"><span class="octicon octicon-link"></span></a>项目的限制<a class="anchor-link" href="#%E9%A1%B9%E7%9B%AE%E7%9A%84%E9%99%90%E5%88%B6"> </a>
+</h2>
+<p>我们做的app比较简单，功能有限，至少有以下限制：</p>
+<ul>
+<li>为了简化，忽略了奖惩机制，2048里面也是这样</li>
+<li>这个游戏只有一个敌人角色，简单模式</li>
+<li>许多优化被忽略了，可以少写一些代码</li>
+</ul>
+<p>如果感兴趣可以自己做。下面我们来看一下Kivy的纹理处理相关内容，后面会用到。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="纹理图集简介">
+<a class="anchor" href="#%E7%BA%B9%E7%90%86%E5%9B%BE%E9%9B%86%E7%AE%80%E4%BB%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>纹理图集简介<a class="anchor-link" href="#%E7%BA%B9%E7%90%86%E5%9B%BE%E9%9B%86%E7%AE%80%E4%BB%8B"> </a>
+</h2>
+<p>纹理图集（也叫sprite sheets）是一种应用开发中把图象组合成更大纹理的方法。与只是把一堆单个图象载入应用相比，这么做有些好处：</p>
+<ul>
+<li>应用打开更快，读一个大文件比读许多小文件要快。如果你有几百个这样的图片，用这种方法性能提升会很明显——网页上更是如此：图片太多会严重占用HTTP请求资源，在移动设备上这点更加明显</li>
+<li>一次性渲染也会很更快。用纹理映射可以只改变需要变化的纹理坐标，而不需要引起其他内容的变化</li>
+<li>当有一个大的模型时，像GLSL类的渲染，用纹理图集方法更适合。另外，纹理的坐标值更容易获取，也不需要二次绑定纹理</li>
+</ul>
+<blockquote>
+<p>在HTML和CSS里面常用类似的方法，叫CSS图片合并（CSS sprites）。原理是一样的。网页app通常是获取网络资源，如果大量图片存在会占用HTTP请求数，用CSS图片合并可以很好的降低HTTP请求占用。</p>
+</blockquote>
+<p>这一章，我们要介绍以下内容：</p>
+<ul>
+<li>用Kivy的CLI工具创建纹理映射</li>
+<li>文件格式化和<code>.atlas</code>文件结构</li>
+<li>Kivy应用纹理图集的用法</li>
+</ul>
+<p>如果你已经掌握了相关内容，可以直接跳到<em>GLSL使用纹理图集</em>一节。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="创建一个图集">
+<a class="anchor" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%9B%BE%E9%9B%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>创建一个图集<a class="anchor-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%9B%BE%E9%9B%86"> </a>
+</h3>
+<p>和网页开发不同，那里没有标准工具处理这个任务，Kivy框架用一个命令行工具处理图集映射。</p>
+<div class="highlight"><pre><span></span>python –m kivy.atlas &lt;atlas_name&gt; &lt;texture_size&gt; &lt;images…&gt;
+</pre></div>
+<p>在Mac系统上，把<code>python</code>替换成<code>kivy</code>，因为安装的时候<code>Kivy.app</code>会调用Python解释器。</p>
+<p>这样会创建至少两个文件，由所有的图像是否满足一个设定大小的纹理来决定。本章假设<code>texture_size</code>的值足够包含所有图像。</p>
+<p>所有输出文件都是<code>atlas_name</code>开头的参数：</p>
+<ul>
+<li>图集的索引称作<code>&lt;atlas_name&gt;.atlas</code>
+</li>
+<li>纹理有一个后缀<code>&lt;atlas_name&gt;-0.png</code>（这个文件总是存在的），<code>&lt;atlas_name&gt;-1.png</code>等等</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="图集结构">
+<a class="anchor" href="#%E5%9B%BE%E9%9B%86%E7%BB%93%E6%9E%84" aria-hidden="true"><span class="octicon octicon-link"></span></a>图集结构<a class="anchor-link" href="#%E5%9B%BE%E9%9B%86%E7%BB%93%E6%9E%84"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>.atlas</code>是JSON格式的文件，用来描述纹理映射的位置。</p>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">"game-0.png"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">"player"</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">78</span><span class="p">,</span> <span class="mi">84</span><span class="p">],</span>
+        <span class="nt">"bullet"</span><span class="p">:</span> <span class="p">[</span><span class="mi">82</span><span class="p">,</span> <span class="mi">184</span><span class="p">,</span> <span class="mi">24</span><span class="p">,</span> <span class="mi">16</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+<p>纹理的名称就是其源文件的文件名，没有后缀，<code>foo.png</code>就是<code>foo</code>。后面的数值对应的是<code>[x, y, width, height]</code>，所有值都是像素。</p>
+<p>组合纹理就是把一堆图片合并起来获得想要的内容，如下图所示。通常，为了利用空间会紧密排在一起。</p>
+<blockquote>
+<p>创建图集的时候，Kivy谨慎会处理每个图集的边框，同时考虑图片可能因渲染后效果引起尺寸改变的情况。这就是为什么你需要为图片组合边距留出充分的像素。这样做效果并不可见，但是很有必要。</p>
+</blockquote>
+<p><img src="/images/copied_from_nb/kbpic/9.2.textureatlas.png" alt="textureatlas"></p>
+<p>在Kivy代码里面用图集的方法和<code>http</code>方式类似，<code>atlas://</code>后面跟图集的路径。如下所示：</p>
+<div class="highlight"><pre><span></span><span class="nt">Image</span><span class="p">:</span>
+    <span class="nt">source</span><span class="p">:</span> <span class="s">'flags/Israel.png'</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="nt">Image</span><span class="p">:</span>
+    <span class="nt">source</span><span class="p">:</span> <span class="s">'atlas://flags/Israel'</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Kivy使用图集的简易方法">
+<a class="anchor" href="#Kivy%E4%BD%BF%E7%94%A8%E5%9B%BE%E9%9B%86%E7%9A%84%E7%AE%80%E6%98%93%E6%96%B9%E6%B3%95" aria-hidden="true"><span class="octicon octicon-link"></span></a>Kivy使用图集的简易方法<a class="anchor-link" href="#Kivy%E4%BD%BF%E7%94%A8%E5%9B%BE%E9%9B%86%E7%9A%84%E7%AE%80%E6%98%93%E6%96%B9%E6%B3%95"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>要演示上面的方法，我们用前面用过的图标<code>icon_clock.png</code>和<code>icon_paint.png</code>来试试：</p>
+<p><img src="/images/copied_from_nb/kbpic/9.3.kivyatlas.png" alt="kivyatlas"></p>
+<p>要创建图集，我们用下面的命令：</p>
+<div class="highlight"><pre><span></span>kivy -m kivy.atlas icons <span class="m">512</span> icon_clock.png icon_paint.png
+</pre></div>
+<p>如果不是Mac系统，用<code>python</code>命令。运行之后会出现如下提示：</p>
+
+<pre><code>[INFO] Kivy v1.9.1
+[INFO] [Atlas] create an 512x512 rgba image
+('Atlas created at', 'icons.atlas')
+1 image have been created</code></pre>
+<p>之后就会出现两个文件<code>icons.atlas</code>和<code>icons-0.png</code>。</p>
+<blockquote>
+<p>现在可以删除源图片文件。不过最好还是保留，有可能后面更新图集的时候还会用到。</p>
+</blockquote>
+<p>图集准备好以后，我们来做一个简单的app。<code>basic.py</code>文件代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.app</span> <span class="kn">import</span> <span class="n">App</span>
+
+
+<span class="k">class</span> <span class="nc">BasicApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">BasicApp</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在<code>basic.kv</code>文件里面加载布局很简单：</p>
+<div class="highlight"><pre><span></span><span class="nt">BoxLayout</span><span class="p">:</span>
+    <span class="nt">orientation</span><span class="p">:</span> <span class="s">'horizontal'</span>
+
+    <span class="nt">Image</span><span class="p">:</span>
+        <span class="nt">source</span><span class="p">:</span> <span class="s">'atlas://icons/icon_clock'</span>
+
+    <span class="nt">Image</span><span class="p">:</span>
+        <span class="nt">source</span><span class="p">:</span> <span class="s">'atlas://icons/icon_paint'</span>
+</pre></div>
+<p>运行代码，效果如下图所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/9.4.kivyatlaseasy.png" alt="kivyatlaseasy"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="在GLSL代码使用图集">
+<a class="anchor" href="#%E5%9C%A8GLSL%E4%BB%A3%E7%A0%81%E4%BD%BF%E7%94%A8%E5%9B%BE%E9%9B%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>在GLSL代码使用图集<a class="anchor-link" href="#%E5%9C%A8GLSL%E4%BB%A3%E7%A0%81%E4%BD%BF%E7%94%A8%E5%9B%BE%E9%9B%86"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Kivy对图集的支持非常简单，但是GLSL应用里面没这么容易。好在<code>.atlas</code>是JSON格式，所以我们可以用Python的<code>json</code>模块来处理。然后，我们可以将像素坐标值转换成OpenGL的UV坐标值。</p>
+<p>由于我们知道每个纹理的绝对尺寸，我们可以计算出每个图片组合的顶点与中心的相对位置。这样就可以实现对图集按照其原始形式进行渲染，保持等比例变化。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="UV映射的数据结构">
+<a class="anchor" href="#UV%E6%98%A0%E5%B0%84%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" aria-hidden="true"><span class="octicon octicon-link"></span></a>UV映射的数据结构<a class="anchor-link" href="#UV%E6%98%A0%E5%B0%84%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>每个图集都有很多数据，为了方便管理数据，我们需要一个数据结构：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+
+<span class="n">UVMapping</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s2">"UVMapping"</span><span class="p">,</span> <span class="s2">"u0 v0 u1 v1 su sv"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这个数据类型和C语言的结构体类似，和下面的代码差不多：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">UVMapping</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u0</span><span class="p">,</span> <span class="n">v0</span><span class="p">,</span> <span class="n">u1</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">su</span><span class="p">,</span> <span class="n">sv</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u0</span> <span class="o">=</span> <span class="n">u0</span>  <span class="c1"># top left corner</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v0</span> <span class="o">=</span> <span class="n">v0</span>  <span class="c1"># ---</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u1</span> <span class="o">=</span> <span class="n">u1</span>  <span class="c1"># bottom right corner</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v1</span> <span class="o">=</span> <span class="n">v1</span>  <span class="c1"># ---</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">su</span> <span class="o">=</span> <span class="n">su</span>  <span class="c1"># equals to 0.5 * width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sv</span> <span class="o">=</span> <span class="n">sv</span>  <span class="c1"># equals to 0.5 * height</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>注意，这些代码只是演示命名数组的原理，并不是完全相同。每个属性的定义如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">定义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>u0, v0</code></td>
+<td style="text-align:center">图集左上角的UV坐标</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>u1, v1</code></td>
+<td style="text-align:center">图集右下角的UV坐标</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>su</code></td>
+<td style="text-align:center">图集宽度一半，在建立顶点数组的时候用</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>sv</code></td>
+<td style="text-align:center">图集高度一半，在建立顶点数组的时候用</td>
+</tr>
+</tbody>
+</table>
+<p>这样做让代码可读性更好，原来的<code>tup[3]</code>就可以用<code>tup.v1</code>表示。同时，<code>UVMapping</code>是元组类型，一种不可变的、内存结构合理的数据结构，可以通过索引连接所有属性。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="图集加载器">
+<a class="anchor" href="#%E5%9B%BE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%99%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>图集加载器<a class="anchor-link" href="#%E5%9B%BE%E9%9B%86%E5%8A%A0%E8%BD%BD%E5%99%A8"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在，让我们写一个函数来描述图集加载的过程，包括处理JSON，确定坐标值等等。这个函数在程序的最后使用：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">kivy.core.image</span> <span class="kn">import</span> <span class="n">Image</span>
+
+
+<span class="k">def</span> <span class="nf">load_atlas</span><span class="p">(</span><span class="n">atlas_name</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">atlas_name</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">atlas</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">))</span>
+
+    <span class="n">tex_name</span><span class="p">,</span> <span class="n">mapping</span> <span class="o">=</span> <span class="n">atlas</span><span class="o">.</span><span class="n">popitem</span><span class="p">()</span>
+    <span class="n">tex</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span><span class="n">tex_name</span><span class="p">)</span><span class="o">.</span><span class="n">texture</span>
+    <span class="n">tex_width</span><span class="p">,</span> <span class="n">tex_height</span> <span class="o">=</span> <span class="n">tex</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="n">uvmap</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">w</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">h</span>
+        <span class="n">uvmap</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">UVMapping</span><span class="p">(</span>
+            <span class="n">x0</span> <span class="o">/</span> <span class="n">tex_width</span><span class="p">,</span>
+            <span class="mi">1</span> <span class="o">-</span> <span class="n">y1</span> <span class="o">/</span> <span class="n">tex_height</span><span class="p">,</span>
+            <span class="n">x1</span> <span class="o">/</span> <span class="n">tex_width</span><span class="p">,</span>
+            <span class="mi">1</span> <span class="o">-</span> <span class="n">y0</span> <span class="o">/</span> <span class="n">tex_height</span><span class="p">,</span>
+            <span class="mf">0.5</span> <span class="o">*</span> <span class="n">w</span><span class="p">,</span>
+            <span class="mf">0.5</span> <span class="o">*</span> <span class="n">h</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tex</span><span class="p">,</span> <span class="n">uvmap</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote>
+<p>记住我们现在处理的是最简单的情况：一个图集由一个纹理构成。这也可能是最有效的配置方式，所以这个限制应该不会影响我们的代码，尤其是因为图集的生成完全在我们控制之下。</p>
+</blockquote>
+<p>因为坐标值是通过Kivy的坐标系统实现的，所有我们需要把纵坐标调整一下，用OpenGL的左上角为原点的坐标系统。否则，图集就会颠倒（不过，在我们的小游戏里面这不是什么大问题。这种bug可能要在代码里长期存在，虽然没被注意到，也没什么大碍）。</p>
+<p><code>load_atlas('icons.atlas')</code>函数返回的是<code>icons-0.png</code>加载的纹理，和图集里每个纹理的UV描述，类似下面的结果：</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; load_atlas<span class="o">(</span><span class="s1">'icons.atlas'</span><span class="o">)</span>
+
+<span class="o">(</span>&lt;Texture <span class="nv">size</span><span class="o">=(</span><span class="m">512</span>, <span class="m">512</span><span class="o">)</span>...&gt;,
+<span class="o">{</span><span class="s1">'icon_paint'</span>:UVMapping<span class="o">(</span><span class="nv">u0</span><span class="o">=</span><span class="m">0</span>.2578125, <span class="nv">v0</span><span class="o">=</span><span class="m">0</span>.00390625,                <span class="nv">u1</span><span class="o">=</span><span class="m">0</span>.5078125, <span class="nv">v1</span><span class="o">=</span><span class="m">0</span>.25390625,
+                <span class="nv">su</span><span class="o">=</span><span class="m">64</span>.0, <span class="nv">sv</span><span class="o">=</span><span class="m">64</span>.0<span class="o">)</span>,
+<span class="s1">'icon_clock'</span>: UVMapping<span class="o">(</span>...<span class="o">)})</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>有了这个数据格式，我们就可以从纹理中挑出每个合并图形然后渲染到屏幕上，下面就来实现。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="从图集中渲染合并图形">
+<a class="anchor" href="#%E4%BB%8E%E5%9B%BE%E9%9B%86%E4%B8%AD%E6%B8%B2%E6%9F%93%E5%90%88%E5%B9%B6%E5%9B%BE%E5%BD%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>从图集中渲染合并图形<a class="anchor-link" href="#%E4%BB%8E%E5%9B%BE%E9%9B%86%E4%B8%AD%E6%B8%B2%E6%9F%93%E5%90%88%E5%B9%B6%E5%9B%BE%E5%BD%A2"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>把上面的内容放到一起，我们用类似前面的GLSL纹理映射例子来实现一个新版本。</p>
+<p>这里的<code>tex_atlas.py</code>文件与上一章的内容类似。通过<code>load_atlas()</code>函数来生成订单数组：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.graphics</span> <span class="kn">import</span> <span class="n">Mesh</span>
+<span class="kn">from</span> <span class="nn">kivy.graphics.instructions</span> <span class="kn">import</span> <span class="n">RenderContext</span>
+<span class="kn">from</span> <span class="nn">kivy.uix.widget</span> <span class="kn">import</span> <span class="n">Widget</span>
+
+<span class="c1"># ......</span>
+<span class="k">class</span> <span class="nc">GlslDemo</span><span class="p">(</span><span class="n">Widget</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Widget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">RenderContext</span><span class="p">(</span><span class="n">use_parent_projection</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">shader</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="s2">"tex_atlas.glsl"</span>
+
+        <span class="n">fmt</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="sa">b</span><span class="s2">"vCenter"</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"float"</span><span class="p">),</span>
+            <span class="p">(</span><span class="sa">b</span><span class="s2">"vPosition"</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"float"</span><span class="p">),</span>
+            <span class="p">(</span><span class="sa">b</span><span class="s2">"vTexCoords0"</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"float"</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="n">texture</span><span class="p">,</span> <span class="n">uvmap</span> <span class="o">=</span> <span class="n">load_atlas</span><span class="p">(</span><span class="s2">"icons.atlas"</span><span class="p">)</span>
+
+        <span class="n">a</span> <span class="o">=</span> <span class="n">uvmap</span><span class="p">[</span><span class="s2">"icon_clock"</span><span class="p">]</span>
+        <span class="n">vertices</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="mi">128</span><span class="p">,</span>
+            <span class="mi">128</span><span class="p">,</span>
+            <span class="o">-</span><span class="n">a</span><span class="o">.</span><span class="n">su</span><span class="p">,</span>
+            <span class="o">-</span><span class="n">a</span><span class="o">.</span><span class="n">sv</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">u0</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">v1</span><span class="p">,</span>
+            <span class="mi">128</span><span class="p">,</span>
+            <span class="mi">128</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">su</span><span class="p">,</span>
+            <span class="o">-</span><span class="n">a</span><span class="o">.</span><span class="n">sv</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">u1</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">v1</span><span class="p">,</span>
+            <span class="mi">128</span><span class="p">,</span>
+            <span class="mi">128</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">su</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">sv</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">u1</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">v0</span><span class="p">,</span>
+            <span class="mi">128</span><span class="p">,</span>
+            <span class="mi">128</span><span class="p">,</span>
+            <span class="o">-</span><span class="n">a</span><span class="o">.</span><span class="n">su</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">sv</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">u0</span><span class="p">,</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">v0</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="n">uvmap</span><span class="p">[</span><span class="s2">"icon_paint"</span><span class="p">]</span>
+        <span class="n">vertices</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="mi">256</span><span class="p">,</span>
+            <span class="mi">256</span><span class="p">,</span>
+            <span class="o">-</span><span class="n">b</span><span class="o">.</span><span class="n">su</span><span class="p">,</span>
+            <span class="o">-</span><span class="n">b</span><span class="o">.</span><span class="n">sv</span><span class="p">,</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">u0</span><span class="p">,</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">v1</span><span class="p">,</span>
+            <span class="mi">256</span><span class="p">,</span>
+            <span class="mi">256</span><span class="p">,</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">su</span><span class="p">,</span>
+            <span class="o">-</span><span class="n">b</span><span class="o">.</span><span class="n">sv</span><span class="p">,</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">u1</span><span class="p">,</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">v1</span><span class="p">,</span>
+            <span class="mi">256</span><span class="p">,</span>
+            <span class="mi">256</span><span class="p">,</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">su</span><span class="p">,</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">sv</span><span class="p">,</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">u1</span><span class="p">,</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">v0</span><span class="p">,</span>
+            <span class="mi">256</span><span class="p">,</span>
+            <span class="mi">256</span><span class="p">,</span>
+            <span class="o">-</span><span class="n">b</span><span class="o">.</span><span class="n">su</span><span class="p">,</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">sv</span><span class="p">,</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">u0</span><span class="p">,</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">v0</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">indices</span> <span class="o">+=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="p">:</span>
+            <span class="n">Mesh</span><span class="p">(</span>
+                <span class="n">fmt</span><span class="o">=</span><span class="n">fmt</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s2">"triangles"</span><span class="p">,</span>
+                <span class="n">vertices</span><span class="o">=</span><span class="n">vertices</span><span class="p">,</span>
+                <span class="n">indices</span><span class="o">=</span><span class="n">indices</span><span class="p">,</span>
+                <span class="n">texture</span><span class="o">=</span><span class="n">texture</span><span class="p">,</span>
+            <span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这点代码除了通常的GLSL初始化过程，就是把<code>load_atlas()</code>结果复制到<code>vertices</code>数组。我们选了两个不同的记录：<code>icon_clock</code>（用变量<code>a</code>表示）和<code>icon_paint</code>（用变量<code>b</code>表示），然后把它们放到顶点数组里。</p>
+<p>顶点数据格式包含以下内容：</p>
+<ul>
+<li>
+<strong>vCenter</strong>：这是合并图片在屏幕上的位置，应该和指定合并图片的所有顶点有相同的值</li>
+<li>
+<strong>vPosition</strong>：顶点与合并图片中心的相对位置，与<code>vCenter</code>无关</li>
+<li>
+<strong>vTexCoords0</strong>：每个顶点的UV坐标值，决定纹理要渲染的部分</li>
+</ul>
+<p>只有合并图片的位置（数组的前两个数值）不能从UV映射关系中找到，其他数值都可以从<code>load_atlas()</code>获得。</p>
+<p><code>tex_atlas.glsl</code>相关文件着色器代码如下：</p>
+<div class="highlight"><pre><span></span><span class="o">---</span><span class="n">vertex</span>
+<span class="err">$</span><span class="n">HEADER</span><span class="err">$</span>
+
+<span class="n">attribute</span> <span class="n">vec2</span> <span class="n">vCenter</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">tex_coord0</span> <span class="o">=</span> <span class="n">vTexCoords0</span><span class="p">;</span>
+    <span class="n">mat4</span> <span class="n">move_mat</span> <span class="o">=</span> <span class="n">mat4</span>
+        <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">vCenter</span><span class="p">.</span><span class="n">x</span><span class="p">,</span>
+         <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">vCenter</span><span class="p">.</span><span class="n">y</span><span class="p">,</span>
+         <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>
+         <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+    <span class="n">vec4</span> <span class="n">pos</span> <span class="o">=</span> <span class="n">vec4</span><span class="p">(</span><span class="n">vPosition</span><span class="p">.</span><span class="n">xy</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">move_mat</span><span class="p">;</span>
+    <span class="n">gl_Position</span> <span class="o">=</span> <span class="n">projection_mat</span> <span class="o">*</span> <span class="n">modelview_mat</span> <span class="o">*</span> <span class="n">pos</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="o">---</span><span class="n">fragment</span>
+<span class="err">$</span><span class="n">HEADER</span><span class="err">$</span>
+
+<span class="kt">void</span> <span class="n">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">gl_FragColor</span> <span class="o">=</span> <span class="n">texture2D</span><span class="p">(</span><span class="n">texture0</span><span class="p">,</span> <span class="n">tex_coord0</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+<p>这里只有最简单的功能——定位和显示纹理。类似的着色器可以用在游戏最后，那时将增加一个控制相对大小的属性，<code>vScale</code>。</p>
+<blockquote>
+<p>如果你不理解这段代码，请看看上一章的内容。</p>
+</blockquote>
+<p>最后运行程序的效果如下图所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/9.5.atlasglsl.png" alt="atlasglsl"></p>
+<p>下面，我们来开发一个粒子系统作为整个游戏其他对象的基础。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="设计重用粒子系统">
+<a class="anchor" href="#%E8%AE%BE%E8%AE%A1%E9%87%8D%E7%94%A8%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F" aria-hidden="true"><span class="octicon octicon-link"></span></a>设计重用粒子系统<a class="anchor-link" href="#%E8%AE%BE%E8%AE%A1%E9%87%8D%E7%94%A8%E7%B2%92%E5%AD%90%E7%B3%BB%E7%BB%9F"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>当我们有很多类似的对象时，写一个具有简单功能的粒子系统是通用的做法。后面我们的飞船、子弹等等都用这个粒子系统来扩展。</p>
+<p>其实，上一章的屏保程序整个就是一个很好的粒子系统，不过还缺少一个配置能力，也不能轻易重用。因此，这里我们要改变这些GLSL代码。</p>
+<blockquote>
+<p>值得一提的是，这里用的方法——每个粒子的四周用纹理渲染——并非底层渲染的最佳方案。但是，这么做非常直截了当，容易理解，而且与任何支持GLSL语言OpenGL的实现兼容。</p>
+<p>如果你打算更系统的学习OpenGL，你可能会用把纹理的四周渲染改为点渲染，或者类似的概念，这已经超出的本书的范围。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="类继续关系">
+<a class="anchor" href="#%E7%B1%BB%E7%BB%A7%E7%BB%AD%E5%85%B3%E7%B3%BB" aria-hidden="true"><span class="octicon octicon-link"></span></a>类继续关系<a class="anchor-link" href="#%E7%B1%BB%E7%BB%A7%E7%BB%AD%E5%85%B3%E7%B3%BB"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>粒子系统的API由两个类构成：<code>PSWidget</code>执行渲染，<code>Particle</code>类表示每个粒子。</p>
+<p>这两个类将与设计紧密耦合，在通常的OOP理论中这么做很有问题，但是可以改善我们app的性能：粒子可以直接连接渲染模块的顶点数组，来改变mesh网格——复制次数更少，考虑到需要同时处理很多粒子，这么做可以大大提升性能。</p>
+<p>粒子系统部件的实现和GLSL部件没什么不同，除了现在它是一个子类。<code>PSWidget</code>和<code>Particle</code>类都是抽象基类，也就是说，它们不能直接通过调用<code>PSWidget()</code>来实例化。</p>
+<p>增强这个现在有很多不同的方法。我们可以用Python标准模块<code>abc</code>来创建<code>true</code>抽象类（<code>abc</code>其实就是抽象类）。虽然这对Java程序员很有用，但是对Python程序员来说并不常用。</p>
+<p>为了简化，我们为所有需要改写的方法添加<code>NotImplementedError</code>异常处理。这使得基类没有元类和复杂的继承关系就不能使用，就像<code>abc</code>模块说明的那样。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="PSWidget渲染类">
+<a class="anchor" href="#PSWidget%E6%B8%B2%E6%9F%93%E7%B1%BB" aria-hidden="true"><span class="octicon octicon-link"></span></a>PSWidget渲染类<a class="anchor-link" href="#PSWidget%E6%B8%B2%E6%9F%93%E7%B1%BB"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面是<code>PSWidget</code>类代码：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">PSWidget</span><span class="p">(</span><span class="n">Widget</span><span class="p">):</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">vertices</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">particles</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Widget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">RenderContext</span><span class="p">(</span><span class="n">use_parent_projection</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">shader</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">glsl</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vfmt</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="sa">b</span><span class="s2">"vCenter"</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"float"</span><span class="p">),</span>
+            <span class="p">(</span><span class="sa">b</span><span class="s2">"vScale"</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"float"</span><span class="p">),</span>
+            <span class="p">(</span><span class="sa">b</span><span class="s2">"vPosition"</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"float"</span><span class="p">),</span>
+            <span class="p">(</span><span class="sa">b</span><span class="s2">"vTexCoords0"</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"float"</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vsize</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">attr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vfmt</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">texture</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uvmap</span> <span class="o">=</span> <span class="n">load_atlas</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">atlas</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这和前面的GLSL初始化类似，有一些属性尚未定义。<code>self.glsl</code>属性将加载着色器的文件名，<code>self.atlas</code>是纹理映射的文件名，被当作是纹理为渲染实例提供的唯一来源。</p>
+<p>这么我们还没有生成顶点数组：这件事留给子类去做。但是，我们应该提供一个简单的方式为派生类处理内部数据结构。因此，<code>make_particles</code>方法可以容易的加入大量类似粒子：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">make_particles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Cls</span><span class="p">,</span> <span class="n">num</span><span class="p">):</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">)</span>
+    <span class="n">uv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uvmap</span><span class="p">[</span><span class="n">Cls</span><span class="o">.</span><span class="n">tex_name</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">count</span> <span class="o">+</span> <span class="n">num</span><span class="p">):</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">i</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="o">.</span><span class="n">extend</span><span class="p">((</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">j</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="o">-</span><span class="n">uv</span><span class="o">.</span><span class="n">su</span><span class="p">,</span>
+                <span class="o">-</span><span class="n">uv</span><span class="o">.</span><span class="n">sv</span><span class="p">,</span>
+                <span class="n">uv</span><span class="o">.</span><span class="n">u0</span><span class="p">,</span>
+                <span class="n">uv</span><span class="o">.</span><span class="n">v1</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="n">uv</span><span class="o">.</span><span class="n">su</span><span class="p">,</span>
+                <span class="o">-</span><span class="n">uv</span><span class="o">.</span><span class="n">sv</span><span class="p">,</span>
+                <span class="n">uv</span><span class="o">.</span><span class="n">u1</span><span class="p">,</span>
+                <span class="n">uv</span><span class="o">.</span><span class="n">v1</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="n">uv</span><span class="o">.</span><span class="n">su</span><span class="p">,</span>
+                <span class="n">uv</span><span class="o">.</span><span class="n">sv</span><span class="p">,</span>
+                <span class="n">uv</span><span class="o">.</span><span class="n">u1</span><span class="p">,</span>
+                <span class="n">uv</span><span class="o">.</span><span class="n">v0</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="o">-</span><span class="n">uv</span><span class="o">.</span><span class="n">su</span><span class="p">,</span>
+                <span class="n">uv</span><span class="o">.</span><span class="n">sv</span><span class="p">,</span>
+                <span class="n">uv</span><span class="o">.</span><span class="n">u0</span><span class="p">,</span>
+                <span class="n">uv</span><span class="o">.</span><span class="n">v0</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Cls</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这<code>Cls</code>类的质点数量（<code>num</code>），把它们增加到部件的<code>self.particles</code>列表，然后同时生成<code>self.vertices</code>。每个粒子类型应该显示一个<code>tex_name</code>属性，用来在UV映射中查找出正确的合并图片，这个数据结构由前面的图集（<code>PSWidget.uvmap</code>）派生出来。</p>
+<p>其实，这个辅助函数是可选的，但是很有用。部件的具体类的在渲染之前的初始化阶段调用这个函数。</p>
+<p>这个部件基类的最后部分就是渲染函数：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">update_glsl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">:</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">advance</span><span class="p">(</span><span class="n">nap</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="p">:</span>
+        <span class="n">Mesh</span><span class="p">(</span>
+            <span class="n">fmt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vfmt</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s2">"triangles"</span><span class="p">,</span>
+            <span class="n">indices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">,</span>
+            <span class="n">vertices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span>
+            <span class="n">texture</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">texture</span><span class="p">,</span>
+        <span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>从<code>canvas.clear()</code>调用开始的代码和前面的GLSL例子类似。前面这段代码是在迭代所有粒子时调用两个方法：<code>advance()</code>方法计算粒子的新状态（由粒子决定），<code>update()</code>保持顶点数组中必要的数据的同步。</p>
+<blockquote>
+<p>这里主要是为了代码的可读性，并没有过多考虑性能，如果需要优化性能，有如下建议：</p>
+<ul>
+<li>循环部分可以并行处理</li>
+<li>代码还可以完全用另一个线程，不用每一帧都升级（优化可能应用到粒子选择的类，比如，不影响主程序背景色的填充物）</li>
+</ul>
+</blockquote>
+<p>这个方法更多的实现细节会在后面介绍。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Particle类">
+<a class="anchor" href="#Particle%E7%B1%BB" aria-hidden="true"><span class="octicon octicon-link"></span></a><code>Particle</code>类<a class="anchor-link" href="#Particle%E7%B1%BB"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面的代码就是Particle类，表示每个合并图片。源自满天星app的<code>Star</code>类，没有运动部分（后面的子类会实现）：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Particle</span><span class="p">:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vsize</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">vsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_i</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">i</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">vsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">created</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">base_i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_i</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">vsize</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vsize</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">created</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">advance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>self.parent</code>保存一个引用到父类<code>PSWidget</code>中，方便后面的信息交互。前面也出现过的<code>update()</code>方法，让多边形四个顶点的变化与粒子位置和比例保持同步（<code>x</code>，<code>y</code>和<code>size</code>属性）。</p>
+<p>这里还有一个方法没有出现在<code>Star</code>里面，就是<code>advance()</code>，它应该被改写，因为没有为屏幕改变设置默认的动作，完全由粒子决定如何变化。后面你会看到，粒子系统可以用来创建不同的效果。</p>
+<p><code>reset()</code>方法是在粒子的生命周期的最后重新初始化粒子（比如，已经离开屏幕或用完TTL的粒子）。虽然这里都是粒子系统，但是任何系统都会有一些要被恢复到原始状态的粒子。另外，这里也没有设置默认的行为让我们调用，所有这个函数什么也没有。</p>
+<blockquote>
+<p>从一个虚拟方法触发<code>NotImplementedError</code>错误是提醒开发者，可以在派生类里定义该方法的内容。我们也可以忽略后面两个方法，但是这样做有可能引发<code>AttributeError</code>错误。保留方法的定义，即使没有实现，也是很好的做法，可以减少其他开发者的猜测（或者过段时间再看代码的时候，会感觉一头雾水，不知道自己怎么写的）。</p>
+</blockquote>
+<p><code>reset()</code>方法里面的<code>created</code>参数。一些粒子系统在第一次生成的时候可能需要额外的（或不同的）初始化过程。前面也有过类似的情况，如满天星app里面，星星在屏幕的右手边生成。如果我们不考虑<em>已生成</em>状态，所有的星星都会出现的屏幕的最右侧，而且有同样的横坐标<code>x</code>，看起来就是一条直线。这样的结果肯定不是我们想要的，所以我们让通过将<code>created</code>变量设置成<code>True</code>使得星星的位置完全随机，这样就会看到漂亮的初始分布了。</p>
+<p>调用<code>reset()</code>方法意味着后面重生的粒子会比第一次生成的多很多，所以把<code>created</code>变量设置成<code>False</code>。</p>
+<p>现在基类的工作都完成了。后面你会看到，游戏的实现会变得很简单。下面我们就用粒子系统来创建游戏的角色。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="制作游戏">
+<a class="anchor" href="#%E5%88%B6%E4%BD%9C%E6%B8%B8%E6%88%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>制作游戏<a class="anchor-link" href="#%E5%88%B6%E4%BD%9C%E6%B8%B8%E6%88%8F"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们的app将用前面做好的模块来构建：根部件是<code>PSWidget</code>的子类叫<code>Game</code>，所有的游戏角色都由粒子系统<code>Particle</code>类派生出来。</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.base</span> <span class="kn">import</span> <span class="n">EventLoop</span>
+<span class="kn">from</span> <span class="nn">kivy.clock</span> <span class="kn">import</span> <span class="n">Clock</span>
+
+
+<span class="k">class</span> <span class="nc">Game</span><span class="p">(</span><span class="n">PSWidget</span><span class="p">):</span>
+    <span class="n">glsl</span> <span class="o">=</span> <span class="s2">"game.glsl"</span>
+    <span class="n">atlas</span> <span class="o">=</span> <span class="s2">"game.atlas"</span>
+
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">GameApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">EventLoop</span><span class="o">.</span><span class="n">ensure_window</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Game</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">on_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+        <span class="n">Clock</span><span class="o">.</span><span class="n">schedule_interval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">update_glsl</span><span class="p">,</span> <span class="mi">60</span> <span class="o">**</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这里用的两个文件解释如下：</p>
+<ul>
+<li>
+<code>game.glsl</code>着色器和<code>starfield.glsl</code>是一样的</li>
+<li>
+<code>game.atlas</code>纹理映射包含下列纹理：<ul>
+<li>
+<code>star</code>：和上一章的星星一样</li>
+<li>
+<code>player</code>：朝向右边的飞船</li>
+<li>
+<code>trail</code>：飞船发射的火球</li>
+<li>
+<code>bullet</code>：飞船发射的炮弹</li>
+<li>
+<code>ufo</code>：外星人朝向左边</li>
+</ul>
+</li>
+</ul>
+<p>上面的代码还没有在屏幕上显示出来，因为我们还没有生成顶点数组，下面我们来实现它们。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="实现星星">
+<a class="anchor" href="#%E5%AE%9E%E7%8E%B0%E6%98%9F%E6%98%9F" aria-hidden="true"><span class="octicon octicon-link"></span></a>实现星星<a class="anchor-link" href="#%E5%AE%9E%E7%8E%B0%E6%98%9F%E6%98%9F"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在我再建一个简单的星空。这次它从右向左运动，和前面的Kivy Bird游戏一样。</p>
+<p>要创建一个简单的平行视差效果，我们把星星分成三个平面，然后让它们有不同的速度。一个平面上的星星比较多也比较大，快速移动，另一个比较少慢速移动。一旦星星飞出屏幕就在左边的随机位置重生。</p>
+<p>下面我们来实现：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span><span class="p">,</span> <span class="n">random</span>
+
+
+<span class="k">class</span> <span class="nc">Star</span><span class="p">(</span><span class="n">Particle</span><span class="p">):</span>
+    <span class="n">plane</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">tex_name</span> <span class="o">=</span> <span class="s2">"star"</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">created</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plane</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">width</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">width</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">plane</span>
+
+    <span class="k">def</span> <span class="nf">advance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-=</span> <span class="mi">20</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">plane</span> <span class="o">*</span> <span class="n">nap</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>tex_name</code>是必须有的，引用<code>game.atlas</code>里面的纹理。</p>
+<p>随机生成一个星星的位置和所属的平面，无论初始化（<code>created=True</code>）是否被调用。</p>
+<p><code>advance()</code>方法就是一旦星星飞出屏幕就重生。</p>
+<p>为了使用粒子系统，我们需要用<code>PSWidget</code>类的<code>make_particles()</code>方法来增加一些星星。在<code>Game.initialize()</code>里面：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">make_particles</span><span class="p">(</span><span class="n">Star</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面就可以看到效果图：</p>
+<p><img src="/images/copied_from_nb/kbpic/9.6.starfield.png" alt="starfield"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="实现宇宙飞船">
+<a class="anchor" href="#%E5%AE%9E%E7%8E%B0%E5%AE%87%E5%AE%99%E9%A3%9E%E8%88%B9" aria-hidden="true"><span class="octicon octicon-link"></span></a>实现宇宙飞船<a class="anchor-link" href="#%E5%AE%9E%E7%8E%B0%E5%AE%87%E5%AE%99%E9%A3%9E%E8%88%B9"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们只需要一个宇宙飞船（单人模式），用一个粒子就可以实现了。这么做是为了和后面的代码统一，这个对象的构建和其他对象没什么区别。</p>
+<p>飞船一直粘在鼠标位置，要实现这个效果，我们把鼠标的位置储存到<code>Game</code>属性里，用<code>player_x</code>和<code>player_y</code>来表示，然后把飞船图片加载到里面。代码如下所示：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.core.window</span> <span class="kn">import</span> <span class="n">Window</span>
+
+
+<span class="k">class</span> <span class="nc">Game</span><span class="p">(</span><span class="n">PSWidget</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update_glsl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_y</span> <span class="o">=</span> <span class="n">Window</span><span class="o">.</span><span class="n">mouse_pos</span>
+
+        <span class="n">PSWidget</span><span class="o">.</span><span class="n">update_glsl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>由于飞船实在用户的控制之下，没有其他逻辑要实现，只要把图片移动到鼠标位置就可以了：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Player</span><span class="p">(</span><span class="n">Particle</span><span class="p">):</span>
+    <span class="n">tex_name</span> <span class="o">=</span> <span class="s2">"player"</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">created</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">player_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">player_y</span>
+
+    <span class="n">advance</span> <span class="o">=</span> <span class="n">reset</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>你会发现<code>reset()</code>和<code>advance()</code>方法是一样的。还有飞船的初始化：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">make_particles</span><span class="p">(</span><span class="n">Star</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">make_particles</span><span class="p">(</span><span class="n">Player</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面就是效果图：</p>
+<p><img src="/images/copied_from_nb/kbpic/9.7.spaceship.png" alt="spaceship"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="实现飞船的尾巴或火焰">
+<a class="anchor" href="#%E5%AE%9E%E7%8E%B0%E9%A3%9E%E8%88%B9%E7%9A%84%E5%B0%BE%E5%B7%B4%E6%88%96%E7%81%AB%E7%84%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>实现飞船的尾巴或火焰<a class="anchor-link" href="#%E5%AE%9E%E7%8E%B0%E9%A3%9E%E8%88%B9%E7%9A%84%E5%B0%BE%E5%B7%B4%E6%88%96%E7%81%AB%E7%84%B0"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>科幻小说里面的飞船都跟着一个尾巴。这个尾巴用下面的算法实现：</p>
+<ol>
+<li>粒子在引擎附件生成，尺寸是随机的。粒子的尺寸也是它的存活时间（time to live，TTL）</li>
+<li>它以一个恒定的速度飞离飞船，尺寸不断减小</li>
+<li>最终粒子的尺寸会比原来小10%</li>
+</ol>
+<p>当有很多粒子来时，这个效果会很好看。不过截屏是看不出来了，你可以运行一下代码试试。代码如下所示：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Trail</span><span class="p">(</span><span class="n">Particle</span><span class="p">):</span>
+    <span class="n">tex_name</span> <span class="o">=</span> <span class="s2">"trail"</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">created</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">player_x</span> <span class="o">+</span> <span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="o">-</span><span class="mi">20</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">player_y</span> <span class="o">+</span> <span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">random</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.6</span>
+
+    <span class="k">def</span> <span class="nf">advance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">-=</span> <span class="n">nap</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mf">0.1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-=</span> <span class="mi">120</span> <span class="o">*</span> <span class="n">nap</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>其实现方式很简单，用同样的<code>player_x</code>和<code>player_y</code>属性来决定飞船的位置。在初始化阶段，添加许多粒子来实现效果：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">make_particles</span><span class="p">(</span><span class="n">Star</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">make_particles</span><span class="p">(</span><span class="n">Trail</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">make_particles</span><span class="p">(</span><span class="n">Player</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>截图效果如下所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/9.8.spaceshiptail.png" alt="spaceshiptail"></p>
+<p>还有敌人和子弹两个粒子系统没有实现。和前面看到的角色不同，它们都是在某个时间立刻出现，而敌人和子弹不是立刻出现的，两者都需要等一个特定的事件发生，然后逐渐增加数量，发射一颗子弹或者生成一个敌人。</p>
+<p>但是，之前我们需要分配固定数量的粒子，因为顶点数组的增减会让代码变得复杂，这不是我们想要的。</p>
+<p>方法是给粒子增加一个新的布尔变量属性，决定粒子是否属于激活状态，然后激活需要的粒子。这个方法后面会提到。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="实现子弹">
+<a class="anchor" href="#%E5%AE%9E%E7%8E%B0%E5%AD%90%E5%BC%B9" aria-hidden="true"><span class="octicon octicon-link"></span></a>实现子弹<a class="anchor-link" href="#%E5%AE%9E%E7%8E%B0%E5%AD%90%E5%BC%B9"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们想让飞船的大炮在我们单击鼠标或触摸屏幕的时候能够发射子弹。用<code>firing</code>属性就可以实现：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Game</span><span class="p">(</span><span class="n">PSWidget</span><span class="p">):</span>
+    <span class="n">firing</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">fire_delay</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">on_touch_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">touch</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firing</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fire_delay</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">on_touch_up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">touch</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firing</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>要在两次射击之间增加延迟，我们引入一个变量<code>fire_delay</code>。这个变量会按帧递减到0，然后一个新的子弹生成，<code>fire_delay</code>开始增大。在<code>firing</code>变量为<code>True</code>的时候循环：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">update_glsl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">player_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_y</span> <span class="o">=</span> <span class="n">Window</span><span class="o">.</span><span class="n">mouse_pos</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">firing</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fire_delay</span> <span class="o">-=</span> <span class="n">nap</span>
+
+    <span class="n">PSWidget</span><span class="o">.</span><span class="n">update_glsl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在，让我们看看这个粒子的状态。开始的时候，所有的子弹都没激活（<code>active=False</code>），移出屏幕（坐标值<code>x=-100, y=-100</code>设置子弹位置，可以在渲染的时候不让它们出现）。代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Bullet</span><span class="p">(</span><span class="n">Particle</span><span class="p">):</span>
+    <span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">tex_name</span> <span class="o">=</span> <span class="s2">"bullet"</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">created</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>当遍历所有子弹之后，我们跳过那些没激活的子弹，保留<code>firing_delay</code>不是0的子弹。这时，我们激活一个子弹，然后把它放到玩家面前，启动<code>firing_delay</code>变量到倒计时。</p>
+<p>激活的子弹想星星一样移动，与星星方向相反。不像星星，子弹飞出屏幕后不会重生。它们回到不激活状态，从屏幕上消失。代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">advance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mi">250</span> <span class="o">*</span> <span class="n">nap</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">width</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">firing</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">fire_delay</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">player_x</span> <span class="o">+</span> <span class="mi">40</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">player_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">fire_delay</span> <span class="o">+=</span> <span class="mf">0.3333</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>fire_delay</code>属性设置为1/3秒，子弹发射的频率是每秒三发（3 rounds per second，RPS）。效果如下图所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/9.9.spaceshipguns.png" alt="spaceshipguns"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="实现敌人">
+<a class="anchor" href="#%E5%AE%9E%E7%8E%B0%E6%95%8C%E4%BA%BA" aria-hidden="true"><span class="octicon octicon-link"></span></a>实现敌人<a class="anchor-link" href="#%E5%AE%9E%E7%8E%B0%E6%95%8C%E4%BA%BA"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>敌人的概念和子弹类似，但是它们是连续出现的，我们不需要<code>firing</code>这样的标记，用一个<code>spawn_delay</code>就够了。代码实现如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Game</span><span class="p">(</span><span class="n">PSWidget</span><span class="p">):</span>
+    <span class="n">spawn_delay</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">update_glsl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_y</span> <span class="o">=</span> <span class="n">Window</span><span class="o">.</span><span class="n">mouse_pos</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">firing</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fire_delay</span> <span class="o">-=</span> <span class="n">nap</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spawn_delay</span> <span class="o">-=</span> <span class="n">nap</span>
+        <span class="n">PSWidget</span><span class="o">.</span><span class="n">update_glsl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在初始化阶段，我们创建了一个预定义数量的敌人，开始不激活。为了实现后面对子弹的碰撞检测，我们需要存储一个子弹列表（<code>Game.particles</code>）：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">make_particles</span><span class="p">(</span><span class="n">Star</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">make_particles</span><span class="p">(</span><span class="n">Trail</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">make_particles</span><span class="p">(</span><span class="n">Player</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">make_particles</span><span class="p">(</span><span class="n">Enemy</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">make_particles</span><span class="p">(</span><span class="n">Bullet</span><span class="p">,</span> <span class="mi">25</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">bullets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">particles</span><span class="p">[</span><span class="o">-</span><span class="mi">25</span><span class="p">:]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这些代码看着很复杂，因为这里涉及到很多不同的运动状态。为了固定<code>x</code>方向的速度，每个敌人还带一个随机垂直运动矢量<code>v</code>。当这样的粒子从屏幕边上的顶部到底部离开屏幕时，粒子的<code>v</code>属性不断改变，在屏幕上看到的是敌人又回到屏幕的效果。</p>
+<p>其他的规则与子弹类似：当敌人到达屏幕的底部，它重置然后消失再重生。代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Enemy</span><span class="p">(</span><span class="n">Particle</span><span class="p">):</span>
+    <span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">tex_name</span> <span class="o">=</span> <span class="s2">"ufo"</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">created</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">advance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_hit</span><span class="p">():</span>
+                <span class="n">snd_hit</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="k">return</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-=</span> <span class="mi">200</span> <span class="o">*</span> <span class="n">nap</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">50</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="k">return</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">*</span> <span class="n">nap</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">height</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">spawn_delay</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="mi">50</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">height</span> <span class="o">*</span> <span class="n">random</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">spawn_delay</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这段代码的设计思路很简单：</p>
+<ol>
+<li>检查是否被一个子弹击中，或者要重置</li>
+<li>水平移动，检查是否离开了屏幕，然后重置</li>
+<li>垂直移动，检查是否离开了屏幕，改变速度矢量</li>
+<li>如果<code>spawn_delay</code>已经到0，就重生一个敌人，然后启动<code>spawn_delay</code>
+</li>
+</ol>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="碰撞检测">
+<a class="anchor" href="#%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>碰撞检测<a class="anchor-link" href="#%E7%A2%B0%E6%92%9E%E6%A3%80%E6%B5%8B"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们还没实现的<code>Enemy</code>类的另一个有趣功能是<code>check_hit()</code>方法。有两种情况敌人会撞到：飞船和子弹。为了简化，我们设定玩家是无敌的，敌人碰到任何物体都会被消灭：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">check_hit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">player_x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">player_y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">60</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">bullets</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">b</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">:</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">True</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>math.hypot()</code>是计算两物体中心距离，我们假设所有的物体都以这个方法监测。不能用没激活的子弹碰撞（<code>if not b.active</code>），因为没激活的子弹在屏幕上是看不到的。因此，它们不会在屏幕上撞击任何物体。</p>
+<p>这样游戏就完成了。</p>
+<p><img src="/images/copied_from_nb/kbpic/9.10.fullgame.png" alt="fullgame"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="改善功能">
+<a class="anchor" href="#%E6%94%B9%E5%96%84%E5%8A%9F%E8%83%BD" aria-hidden="true"><span class="octicon octicon-link"></span></a>改善功能<a class="anchor-link" href="#%E6%94%B9%E5%96%84%E5%8A%9F%E8%83%BD"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>游戏有很多地方可以改进，尤其是游戏玩法上。当然这只是一个原型，不是商品，可以慢慢改进。</p>
+<p>如果你感兴趣，下面的建议留给你完成：</p>
+<ul>
+<li>游戏需要一个“Game Over”状态。胜利的状态不一定有，失败必须有，和上一章的类似</li>
+<li>增加角色，实现多种敌人，更多攻击的方式，也可以让敌人攻击飞船，增加关卡的难度，照着街机雷电游戏去做就行</li>
+<li>增加声音效果，可以仿照Kivy Bird那一章的内容。<code>MultiAudio</code>类也可以重用</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="总结">
+<a class="anchor" href="#%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>总结<a class="anchor-link" href="#%E6%80%BB%E7%BB%93"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这章的重点是用粒子系统来实现不同的游戏角色。这可能不是你了解的最好方法，但还是让我们把细节放下，来总结一下整本书的重点。</p>
+<p>一路走来，我们基本上学完了Python和Kivy游戏开发的过程，能胜任的领域很多：</p>
+<ul>
+<li>桌面和移动应用开发</li>
+<li>文字、图像、声音合成内容等应用的开发</li>
+<li>网络聊天应用的开发，以及社交网络，远程控制等程序</li>
+<li>视频游戏开发</li>
+</ul>
+<p>通过这本书，我们还为如何有效使用新技术提供了一些基本原则：</p>
+<ul>
+<li>把其他领域的经验迁移过来。Kivy虽然不一样，但并非完全不同，很多其他领域的方法都可以在这里重用</li>
+<li>努力探索实现的过程。理解框架工作的内部原理可以为调试提供极大帮助。</li>
+<li>如果文档缺失，请读源代码。毕竟，它是Python。</li>
+<li>遇到问题请用搜索引擎。你遇到的问题别人也遇到过。</li>
+</ul>
+<p>总之，我们衷心希望你能喜欢这次旅程。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="kbpic/src/9_ShootEmUp/">源代码</a></p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="muxuezi/air"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/jupyter/kivy/android/ios/2019/10/01/kivy-ch9-shmup-app.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

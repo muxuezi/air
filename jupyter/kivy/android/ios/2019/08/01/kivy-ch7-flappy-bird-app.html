@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>飞翔的小鸟app | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="飞翔的小鸟app" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="利用横向卷轴模式（Side-Scrolling）实现飞翔的小鸟" />
+<meta property="og:description" content="利用横向卷轴模式（Side-Scrolling）实现飞翔的小鸟" />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/08/01/kivy-ch7-flappy-bird-app.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/08/01/kivy-ch7-flappy-bird-app.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/7.1.kivybird.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-08-01T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"利用横向卷轴模式（Side-Scrolling）实现飞翔的小鸟","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/08/01/kivy-ch7-flappy-bird-app.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/08/01/kivy-ch7-flappy-bird-app.html","headline":"飞翔的小鸟app","dateModified":"2019-08-01T00:00:00-05:00","datePublished":"2019-08-01T00:00:00-05:00","image":"https://asyncfor.com/kbpic/7.1.kivybird.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>飞翔的小鸟app | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="飞翔的小鸟app" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="利用横向卷轴模式（Side-Scrolling）实现飞翔的小鸟" />
+<meta property="og:description" content="利用横向卷轴模式（Side-Scrolling）实现飞翔的小鸟" />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/08/01/kivy-ch7-flappy-bird-app.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/08/01/kivy-ch7-flappy-bird-app.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/7.1.kivybird.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-08-01T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"利用横向卷轴模式（Side-Scrolling）实现飞翔的小鸟","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/08/01/kivy-ch7-flappy-bird-app.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/08/01/kivy-ch7-flappy-bird-app.html","headline":"飞翔的小鸟app","dateModified":"2019-08-01T00:00:00-05:00","datePublished":"2019-08-01T00:00:00-05:00","image":"https://asyncfor.com/kbpic/7.1.kivybird.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">飞翔的小鸟app</h1><p class="page-description">利用横向卷轴模式（Side-Scrolling）实现飞翔的小鸟</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2019-08-01T00:00:00-05:00" itemprop="datePublished">
+        Aug 1, 2019
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      5 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#jupyter">jupyter</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Kivy">Kivy</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Android">Android</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#iOS">iOS</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/muxuezi/air/tree/master/_notebooks/2019-08-01-kivy-ch7-flappy-bird-app.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/muxuezi/air/master?filepath=_notebooks%2F2019-08-01-kivy-ch7-flappy-bird-app.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/muxuezi/air/blob/master/_notebooks/2019-08-01-kivy-ch7-flappy-bird-app.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#项目介绍">项目介绍 </a></li>
+<li class="toc-entry toc-h2"><a href="#制作背景动画">制作背景动画 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#加载平铺的花纹">加载平铺的花纹 </a></li>
+<li class="toc-entry toc-h3"><a href="#背景部件">背景部件 </a></li>
+<li class="toc-entry toc-h3"><a href="#背景动画">背景动画 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#制作管道">制作管道 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#管道属性介绍">管道属性介绍 </a></li>
+<li class="toc-entry toc-h3"><a href="#设置花纹的坐标值">设置花纹的坐标值 </a></li>
+<li class="toc-entry toc-h3"><a href="#实现管道">实现管道 </a></li>
+<li class="toc-entry toc-h3"><a href="#生成管道">生成管道 </a></li>
+<li class="toc-entry toc-h3"><a href="#循环移动管道">循环移动管道 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#制作小鸟">制作小鸟 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#游戏玩法回顾">游戏玩法回顾 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#接受用户输入">接受用户输入 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#实现小鸟上下飞行">实现小鸟上下飞行 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#保持在空中">保持在空中 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#旋转小鸟">旋转小鸟 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#碰撞监测">碰撞监测 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#游戏结束">游戏结束 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#制作声效">制作声效 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Kivy声音播放">Kivy声音播放 </a></li>
+<li class="toc-entry toc-h3"><a href="#添加声效">添加声效 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#总结">总结 </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2019-08-01-kivy-ch7-flappy-bird-app.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>上一章，通过制作2048app，我们已经掌握了游戏开发的简单技巧。这一章，我们继续游戏开发，做一个同样很受欢迎的游戏，飞翔的小鸟（Flappy Bird），重点学习一下游戏开发中的横向卷轴模式（Side-Scrolling）。</p>
+<!-- TEASER_END-->
+
+<p>这是一款由越南独立开发者<a href="http://tech.qq.com/a/20140210/001859.htm">阮哈东（Dong Nguyen）</a>2013年开发的手机游戏，短时间竟占领了全球各大App Store免费排行榜首位，2014年年末的时候，下载量已经 iOS App Store第一。其设计思路非常有趣，游戏操作就是一个人点击屏幕（或者空格键）保持飞翔，穿过重重障碍。这种简单重复的设计思路现在越来越流行，后面会详细介绍。</p>
+<p><strong>移动游戏设计的荆棘之路</strong></p>
+<p>经典的二维街机游戏风格在手机上复活了。有大量的经典游戏商业改造版，和30年前唯一不同的就是价签——包括Dizzy，Sonic，Double Dragon和R-Type等等。</p>
+<p>这些游戏一个共同的不足就是控制方式感受很差，毕竟触摸屏和陀螺仪目前还不能完全替代摇杆的效果。这也给新游戏提供了卖点——发挥触摸屏的特点，设计一种新的控制方式就能获得成功。</p>
+<p>一些开发者通过简单的设计来赢得客户，因为简单游戏有巨大的市场，尤其是低成本和免费的游戏。</p>
+<p>那些操作简单的游戏确实很受欢迎，飞翔的小鸟就是如此。这一章，我们将用Kivy来实现这种简单的设计方法。教学大纲如下：</p>
+<ul>
+<li>模拟简单的街机游戏</li>
+<li>用Kivy部件开发游戏，完成方向控制和二维变换，比如旋转</li>
+<li>实现简单的碰撞检测</li>
+<li>实现游戏的声音效果</li>
+</ul>
+<p>这个游戏没有获胜条件，最小的碰撞都会失败。在原版游戏中，玩家以分数高低论输赢。和上一章类似，如果感兴趣，记分板可以当作练习。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="项目介绍">
+<a class="anchor" href="#%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D" aria-hidden="true"><span class="octicon octicon-link"></span></a>项目介绍<a class="anchor-link" href="#%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们要做一个与飞翔的小鸟差不多的版本，姑且取名叫Kivy bird吧。游戏最终界面如下：</p>
+<p><img src="/images/copied_from_nb/kbpic/7.1.kivybird.png" alt="kivybird"></p>
+<p>我们的游戏包括下面三个部分：</p>
+<ul>
+<li>
+<strong>背景图案</strong>：背景是由一些以不同速度移动哦图层构成，给人一种视差效果。运动速度是不变的，也没有其他游戏事件。背景比较容易做，我们将从这里开始。</li>
+<li>
+<strong>障碍物（管道）</strong>：这是一个单独的图层，也是以固定的速度向玩家移动。与背景不同的是，管道的高度会不断变化，中间留出一段空间让玩家通过。碰到管道游戏失败。</li>
+<li>
+<strong>游戏角色（小鸟）</strong>：小鸟一直往下掉，只能垂直飞翔。玩家点击屏幕，小鸟就向上飞。如果小鸟掉到地上，碰到天花板或管道，游戏都失败。</li>
+</ul>
+<p>这就是游戏的基本设计思路。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="制作背景动画">
+<a class="anchor" href="#%E5%88%B6%E4%BD%9C%E8%83%8C%E6%99%AF%E5%8A%A8%E7%94%BB" aria-hidden="true"><span class="octicon octicon-link"></span></a>制作背景动画<a class="anchor-link" href="#%E5%88%B6%E4%BD%9C%E8%83%8C%E6%99%AF%E5%8A%A8%E7%94%BB"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们将用下面的图片来做背景图案：</p>
+<p><img src="/images/copied_from_nb/kbpic/7.2.background.png" alt="background"></p>
+<p>这些图片都可以无缝平铺在一起——这并不是必须的，只是看着会更好看。</p>
+<p>如上所述，背景一直是运动的。这种效果可以通过两种方法实现：</p>
+<ul>
+<li>直接的方法就是在背景上移动一个大的多边形（或者几个多边形）。只是创建循环的动画需要费点功夫</li>
+<li>更有效的方法是创建一些静态多边形（一个是一层）占据整个屏幕，然后让花纹图案动起来。用一个平铺的花纹图案，这个方法可以流畅的实现动画效果，也省不少功夫——不需要重新定位背景上的对象。</li>
+</ul>
+<p>我们要第二种方法来实现，因为这更简单有效。首先让我们把<code>kivybird.kv</code>文件做出来：</p>
+<div class="highlight"><pre><span></span><span class="nt">FloatLayout</span><span class="p">:</span>
+    <span class="nt">Background</span><span class="p">:</span>
+        <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">background</span>
+        <span class="nt">canvas</span><span class="p">:</span>
+            <span class="nt">Rectangle</span><span class="p">:</span>
+                <span class="nt">pos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.pos</span>
+                <span class="nt">size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(self.width, 96)</span>
+                <span class="nt">texture</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.tx_floor</span>
+            <span class="nt">Rectangle</span><span class="p">:</span>
+                <span class="nt">pos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(self.x, self.y + 96)</span>
+                <span class="nt">size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(self.width, 64)</span>
+                <span class="nt">texture</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.tx_grass</span>
+            <span class="nt">Rectangle</span><span class="p">:</span>
+                <span class="nt">pos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(self.x, self.height - 144)</span>
+                <span class="nt">size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(self.width, 128)</span>
+                <span class="nt">texture</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.tx_cloud</span>
+</pre></div>
+<blockquote>
+<p>这里的数字都是花纹的尺寸：96是地面高度，64是草的高度，144是云的高度。在实际开发中写这些代码很费劲，不过我们应该尽量简化代码，降低工作量。</p>
+</blockquote>
+<p>你会看到，这里没有移动的部分，就是三个矩形在屏幕的底部和顶部。动画效果需要花纹用<code>Background</code>类中带<code>tx_</code>的属性来实现，下面我们就是。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="加载平铺的花纹">
+<a class="anchor" href="#%E5%8A%A0%E8%BD%BD%E5%B9%B3%E9%93%BA%E7%9A%84%E8%8A%B1%E7%BA%B9" aria-hidden="true"><span class="octicon octicon-link"></span></a>加载平铺的花纹<a class="anchor-link" href="#%E5%8A%A0%E8%BD%BD%E5%B9%B3%E9%93%BA%E7%9A%84%E8%8A%B1%E7%BA%B9"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>让我们建一个辅助函数来加载平铺的花纹，这个函数在后面经常用到，所以把它放在最上面。</p>
+<p>首先创建一个<code>Widget</code>类，作为自定义部件的基类，<code>main.py</code>中代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.core.image</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">kivy.uix.widget</span> <span class="kn">import</span> <span class="n">Widget</span>
+
+
+<span class="k">class</span> <span class="nc">BaseWidget</span><span class="p">(</span><span class="n">Widget</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">load_tileable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2">.png"</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">texture</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">wrap</span> <span class="o">=</span> <span class="s2">"repeat"</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"tx_</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">name</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>创建辅助函数的语句就是<code>t.wrap = 'repeat'</code>。我们要把它应用到每一块花纹上。</p>
+<p>我们还需要储存新加载的花纹，用<code>tx_</code>加图片名称来命名。比如，<code>load_tileable('grass')</code>就会把<code>grass.png</code>加载到<code>self.tx_grass</code>属性。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="背景部件">
+<a class="anchor" href="#%E8%83%8C%E6%99%AF%E9%83%A8%E4%BB%B6" aria-hidden="true"><span class="octicon octicon-link"></span></a>背景部件<a class="anchor-link" href="#%E8%83%8C%E6%99%AF%E9%83%A8%E4%BB%B6"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在我们来实现<code>Background</code>部件：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.properties</span> <span class="kn">import</span> <span class="n">ObjectProperty</span>
+
+
+<span class="k">class</span> <span class="nc">Background</span><span class="p">(</span><span class="n">BaseWidget</span><span class="p">):</span>
+    <span class="n">tx_floor</span> <span class="o">=</span> <span class="n">ObjectProperty</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">tx_grass</span> <span class="o">=</span> <span class="n">ObjectProperty</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">tx_cloud</span> <span class="o">=</span> <span class="n">ObjectProperty</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Background</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"floor"</span><span class="p">,</span> <span class="s2">"grass"</span><span class="p">,</span> <span class="s2">"cloud"</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load_tileable</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>如果现在执行代码，你会看到花纹被拉伸填充矩形，这是因为还没有指定花纹的坐标。改变每块花纹的<code>uvsize</code>属性就可以了，这样就计算出覆盖多边形需要多少块花纹了。比如，<code>uvsize</code>设为<code>(2, 2)</code>表示填充一个矩形需要4块花纹。</p>
+<p>辅助函数可以用来设置<code>uvsize</code>的值，这样我们的花纹就不会变形了：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">set_background_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tx</span><span class="p">):</span>
+    <span class="n">tx</span><span class="o">.</span><span class="n">uvsize</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="n">tx</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote>
+<p>这里负坐标值表示花纹可以被切割。Kivy用这种效果来避免高成本的栅格操作，把负担转给GPU（显卡），这样处理起来更轻松。</p>
+</blockquote>
+<p>这个方法依赖于背景的宽度，所以每次<code>size</code>属性变化之后可以用<code>on_size()</code>调用一次。这样就可以在屏幕发生变化的时候保持<code>uvsize</code>属性及时更新了：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">tx</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tx_floor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx_grass</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tx_cloud</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_background_size</span><span class="p">(</span><span class="n">tx</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在背景图案就变成这样了：
+<img src="/images/copied_from_nb/kbpic/7.3.texturebackground.png" alt="texturebackground"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="背景动画">
+<a class="anchor" href="#%E8%83%8C%E6%99%AF%E5%8A%A8%E7%94%BB" aria-hidden="true"><span class="octicon octicon-link"></span></a>背景动画<a class="anchor-link" href="#%E8%83%8C%E6%99%AF%E5%8A%A8%E7%94%BB"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面我们要让背景动起来。首先，我们要在<code>KivyBirdApp</code>类增加一个每秒60下的运动计时器：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.app</span> <span class="kn">import</span> <span class="n">App</span>
+<span class="kn">from</span> <span class="nn">kivy.clock</span> <span class="kn">import</span> <span class="n">Clock</span>
+
+
+<span class="k">class</span> <span class="nc">KivyBirdApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">on_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">background</span>
+        <span class="n">Clock</span><span class="o">.</span><span class="n">schedule_interval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">,</span> <span class="mf">0.016</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">nap</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>update()</code>方法就是把控制传递给<code>Background</code>部件的<code>update()</code>。当我们需要更多移动的时候，我们再扩展这个方法。</p>
+<p>在<code>Background.update()</code>里面，我们改变花纹来模拟运动状态：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">set_background_uv</span><span class="p">(</span><span class="s2">"tx_floor"</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">nap</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">set_background_uv</span><span class="p">(</span><span class="s2">"tx_grass"</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">nap</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">set_background_uv</span><span class="p">(</span><span class="s2">"tx_cloud"</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">nap</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">set_background_uv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="n">t</span><span class="o">.</span><span class="n">uvpos</span> <span class="o">=</span> <span class="p">((</span><span class="n">t</span><span class="o">.</span><span class="n">uvpos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">val</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">uvpos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">property</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>辅助函数里面的<code>set_background_uv()</code>作用是：</p>
+<ul>
+<li>增加<code>uvpos</code>属性的横坐标，水平移动花纹</li>
+<li>花纹的属性调用<code>dispatch()</code>表示花纹位置已经改变了</li>
+</ul>
+<p><code>kivybird.kv</code>的画布指令会监听这个变化并及时反馈，把花纹重新渲染出来，这样就会看到流畅的动画了。</p>
+<p><code>set_background_uv()</code>里面控制不同图层速度的因子是随意选择的，可以自定义。</p>
+<p>这样背景就完成了，下面我们来做管道。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="制作管道">
+<a class="anchor" href="#%E5%88%B6%E4%BD%9C%E7%AE%A1%E9%81%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>制作管道<a class="anchor-link" href="#%E5%88%B6%E4%BD%9C%E7%AE%A1%E9%81%93"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>管道分成两部分：高的和低的。中间会留出一个孔给小鸟飞过。每一部分都是有不同长度的管体和管头构成。</p>
+<p><img src="/images/copied_from_nb/kbpic/7.4.pipe.png" alt="pipe"></p>
+<p><code>kivybird.kv</code>文件里的布局部件给我们一个好起点：</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;Pipe&gt;</span><span class="p">:</span>
+    <span class="nt">canvas</span><span class="p">:</span>
+        <span class="nt">Rectangle</span><span class="p">:</span>
+            <span class="nt">pos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(self.x + 4, self.FLOOR)</span>
+            <span class="nt">size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(56, self.lower_len)</span>
+            <span class="nt">texture</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.tx_pipe</span>
+            <span class="nt">tex_coords</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.lower_coords</span>
+        <span class="nt">Rectangle</span><span class="p">:</span>
+            <span class="nt">pos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(self.x, self.FLOOR + self.lower_len)</span>
+            <span class="nt">size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(64, self.PCAP_HEIGHT)</span>
+            <span class="nt">texture</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.tx_pcap</span>
+        <span class="nt">Rectangle</span><span class="p">:</span>
+            <span class="nt">pos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(self.x + 4, self.upper_y)</span>
+            <span class="nt">size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(56, self.upper_len)</span>
+            <span class="nt">texture</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.tx_pipe</span>
+            <span class="nt">tex_coords</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.upper_coords</span>
+        <span class="nt">Rectangle</span><span class="p">:</span>
+            <span class="nt">pos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(self.x, self.upper_y - self.PCAP_HEIGHT)</span>
+            <span class="nt">size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(64, self.PCAP_HEIGHT)</span>
+            <span class="nt">texture</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.tx_pcap</span>
+    <span class="nt">size_hint</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(None, 1)</span>
+    <span class="nt">width</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">64</span>
+</pre></div>
+<p>其实很简单，就是把管道从下到上分成四个矩形：</p>
+<ul>
+<li>底部管体</li>
+<li>底部管头</li>
+<li>顶部管体</li>
+<li>顶部管头</li>
+</ul>
+<p><img src="/images/copied_from_nb/kbpic/7.5.kvpipe.png" alt="kvpipe"></p>
+<p>与<code>Background</code>部件的实现过程类似，这些属性都要连接到部件图形显示算法的Python代码中。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="管道属性介绍">
+<a class="anchor" href="#%E7%AE%A1%E9%81%93%E5%B1%9E%E6%80%A7%E4%BB%8B%E7%BB%8D" aria-hidden="true"><span class="octicon octicon-link"></span></a>管道属性介绍<a class="anchor-link" href="#%E7%AE%A1%E9%81%93%E5%B1%9E%E6%80%A7%E4%BB%8B%E7%BB%8D"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>pipe</code>部件有趣的属性是：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.properties</span> <span class="kn">import</span> <span class="n">AliasProperty</span><span class="p">,</span> <span class="n">ListProperty</span><span class="p">,</span> <span class="n">NumericProperty</span><span class="p">,</span> <span class="n">ObjectProperty</span>
+
+
+<span class="k">class</span> <span class="nc">Pipe</span><span class="p">(</span><span class="n">BaseWidget</span><span class="p">):</span>
+    <span class="n">FLOOR</span> <span class="o">=</span> <span class="mi">96</span>
+    <span class="n">PCAP_HEIGHT</span> <span class="o">=</span> <span class="mi">26</span>
+    <span class="n">PIPE_GAP</span> <span class="o">=</span> <span class="mi">120</span>
+    <span class="n">tx_pipe</span> <span class="o">=</span> <span class="n">ObjectProperty</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">tx_pcap</span> <span class="o">=</span> <span class="n">ObjectProperty</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="n">NumericProperty</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">lower_len</span> <span class="o">=</span> <span class="n">NumericProperty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">lower_coords</span> <span class="o">=</span> <span class="n">ListProperty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">upper_len</span> <span class="o">=</span> <span class="n">NumericProperty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">upper_coords</span> <span class="o">=</span> <span class="n">ListProperty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">upper_y</span> <span class="o">=</span> <span class="n">AliasProperty</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_len</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bind</span><span class="o">=</span><span class="p">[</span><span class="s2">"height"</span><span class="p">,</span> <span class="s2">"upper_len"</span><span class="p">]</span>
+    <span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>首先，常量都放在<code>ALL_CAPS</code>里面：</p>
+<ul>
+<li>
+<code>FLOOR</code>：地面花纹的高度</li>
+<li>
+<code>PCAP_HEIGHT</code>：管头高度</li>
+<li>
+<code>PIPE_GAP</code>：留给小鸟飞过的小孔高度</li>
+</ul>
+<p>然后就是花纹的属性<code>tx_pipe</code>和<code>tx_pcap</code>。它们和那些在<code>Background</code>类里面花纹的用法一样</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Pipe</span><span class="p">(</span><span class="n">BaseWidget</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Pipe</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"pipe"</span><span class="p">,</span> <span class="s2">"pcap"</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">load_tileable</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>ratio</code>属性定义空的位置：<code>0.5</code>表示出现在中间（默认值），<code>0</code>表示出现在屏幕底部（地上），<code>1</code>表示出现在屏幕顶部（天空）。</p>
+<p><code>upper_y</code>是减少输入次数的辅助函数，它是用来计算<code>height - upper_len</code>值的。</p>
+<p>还有两个重要的属性<code>lower_coords</code>和<code>upper_coords</code>，用来设置花纹的坐标。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="设置花纹的坐标值">
+<a class="anchor" href="#%E8%AE%BE%E7%BD%AE%E8%8A%B1%E7%BA%B9%E7%9A%84%E5%9D%90%E6%A0%87%E5%80%BC" aria-hidden="true"><span class="octicon octicon-link"></span></a>设置花纹的坐标值<a class="anchor-link" href="#%E8%AE%BE%E7%BD%AE%E8%8A%B1%E7%BA%B9%E7%9A%84%E5%9D%90%E6%A0%87%E5%80%BC"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在<code>Background</code>部件的实现过程中，我们调整了花纹的属性，像<code>uvsize</code>和<code>uvpos</code>来控制渲染效果。这个方法的问题是这么做会影响花纹的所有实例。</p>
+<p>只要花纹没有在不同的几何形状中使用这么做就没问题。但是，现在我们需要在所有形状中都控制花纹的属性，因此我们就不能调整<code>uvsize</code>和<code>uvpos</code>了。我们需要用<code>Rectangle.tex_coords</code>。</p>
+<p><code>Rectangle.tex_coords</code>属性接受一个8个数字的列表或元组，把花纹的坐标匹配到矩形的四个角落。<code>tex_coords</code>这种匹配方式如下图所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/7.6.coordinatesmap.png" alt="coordinatesmap"></p>
+<blockquote>
+<p>花纹匹配通常用<code>u</code>和<code>v</code>，不用<code>x</code>和<code>y</code>。这样可以把几何位置与花纹坐标值区分开，经常容易混淆。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="实现管道">
+<a class="anchor" href="#%E5%AE%9E%E7%8E%B0%E7%AE%A1%E9%81%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>实现管道<a class="anchor-link" href="#%E5%AE%9E%E7%8E%B0%E7%AE%A1%E9%81%93"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这个主题看着有点混乱，让我们一点点来推进：我们要垂直固定管道上的砖块，只需要调整<code>tex_coords</code>的第5和第7个元素。另外，<code>tex_coords</code>的值和<code>uvsize</code>里面的值是一个意思。基于管道高度调整砖块的坐标如下所示：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">set_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coords</span><span class="p">,</span> <span class="nb">len</span><span class="p">):</span>
+    <span class="nb">len</span> <span class="o">/=</span> <span class="mi">16</span>  <span class="c1"># height of the texture</span>
+    <span class="n">coords</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">)</span>  <span class="c1"># set the last 3 items</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>然后就是用<code>ratio</code>和屏幕高度来计算管道的长度：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">pipes_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="p">(</span><span class="n">Pipe</span><span class="o">.</span><span class="n">FLOOR</span> <span class="o">+</span> <span class="n">Pipe</span><span class="o">.</span><span class="n">PIPE_GAP</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">Pipe</span><span class="o">.</span><span class="n">PCAP_HEIGHT</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">lower_len</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span> <span class="o">*</span> <span class="n">pipes_length</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">upper_len</span> <span class="o">=</span> <span class="n">pipes_length</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_len</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lower_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lower_len</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">set_coords</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">upper_coords</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">upper_len</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这段<code>on_size()</code>代码用来使所有的属性与屏幕尺寸保持同步。要反映<code>ratio</code>的变化，需要这样：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">ratio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">on_size</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>你可能发现在代码中我们没改变这个属性。这是因为管道的整个生命周期将通过<code>KivyBirdApp</code>类来处理，马上你就会看到。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="生成管道">
+<a class="anchor" href="#%E7%94%9F%E6%88%90%E7%AE%A1%E9%81%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>生成管道<a class="anchor-link" href="#%E7%94%9F%E6%88%90%E7%AE%A1%E9%81%93"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>要创建一堆望不到头的管道森林，我们需要把它们摆满屏幕，用循环队列就可以实现。</p>
+<p>我们让两个管道的间距是半屏宽，这样可以给玩家充分的准备时间，这样屏幕上同时会出现最多3个管道。为了方便测量，我们需要做4个管道。</p>
+<p>实现代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">KivyBirdApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="n">pipes</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">on_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spacing</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">width</span>
+        <span class="c1"># ...</span>
+
+    <span class="k">def</span> <span class="nf">spawn_pipes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">remove_widget</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">width</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spacing</span> <span class="o">*</span> <span class="n">i</span><span class="p">))</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">ratio</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">add_widget</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>pipes</code>列表的使用应该考虑实现细节。我们可以遍历子部件列表来连接管道，但是只是更好看一点儿。</p>
+<p><code>spawn_pipes()</code>方法开始部分的清除代码允许我们后面重启程序更方便。</p>
+<p>我们还用随机分布来控制<code>ratio</code>参数。这里用<code>[0.25, 0.75]</code>作为随机范围，而不是常用的<code>[0, 1]</code>，是为了让小孔生成的位置更容易一些。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="循环移动管道">
+<a class="anchor" href="#%E5%BE%AA%E7%8E%AF%E7%A7%BB%E5%8A%A8%E7%AE%A1%E9%81%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>循环移动管道<a class="anchor-link" href="#%E5%BE%AA%E7%8E%AF%E7%A7%BB%E5%8A%A8%E7%AE%A1%E9%81%93"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>与背景图案通过改变<code>uvpos</code>属性模拟运动的方式不同，管道真正移动。更新<code>KivyBirdApp.update()</code>方法来实现管道的循环更新：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">nap</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="p">:</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">-=</span> <span class="mi">96</span> <span class="o">*</span> <span class="n">nap</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="mi">64</span><span class="p">:</span>  <span class="c1"># pipe gone off screen</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">spacing</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">ratio</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>和之前的动画一样，<code>96</code>是随机的移动速度因子；因子越大速度越快。</p>
+<p>每个管道的<code>ratio</code>数值都是随机生成的，这样就为玩家创建一个新的管子。界面如下图所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/7.7.movingpipes.png" alt="movingpipes"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="制作小鸟">
+<a class="anchor" href="#%E5%88%B6%E4%BD%9C%E5%B0%8F%E9%B8%9F" aria-hidden="true"><span class="octicon octicon-link"></span></a>制作小鸟<a class="anchor-link" href="#%E5%88%B6%E4%BD%9C%E5%B0%8F%E9%B8%9F"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面我们来制作小鸟：
+<img src="/images/copied_from_nb/kbpic/7.8.bird.png" alt="bird"></p>
+<p>这个很简单，直接用Kivy的<code>Image</code>部件（<code>kivy.uix.image.Image</code>）实现<code>Bird</code>类就行。</p>
+<p><code>kivybird.kv</code>文件里面，我们需要几个属性来处理小鸟图片：</p>
+<div class="highlight"><pre><span></span><span class="nt">Bird</span><span class="p">:</span>
+    <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">bird</span>
+    <span class="nt">pos_hint</span><span class="p">:</span> <span class="p p-Indicator">{</span><span class="s">'center_x'</span><span class="p p-Indicator">:</span> <span class="nv">0.3333</span><span class="p p-Indicator">,</span> <span class="s">'center_y'</span><span class="p p-Indicator">:</span> <span class="nv">0.6</span><span class="p p-Indicator">}</span>
+    <span class="nt">size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(54, 54)</span>
+    <span class="nt">size_hint</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(None, None)</span>
+    <span class="nt">source</span><span class="p">:</span> <span class="s">'bird.png'</span>
+</pre></div>
+<p>这是<code>Bird</code>类的Python实现：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.uix.image</span> <span class="kn">import</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">ImageWidget</span>
+
+
+<span class="k">class</span> <span class="nc">Bird</span><span class="p">(</span><span class="n">ImageWidget</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在实现细节之前，我们需要完成一些基础工作。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="游戏玩法回顾">
+<a class="anchor" href="#%E6%B8%B8%E6%88%8F%E7%8E%A9%E6%B3%95%E5%9B%9E%E9%A1%BE" aria-hidden="true"><span class="octicon octicon-link"></span></a>游戏玩法回顾<a class="anchor-link" href="#%E6%B8%B8%E6%88%8F%E7%8E%A9%E6%B3%95%E5%9B%9E%E9%A1%BE"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在，让我们回忆一下游戏的过程：</p>
+<ol>
+<li>首先，在没有任何管道和重力的时候，确定鸟的初始位置。这个状态用<code>playing = False</code>代码表示</li>
+<li>只要玩家开始了游戏（点击屏幕或者用键盘敲空格键），代码就变成<code>playing = True</code>，管道开始生成，重力开始影响小鸟的状态。玩家需要持续的动作保持小鸟不掉下来</li>
+<li>如果发生碰撞，游戏重回<code>playing = False</code>，每个物体都会静止下来，等待玩家重新启动，然后回到步骤2重新开始</li>
+</ol>
+<p>为了实现这些，我们需要获取玩家输入的内容，很容易做到，因为我们只关心事件是否发生，不关心在哪里发生，整个屏幕就是一个大的按钮。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="接受用户输入">
+<a class="anchor" href="#%E6%8E%A5%E5%8F%97%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5" aria-hidden="true"><span class="octicon octicon-link"></span></a>接受用户输入<a class="anchor-link" href="#%E6%8E%A5%E5%8F%97%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面是实现代码：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.core.window</span> <span class="kn">import</span> <span class="n">Window</span><span class="p">,</span> <span class="n">Keyboard</span>
+
+
+<span class="k">class</span> <span class="nc">KivyBirdApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="n">playing</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">on_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># ...</span>
+        <span class="n">Window</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">on_key_down</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">on_key_down</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">on_touch_down</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_action</span>
+
+    <span class="k">def</span> <span class="nf">on_key_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">Keyboard</span><span class="o">.</span><span class="n">keycodes</span><span class="p">[</span><span class="s2">"spacebar"</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user_action</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">user_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">playing</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spawn_pipes</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playing</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这就是用户输入处理方式：<code>on_key_down</code>事件处理键盘输入，检查玩家是否敲了空格键。<code>on_touch_down</code>事件处理其他事件。最后都调用<code>user_action()</code>方法，执行<code>spawn_pipes()</code>，并把<code>playing</code>设置成<code>True</code>。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="实现小鸟上下飞行">
+<a class="anchor" href="#%E5%AE%9E%E7%8E%B0%E5%B0%8F%E9%B8%9F%E4%B8%8A%E4%B8%8B%E9%A3%9E%E8%A1%8C" aria-hidden="true"><span class="octicon octicon-link"></span></a>实现小鸟上下飞行<a class="anchor-link" href="#%E5%AE%9E%E7%8E%B0%E5%B0%8F%E9%B8%9F%E4%B8%8A%E4%B8%8B%E9%A3%9E%E8%A1%8C"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>紧接着，我们要实现重力让小鸟在一个方向上飞行。这里，我们引入<code>Bird.speed</code>属性和一个新常量——加速度。每一帧的速度矢量都向下增加，造成一种匀加速下降运行。如下面的代码所示：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Bird</span><span class="p">(</span><span class="n">ImageWidget</span><span class="p">):</span>
+    <span class="n">ACCEL_FALL</span> <span class="o">=</span> <span class="mf">0.25</span>
+
+    <span class="n">speed</span> <span class="o">=</span> <span class="n">NumericProperty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">gravity_on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="c1"># Replace pos_hint with a value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos_hint</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"center_y"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">center_y</span> <span class="o">=</span> <span class="mf">0.6</span> <span class="o">*</span> <span class="n">height</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">-=</span> <span class="n">Bird</span><span class="o">.</span><span class="n">ACCEL_FALL</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>当<code>playing</code>变成<code>True</code>时，<code>gravity_on()</code>方法会被调用。把<code>self.bird.gravity_on(self.root.height)</code>插入到<code>KivyBirdApp.user_action()</code>方法中：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">playing</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">bird</span><span class="o">.</span><span class="n">gravity_on</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">spawn_pipes</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">playing</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这个方法可以有效的重置鸟的初始位置，从<code>pos_hint</code>里面把<code>'center_y'</code>移除。</p>
+<blockquote>
+<p><code>self.bird</code>类似前面的<code>self.background</code>。下面的代码应该放在<code>KivyBirdApp.on_start()</code>里面：</p>
+<div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">background</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">bird</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">bird</span>
+</pre></div>
+</blockquote>
+<p>我们还得从<code>KivyBirdApp.update()</code>方法里面调用<code>Bird.update()</code>。这样做有个好处，可以在不玩游戏的时候为升级游戏对象加一个防护：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">nap</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">playing</span><span class="p">:</span>
+        <span class="k">return</span>  <span class="c1"># don't move bird or pipes</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">bird</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">nap</span><span class="p">)</span>
+    <span class="c1"># rest of the code omitted</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>你会发现，任何时候<code>Background.update()</code>方法都可以被调用；其他方法都是必要的时候才调用。</p>
+<p>这里没有实现保持小鸟在空中的能力，下面会实现。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="保持在空中">
+<a class="anchor" href="#%E4%BF%9D%E6%8C%81%E5%9C%A8%E7%A9%BA%E4%B8%AD" aria-hidden="true"><span class="octicon octicon-link"></span></a>保持在空中<a class="anchor-link" href="#%E4%BF%9D%E6%8C%81%E5%9C%A8%E7%A9%BA%E4%B8%AD"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>要让飞翔的小鸟跳着飞行也很简单。我们改写<code>Bird.speed</code>就行，把它设置一个正数值，当小鸟持续跌落的时候让它正常延迟。让我们在<code>Bird</code>类里面增加方法：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ACCEL_JUMP</span> <span class="o">=</span> <span class="mi">5</span>
+
+
+<span class="k">def</span> <span class="nf">bump</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="n">Bird</span><span class="o">.</span><span class="n">ACCEL_JUMP</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在，我们需要在<code>KivyBirdApp.user_action()</code>方法的最后调用<code>self.bird.bump()</code>就可以了，只要重复点击屏幕或按空格键都可以保持在空中。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="旋转小鸟">
+<a class="anchor" href="#%E6%97%8B%E8%BD%AC%E5%B0%8F%E9%B8%9F" aria-hidden="true"><span class="octicon octicon-link"></span></a>旋转小鸟<a class="anchor-link" href="#%E6%97%8B%E8%BD%AC%E5%B0%8F%E9%B8%9F"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>旋转小鸟是为了让游戏更生动，当它飞行的时候，沿着它的飞行轨迹旋转，看着很生动。向上飞行的时候朝着右上角旋转，向下飞行的时候朝着左下角旋转。</p>
+<p>角度计算的方法如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">Bird</span><span class="p">(</span><span class="n">ImageWidget</span><span class="p">):</span>
+    <span class="n">speed</span> <span class="o">=</span> <span class="n">NumericProperty</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">angle</span> <span class="o">=</span> <span class="n">AliasProperty</span><span class="p">(</span><span class="k">lambda</span> <span class="bp">self</span><span class="p">:</span> <span class="mi">5</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">bind</span><span class="o">=</span><span class="p">[</span><span class="s2">"speed"</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这里的速度因子<code>5</code>是随意设置的。</p>
+<p>现在，要让小鸟旋转起来，我们要在<code>kivybird.kv</code>里面加入：</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;Bird&gt;</span><span class="p">:</span>
+    <span class="nt">canvas.before</span><span class="p">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">PushMatrix</span>
+        <span class="l l-Scalar l-Scalar-Plain">Rotate</span><span class="p p-Indicator">:</span>
+            <span class="nt">angle</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root.angle</span>
+            <span class="nt">axis</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(0, 0, 1)</span>
+            <span class="nt">origin</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root.center</span>
+    <span class="nt">canvas.after</span><span class="p">:</span>
+        <span class="l l-Scalar l-Scalar-Plain">PopMatrix</span>
+</pre></div>
+<p>这个操作会改变OpenGL使用的局部坐标系统，影响后面所有的渲染。不要忘了保存（<code>PushMatrix</code>）和恢复（<code>PopMatrix</code>）坐标系统的状态，否则致命的错误可能会发生，导致整个画面变形。</p>
+<blockquote>
+<p>如果您遇到莫名的app渲染问题，看看OpenGL的底层指令。</p>
+</blockquote>
+<p>这样，小鸟就可以沿着既定的轨道飞行了。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="碰撞监测">
+<a class="anchor" href="#%E7%A2%B0%E6%92%9E%E7%9B%91%E6%B5%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>碰撞监测<a class="anchor-link" href="#%E7%A2%B0%E6%92%9E%E7%9B%91%E6%B5%8B"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这个游戏最重要的事情之一就是碰撞监测，当鸟碰到地板、天花板和管道都要结束游戏。</p>
+<p>用地面和屏幕高度与小鸟的高度<code>bird.y</code>对比，就可以轻松确认小鸟是否已经碰到。在<code>KivyBirdApp</code>实现如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">test_game_over</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bird</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="mi">90</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">bird</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="mi">50</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>监测是否碰到管道有点困难。我们要分两步来监测：首先，我们用Kivy的<code>collide_widget()</code>方法来测试横坐标，然后检查纵坐标是否在合理的范围之内（管道上下两段的<code>lower_len</code>和<code>upper_len</code>属性）。<code>KivyBirdApp.test_game_over()</code>方法最终实现如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">test_game_over</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">screen_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">height</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bird</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="mi">90</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">bird</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">screen_height</span> <span class="o">-</span> <span class="mi">50</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">p</span><span class="o">.</span><span class="n">collide_widget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bird</span><span class="p">):</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># The gap between pipes</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bird</span><span class="o">.</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">p</span><span class="o">.</span><span class="n">lower_len</span> <span class="o">+</span> <span class="mi">116</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">bird</span><span class="o">.</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">screen_height</span> <span class="o">-</span> <span class="p">(</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">upper_len</span> <span class="o">+</span> <span class="mi">75</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>如果监测失败就会返回<code>False</code>，游戏会结束。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="游戏结束">
+<a class="anchor" href="#%E6%B8%B8%E6%88%8F%E7%BB%93%E6%9D%9F" aria-hidden="true"><span class="octicon octicon-link"></span></a>游戏结束<a class="anchor-link" href="#%E6%B8%B8%E6%88%8F%E7%BB%93%E6%9D%9F"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>当碰撞发生是回发生什么呢？我们只要把<code>self.playing</code>改为<code>False</code>就行。监测结果可以在所有的计算完成后增加到<code>KivyBirdApp.update()</code>最后：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nap</span><span class="p">):</span>
+    <span class="c1"># ...</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_game_over</span><span class="p">():</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playing</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这个状态要等用户重新开始游戏才会消失。写碰撞监测代码最给力的部分就是边玩边测试，就是可以同时出现不同的游戏失败状态：</p>
+<p><img src="/images/copied_from_nb/kbpic/7.9.gameover.png" alt="gameover"></p>
+<p>虽然游戏失败，效果还是很Q的。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="制作声效">
+<a class="anchor" href="#%E5%88%B6%E4%BD%9C%E5%A3%B0%E6%95%88" aria-hidden="true"><span class="octicon octicon-link"></span></a>制作声效<a class="anchor-link" href="#%E5%88%B6%E4%BD%9C%E5%A3%B0%E6%95%88"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这部分和Kivy开发没啥关系了，就是演示一些制作游戏和应用声效的工具。</p>
+<p>声效的最大问题都不是技术上的。创建高质量的声效不是简单的事儿，软件工程师毕竟没有音乐和声乐工程师专业。另外，很多应用实际上没用声效，所以声效通常是被忽略了。</p>
+<p>不过制作声效的简便工具还是不少的。<a href="www.bfxr.net">Bfxr</a>就是一个很棒的免费电子合成器。用法很简单，就是单击一些设置按钮配置好音效，然后点击<strong>Save to Disk</strong>保存到电脑上就行了，用Bfxr可以很轻松地为app创建声效。</p>
+<p><img src="/images/copied_from_nb/kbpic/7.10.bfxr.png" alt="bfxr"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Kivy声音播放">
+<a class="anchor" href="#Kivy%E5%A3%B0%E9%9F%B3%E6%92%AD%E6%94%BE" aria-hidden="true"><span class="octicon octicon-link"></span></a>Kivy声音播放<a class="anchor-link" href="#Kivy%E5%A3%B0%E9%9F%B3%E6%92%AD%E6%94%BE"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在程序处理时，Kivy提供了声音播放的API：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.core.audio</span> <span class="kn">import</span> <span class="n">SoundLoader</span>
+
+<span class="n">snd</span> <span class="o">=</span> <span class="n">SoundLoader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"sound.wav"</span><span class="p">)</span>
+<span class="n">snd</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>用<code>play()</code>方法就开始播放。不过这个简单的方法在游戏里面使用有点问题。</p>
+<p>很多时候，你需要让声音随着你的动作不断的重复。Kivy的<code>sound</code>类的问题就是只能在指定的时间内播放一次。</p>
+<p>可行方式如下：</p>
+<ul>
+<li>等前一个播放终止（默认的行为，后面的事件都会静音）</li>
+<li>为每个事件停止播放然后重启播放，还是有问题（可能引起延迟）</li>
+</ul>
+<p>要解决这个问题，我们需要创建一个<code>sound</code>对象的队列，这样每次调用<code>play()</code>就产生一个<code>Sound</code>对象。当队列结束时，我们可以从头开始。只要队列足够长，我们就可以完全不用担心<code>Sound</code>的限制了。实际上，长度为10就可以。实现代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">MultiAudio</span><span class="p">:</span>
+    <span class="n">_next</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buf</span> <span class="o">=</span> <span class="p">[</span><span class="n">SoundLoader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">)]</span>
+
+    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_next</span><span class="p">]</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_next</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_next</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buf</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>用法如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">snd</span> <span class="o">=</span> <span class="n">MultiAudio</span><span class="p">(</span><span class="s2">"sound.wav"</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">snd</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>上面第二个参数就是队列的长度。看看我们是如何改写<code>Sound</code> API的<code>play()</code>方法的。这样在简单的程序里直接替换<code>Sound</code>就可以。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="添加声效">
+<a class="anchor" href="#%E6%B7%BB%E5%8A%A0%E5%A3%B0%E6%95%88" aria-hidden="true"><span class="octicon octicon-link"></span></a>添加声效<a class="anchor-link" href="#%E6%B7%BB%E5%8A%A0%E5%A3%B0%E6%95%88"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面让我们把声效添加到kivy Bird游戏里。</p>
+<p>有两个地方需要使用声音文件，一个是小鸟向上飞，一个是撞到东西。</p>
+<p>第一个事件，通过单击和切换来初始化，在速度快的时候重复很频繁，我们用一个队列。第二个事件，游戏结束，不会频繁的发生，所以就用一个<code>Sound</code>对象：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">snd_bump</span> <span class="o">=</span> <span class="n">MultiAudio</span><span class="p">(</span><span class="s2">"bump.wav"</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">snd_game_over</span> <span class="o">=</span> <span class="n">SoundLoader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">"game_over.wav"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>用前面加载过的<code>MultiAudio</code>类就行。剩下的事情就是把<code>play()</code>添加到适当的位置：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_game_over</span><span class="p">():</span>
+    <span class="n">snd_game_over</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">playing</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="k">def</span> <span class="nf">user_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">snd_bump</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这样，飞翔的小鸟就有声音了，希望你喜欢。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="总结">
+<a class="anchor" href="#%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>总结<a class="anchor-link" href="#%E6%80%BB%E7%BB%93"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这一章，我们做了一个Kivy小游戏，用到了画布指令和部件。</p>
+<p>作为UI工具包，Kivy提供了很多好东西，允许我们自由的组合、新建任何部件，可以做微信客户端和视频游戏等等。Kivy属性实现的一个特别值得称赞的地方就是可以无限制的组织数据，帮助我们充分消除不必要的内容（比如在属性没有发生变化的时候重新刷屏）。</p>
+<p>Kivy的另一个令人惊奇也是反直觉的特点就是它的性能很好——虽然Python并不以性能著称。部分原因是因为Kivy底层系统是Cython写的，被编译成机器码，性能和C语言有一拼。另外，如果配置合适，显卡加速也可以用来保证动画流程运行。</p>
+<p>下一章我们将继续提供图形渲染性能。</p>
+<p><a href="kbpic/src/7_KivyBird">源代码</a></p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="muxuezi/air"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/jupyter/kivy/android/ios/2019/08/01/kivy-ch7-flappy-bird-app.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

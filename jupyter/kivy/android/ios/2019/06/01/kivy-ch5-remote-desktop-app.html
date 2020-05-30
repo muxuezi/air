@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>远程桌面app | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="远程桌面app" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="做一个远程桌面app，用“真正的”应用层协议进行通信" />
+<meta property="og:description" content="做一个远程桌面app，用“真正的”应用层协议进行通信" />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/06/01/kivy-ch5-remote-desktop-app.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/06/01/kivy-ch5-remote-desktop-app.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/5.3remotedesk.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-01T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"做一个远程桌面app，用“真正的”应用层协议进行通信","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/06/01/kivy-ch5-remote-desktop-app.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/06/01/kivy-ch5-remote-desktop-app.html","headline":"远程桌面app","dateModified":"2019-06-01T00:00:00-05:00","datePublished":"2019-06-01T00:00:00-05:00","image":"https://asyncfor.com/kbpic/5.3remotedesk.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>远程桌面app | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="远程桌面app" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="做一个远程桌面app，用“真正的”应用层协议进行通信" />
+<meta property="og:description" content="做一个远程桌面app，用“真正的”应用层协议进行通信" />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/06/01/kivy-ch5-remote-desktop-app.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/06/01/kivy-ch5-remote-desktop-app.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/5.3remotedesk.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-06-01T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"做一个远程桌面app，用“真正的”应用层协议进行通信","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/06/01/kivy-ch5-remote-desktop-app.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/06/01/kivy-ch5-remote-desktop-app.html","headline":"远程桌面app","dateModified":"2019-06-01T00:00:00-05:00","datePublished":"2019-06-01T00:00:00-05:00","image":"https://asyncfor.com/kbpic/5.3remotedesk.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">远程桌面app</h1><p class="page-description">做一个远程桌面app，用“真正的”应用层协议进行通信</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2019-06-01T00:00:00-05:00" itemprop="datePublished">
+        Jun 1, 2019
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      3 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#jupyter">jupyter</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Kivy">Kivy</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Android">Android</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#iOS">iOS</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/muxuezi/air/tree/master/_notebooks/2019-06-01-kivy-ch5-remote-desktop-app.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/muxuezi/air/master?filepath=_notebooks%2F2019-06-01-kivy-ch5-remote-desktop-app.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/muxuezi/air/blob/master/_notebooks/2019-06-01-kivy-ch5-remote-desktop-app.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#服务器">服务器 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Flask服务器">Flask服务器 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#服务器新功能——截屏">服务器新功能——截屏 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#模拟点击行为">模拟点击行为 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#JavaScript客户端">JavaScript客户端 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#截屏的无限循环">截屏的无限循环 </a></li>
+<li class="toc-entry toc-h3"><a href="#把点击传回主机">把点击传回主机 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#Kivy远程桌面app">Kivy远程桌面app </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#登录界面">登录界面 </a></li>
+<li class="toc-entry toc-h3"><a href="#远程桌面窗口">远程桌面窗口 </a></li>
+<li class="toc-entry toc-h3"><a href="#截屏在Kivy里的循环">截屏在Kivy里的循环 </a></li>
+<li class="toc-entry toc-h3"><a href="#传送点击">传送点击 </a></li>
+<li class="toc-entry toc-h3"><a href="#后续任务">后续任务 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#总结">总结 </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2019-06-01-kivy-ch5-remote-desktop-app.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>本章做一个远程桌面app，依然和网络相关。我们用“真正的”应用层协议进行通信，解决一个复杂的问题。</p>
+<p>简单介绍一下：首先我们的目的是实现一个经典的桌面应用——远程连接，允许用户通过网络操纵其他电脑。这类应用在技术支持和远程协助中使用广泛。</p>
+<p>其次，介绍两个术语：主机（<em>host</em> machine）是远程控制者（运行远程控制服务器），客户机（<em>client</em>）是主机控制的系统。远程系统管理基本上就是这样的用户交互过程，主机把客户机当作代理来使用。</p>
+<p>因此，关键的两个步骤就是：</p>
+<ul>
+<li>收集客户机用户的输入（如鼠标和键盘动作），并应用到主机</li>
+<li>从主机向客户机发送任何输出（最常见的是截屏，还有声频、视频等）</li>
+</ul>
+<p>远程桌面就是这两个步骤的不断重复。很多商业软件都会实现这些功能，有一些甚至允许运行视频游戏——通过图形和游戏控制器加速。我们准备实现的一些功能如下：</p>
+<ul>
+<li>用户的输入只支持鼠标点击或Tab切换</li>
+<li>输出只有屏幕截图，因为通过网络抓取声音比较复杂</li>
+<li>主机只支持Windows平台，任何桌面版本都行。客户端没有限制，因为Kivy app哪儿都可以运行</li>
+</ul>
+<p>最后一条实在遗憾，因为不同的系统截屏和模拟点击行为的API不同，我们只能选择最流行的系统来实现。其他平台的支持以后会实现，原理都一样。</p>
+<blockquote>
+<p>中国用户可以忽略这条：如果没Windows，自己找虚拟机安装一个。Mac上也可以用Parallers安装，就是要换点钱。</p>
+</blockquote>
+<p>本章教学大纲如下：</p>
+<ul>
+<li>用Python的Flask微框架写一个HTTP服务器</li>
+<li>用PIL（Pillow）实现截屏</li>
+<li>用WinAPI功能模拟Windows点击</li>
+<li>做一个简单的JavaScript客户端原型，用它来测试</li>
+<li>做一个基于Kivy的HTTP客户端app连接到远程桌面服务器</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="服务器">
+<a class="anchor" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>服务器<a class="anchor-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>为了方便测试和使用，我们希望用容易实现的应用层协议做服务器。我们选择HTTP，要容易实现和简单测试，需要具体两个特征：</p>
+<ul>
+<li>支持很多特性，包括服务器端和客户端。HTTP是最流行的协议，完全符合。</li>
+<li>与其他协议不同，使用HTTP协议，我们可以用JavaScript轻易写出一个可以在浏览器上运行的客户端。这和本书的主题关系不大，但是依然是一个流行的做法</li>
+</ul>
+<p>建服务器的模块，我们用Flask，Django更流行，不过太大材小用了。要安装Flask，直接用pip安装即可：</p>
+<p><strong>pip install Flask</strong></p>
+<p>简单高效，完全开源，<a href="https://github.com/mitsuhiko/flask">文档</a>详细，推荐学习一下。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Flask服务器">
+<a class="anchor" href="#Flask%E6%9C%8D%E5%8A%A1%E5%99%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>Flask服务器<a class="anchor-link" href="#Flask%E6%9C%8D%E5%8A%A1%E5%99%A8"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>服务器通常就是由一系列绑定到不同URL的handler组成的。这些绑定通常叫做路由（<em>routing</em>）。Flask可以非常容易的实现这些功能。我们建立一个网页的服务器<code>server.py</code>：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">"Hello, Flask"</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s2">"0.0.0.0"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">7080</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在Flask里面，路由是以修饰器方式实现的，如<code>@app.route('/')</code>，在URL比较少的时候这么做很方便。</p>
+<p>'/'路由是服务器域名，对应一个IP地址。运行<code>server.py</code>后，在浏览器打开<code>http://127.0.0.1:7080</code>，看到<code>Hello, Flask</code>说明服务器ok了。</p>
+<p><img src="/images/copied_from_nb/kbpic/5.1flaskserver.png" alt="flaskserver"></p>
+<p>这里，<code>app.run()</code>里面的参数<code>0.0.0.0</code>不是一个有效的IP地址，不能通过正常访问。服务器绑定这个IP表示我们的app会监听所有IPV4接口——也就是说，从任何一个可用的IP发出的请求都会得到相应。</p>
+<p>这和默认设置（localhost，127.0.0.1）不同。localhost的IP只允许监听同一个机器传来的请求。因此，这个IP适合调试和测试用。但是，当我们发布产品后，<code>0.0.0.0</code>就是面向世界，开张圣听。不过，注意这不会自动绕过路由器；它可以在你的局域网工作，但是在公网工作可能需要其他配置。</p>
+<p>还有，记得设置防火墙策略，因为它需要满足应用层设置的优先级。</p>
+<blockquote>
+<p><strong>端口选择</strong></p>
+<p>用哪个端口并不重要，重要的是服务器和客户端要用同一个端口，无论是一个浏览器还是一个Kivy app。</p>
+<p>还要注意，几乎所有的系统中1024以下的端口一般只能由授权用户使用（root或admin）。而且很多端口已经分配了固定用途，所以建议选择1024以上的端口。</p>
+<p>默认的HTTP端口是80，默认端口通常不需要指定，<code>http://www.w3.org</code>和<code>http://www.w3.org:80/</code>是一样的。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>你可能发现Python开发实在太容易了——几行代码就可以运行一个服务器。不过，不是样样都很简单，有些事情还不能立竿见影。</p>
+<p>这是Python的优势：如果你要实现一些不太复杂的功能，试试Python吧，通常都会取得好效果。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="服务器新功能——截屏">
+<a class="anchor" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%96%B0%E5%8A%9F%E8%83%BD%E2%80%94%E2%80%94%E6%88%AA%E5%B1%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>服务器新功能——截屏<a class="anchor-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%96%B0%E5%8A%9F%E8%83%BD%E2%80%94%E2%80%94%E6%88%AA%E5%B1%8F"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>协议和服务器实现之后，我们来做截屏和模拟点击功能。这里仅实现Windows的实现，Mac和Linux支持可以做练习。</p>
+<p>PIL可以实现，用<code>PIL.ImageGrab.grab()</code>就行，我们把截图保存为RGB格式。之后就是把图片接到Flask上，这样就可以通过HTTP传送了。</p>
+<p>PIL已经不再维护了，现在有Pillow实现PIL，直接用pip安装即可，具体参阅<a href="http://pillow.readthedocs.org/">文档</a>。</p>
+<p><strong>pip install Pillow</strong></p>
+<p>实现的代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">send_file</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">ImageGrab</span>
+<span class="kn">from</span> <span class="nn">StringIO</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="c1"># # more compatible</span>
+<span class="c1"># try:</span>
+<span class="c1">#     from StringIO import StringIO # python2</span>
+<span class="c1"># except ImportError:</span>
+<span class="c1">#     from io import BytesIO as # python3</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">"/desktop.jpeg"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">desktop</span><span class="p">():</span>
+    <span class="n">screen</span> <span class="o">=</span> <span class="n">ImageGrab</span><span class="o">.</span><span class="n">grab</span><span class="p">()</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+    <span class="n">screen</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="s2">"JPEG"</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">75</span><span class="p">)</span>
+    <span class="n">buf</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">send_file</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span> <span class="n">mimetype</span><span class="o">=</span><span class="s2">"image/jpeg"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这里<code>StringIO</code>是把内容存在内存，不是磁盘上。使用API处理临时数据的时候这种“虚拟文件”很有用。本例中，我们不想要保存截屏内容，就是一个临时文件。如果连续下载文件到磁盘上效率很低，不如直接放到内存里，用完就释放。</p>
+<p>代码很简单，就是用<code>PIL.ImageGrab.grab()</code>截屏叫<code>screen</code>，然后用<code>screen.save()</code>保存为JPEG格式，这样省流量一些，最后用MIME type形式<code>'image/jpeg'</code>发送到Flask，这样就可以直接现在在浏览器上了。</p>
+<blockquote>
+<p>为了实现更好的速度，用比分辨率的图片更合适，因为每一个帧都要截图是很费流量的。</p>
+<p>这里又一次充分证明了一点：验证新概念或市场研究时，快速原型是多么高效。</p>
+</blockquote>
+<p><code>buf.seek(0)</code>是为了倒回（<em>rewind</em>）<code>StringIO</code>实例；否则，程序就到了数据的最后，不会给<code>send_file()</code>发送任何数据了。</p>
+<p>现在就可以测试效果了，打开<code>http://127.0.0.1:7080/desktop.jpeg</code>就会看到当前屏幕的截图了。
+<img src="/images/copied_from_nb/kbpic/5.2screenshot.png" alt="screenshot"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这里的路由很有意思<strong>"desktop.jpeg"</strong>，URL的最后是文件曾经在服务器工具里面是一种习惯，像<strong>Personal Home
+Page (PHP)</strong>，一种适合做简单的网站的简单编程语言。其实这里并没有路径的概念，你实际上只要把文件的名称输入地址栏然后从服务器获得它。</p>
+<p>这么做是很不安全的行为，远程连接者可以看到服务器的配置，比如<code>'/../../etc/passwd'</code>输入地址栏就可以看到密码了，之后的各种木马病毒像Trojans木马（后门）就来了。</p>
+<p>Python的网页服务器都经历过这些教训。你也可以这么写，但是强烈不推荐，这样太危险了。另外，Python的模块通常默认也不会使用这些配置。</p>
+<p>今天，从文件系统直接获取文件的事情并不是没有，但主要是用于静态文件。另外，有时我们也会把动态网页（如<code>/index.html</code>，<code>/desktop.jpeg</code>等）也写成文件名的形式是为了让用户更容易明白这些URL的作用。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="模拟点击行为">
+<a class="anchor" href="#%E6%A8%A1%E6%8B%9F%E7%82%B9%E5%87%BB%E8%A1%8C%E4%B8%BA" aria-hidden="true"><span class="octicon octicon-link"></span></a>模拟点击行为<a class="anchor-link" href="#%E6%A8%A1%E6%8B%9F%E7%82%B9%E5%87%BB%E8%A1%8C%E4%B8%BA"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>截屏部分完成之后，我们需要实现的功能就是鼠标点击，用WinAPI可以实现，不过很麻烦，我们用Python的ctypes模块来做。</p>
+<p>首先我们需要从URL或者点击的坐标。我们用<code>GET</code>方式来实现：<code>/click?x=100&amp;y=200</code>，这种方法容易在浏览器测试，不像<code>POST</code>和其他HTTP方式需要其他工具来测试。</p>
+<p>Flask支持这种URL带参数的方式：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">request</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">"/click"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">click</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"x"</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"y"</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"error: expecting 2 ints, x and y"</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>建立原型的时候在可能出错的地方加异常处理代码是必要的，因为经常会忘记或发送了不合理的参数，所以我们要做异常处理，所有我们需要检查<code>GET</code>请求的参数是否可用。调试的时候如果出现错误就会显示信息，这样就知道问题出在哪里了。</p>
+<p>有了点击的坐标之后，我们就要用WinAPI来调用它们。这里需要两个函数都在<code>user32.dll</code>：<code>SetCursorPos()</code>是设置鼠标光标的位置，<code>mouse_event()</code>模拟鼠标的点击事件，比如按下或松开按键。</p>
+<blockquote>
+<p><code>user32.dll</code>这个32和你系统的32位或64位没关系。Win32 API首次出现在 Windows NT，比之后的AMD64 (x86_64)架构早7年多，之所以这Win32是为了和之前的Win16区分。</p>
+</blockquote>
+<p><code>mouse_event()</code>的第一个参数是事件类型，一个C语言枚举类型（一组整型常量）。我们可以在Python里面定义这些常量，用常量2表示鼠标按下，4表示鼠标松开并不是很直观。可以这样：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">ctypes</span>
+
+<span class="c1"># this is the user32.dll reference</span>
+<span class="n">user32</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">user32</span>
+
+<span class="n">MOUSEEVENTF_LEFTDOWN</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">MOUSEEVENTF_LEFTUP</span> <span class="o">=</span> <span class="mi">4</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<blockquote>
+<p>Win API文档可以到Microsoft Developer Network (MSDN)去查：<code>SetCursorPos()</code>，<code>mouse_event()</code>。
+限于篇幅不做详细介绍，而且也不会有到很多功能；WinAPI可谓包罗万象，内容十分丰富，感兴趣自行研究。</p>
+</blockquote>
+<p>模拟点击的代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">"/click"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">click</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"x"</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"y"</span><span class="p">))</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"error"</span>
+
+    <span class="n">user32</span><span class="o">.</span><span class="n">SetCursorPos</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">user32</span><span class="o">.</span><span class="n">mouse_event</span><span class="p">(</span><span class="n">MOUSEEVENTF_LEFTDOWN</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">user32</span><span class="o">.</span><span class="n">mouse_event</span><span class="p">(</span><span class="n">MOUSEEVENTF_LEFTUP</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">"done"</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>代码很直白，就是设置鼠标位置，然后单击一下（按下，松开）。</p>
+<p>现在你可以启动Flask的服务器然后试试点击操作，可以在地址栏输入<code>http://127.0.0.1:7080/click?x=10&amp;y=10</code>，如果左上角（10，10）这个位置有图标，图标会被选中。</p>
+<p>当然也可以实现一个双击行为，如果页面刷新的足够快的话（因为打开文件时屏幕变化很大，需要截取很多图片），这可能需要在另外一个设备上运行浏览器，记得修改对应的服务器IP地址。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="JavaScript客户端">
+<a class="anchor" href="#JavaScript%E5%AE%A2%E6%88%B7%E7%AB%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>JavaScript客户端<a class="anchor-link" href="#JavaScript%E5%AE%A2%E6%88%B7%E7%AB%AF"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在这一章，我们将尝试一下JavaScript远程桌面客户端，因为我们用的是HTTP协议，JavaScript非常合适。这个简单的客户端可以在浏览器运行，作为Kivy客户端桌面应用的原型。</p>
+<p>如果你不熟悉JavaScript，不用担心，其语法很简单，与Python很相似。我们还要用到jQuery来处理DOM表和AJAX。</p>
+<blockquote>
+<p>很多人可能不赞成在产品设计阶段使用jQuery，尤其是对那些性能要求高的应用。但是，要实现网页app的快速原型，jQuery还是很不错的，因为它用法简单，实现高效。</p>
+</blockquote>
+<p>做网页app，我们得把原来的<strong>Hello, Flask</strong>替换成。</p>
+<div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">"UTF-8"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Remote Desktop<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">"//code.jquery.com/jquery-1.11.1.js"</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="c1">// code goes here</span>
+        <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+<p>Flask要使用这个HTML，需要对<code>index()</code>做一点调整：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">app</span><span class="o">.</span><span class="n">send_static_file</span><span class="p">(</span><span class="s2">"index.html"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这和前面的<code>desktop()</code>函数是一样的，不过是从硬盘读取HTML文件再显示。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="截屏的无限循环">
+<a class="anchor" href="#%E6%88%AA%E5%B1%8F%E7%9A%84%E6%97%A0%E9%99%90%E5%BE%AA%E7%8E%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>截屏的无限循环<a class="anchor-link" href="#%E6%88%AA%E5%B1%8F%E7%9A%84%E6%97%A0%E9%99%90%E5%BE%AA%E7%8E%AF"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在，让我们展示一个连续的屏幕显示方案：我们的程序每两秒请求一个截屏，然后立刻向用户显示出来。因为我们写的是网页应用，所有的复杂情况都由浏览器处理：用<code>&lt;img&gt;</code>标签加载图片显示到屏幕上。实现步骤如下：</p>
+<ol>
+<li>删除旧的<code>&lt;img&gt;</code>标签，如果有的话</li>
+<li>增加一个新的<code>&lt;img&gt;</code>标签</li>
+<li>每2秒重复一次</li>
+</ol>
+<p>用JavaScript实现如下：</p>
+
+<pre><code>function reload_desktop() {
+    $('img').remove()
+    $('&lt;img&gt;', {src: '/desktop.jpeg?' + 
+        Date.now()}).appendTo('body')
+}
+setInterval(reload_desktop, 2000)</code></pre>
+<p>代码解释如下：</p>
+<ul>
+<li>
+<code>$()</code>是jQuery选择网页元素的函数，我们可以在元素上实现各种操作，如<code>.remove()</code>或<code>.insert()</code>
+</li>
+<li>
+<code>Date.now()</code>返回当前时间戳，就是1970年1月1日到当前时间的毫秒数。我们用这个数据来阻止缓存，这样每次的信息就会更新了。</li>
+</ul>
+<p>让我们把图片的调整为适合浏览器的尺寸，去掉所有的边距。用CSS也很容易实现：</p>
+<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+    <span class="nt">body</span> <span class="p">{</span> <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span> <span class="p">}</span>
+    <span class="nt">img</span> <span class="p">{</span> <span class="k">max-width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span> <span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</pre></div>
+<p>应用的截图如下所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/5.3remotedesk.png" alt="remotedesk"></p>
+<p>加载的时候你会发现图片在闪烁，因为在完全加载之前就立刻显示<code>desktop.jpeg</code>。还有一个问题就是下载频率是固定的，我们随意设定为两秒。由于网速的原因，用户可能还没看到图片加载完成就又改变了。</p>
+<p>这里只是原型，在Kivy设计的时候我们会纠正这个问题。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="把点击传回主机">
+<a class="anchor" href="#%E6%8A%8A%E7%82%B9%E5%87%BB%E4%BC%A0%E5%9B%9E%E4%B8%BB%E6%9C%BA" aria-hidden="true"><span class="octicon octicon-link"></span></a>把点击传回主机<a class="anchor-link" href="#%E6%8A%8A%E7%82%B9%E5%87%BB%E4%BC%A0%E5%9B%9E%E4%B8%BB%E6%9C%BA"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面我们要把<code>&lt;img&gt;</code>截图上的点击传给服务器。对<code>&lt;body&gt;</code>元素使用<code>.bind()</code>方法可以实现。因为我们不断的增删元素，图片上绑定的内容在更新后会丢失，而重新绑定也没必要。</p>
+
+<pre><code>function send_click(event) {
+    var fac = this.naturalWidth / this.width
+    $.get('/click', {x: 0|fac * event.clientX,
+               y: 0|fac * event.clientY})
+}
+$('body').on('click', 'img', send_click)</code></pre>
+<p>这里我们计算了点击的真实位置：通过图片缩放比例对坐标位置进行调整。</p>
+<p>
+$$x,y_{server} = \frac {width_{natural}}{width_{scaled}} \times x,y_{client}$$
+</p>
+<p>JavaScript里面的<code>0|expression</code>表达式是<code>Math.floor()</code>的另外一种形式，更快更精确，只是语法有点差异。</p>
+<p>然后用jQuery的<code>$.get()</code>函数把前面计算的结果发给服务器。由于我们打算立刻显示一个新截屏，所以就没有对服务器响应进行处理——如果我们最后一个动作有任何变化，都会立即显示出来。</p>
+<p>用这个远程桌面原型，我们已经可以看到桌面，执行机器上的程序了。现在，让我们用Kivy来实现这个原型，同时做些改进，增加滚动条、去掉屏幕闪烁，让它更适用于移动设备。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Kivy远程桌面app">
+<a class="anchor" href="#Kivy%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2app" aria-hidden="true"><span class="octicon octicon-link"></span></a>Kivy远程桌面app<a class="anchor-link" href="#Kivy%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2app"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们可以重用上一章聊天app的一些功能。这里个应用很相似，都是由两个屏幕构成，一个屏幕是带服务器地址的登录界面。我们就把<code>chat.kv</code>文件改造成<code>remotedesktop.kv</code>文件，里面的<code>ScreenManager</code>保留。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="登录界面">
+<a class="anchor" href="#%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2" aria-hidden="true"><span class="octicon octicon-link"></span></a>登录界面<a class="anchor-link" href="#%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>就是下面的代码，包含三个部分——标题、输入文本框、登录按钮——位于屏幕的顶部：</p>
+<div class="highlight"><pre><span></span><span class="nt">Screen</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">'login'</span>
+
+    <span class="nt">BoxLayout</span><span class="p">:</span>
+        <span class="nt">orientation</span><span class="p">:</span> <span class="s">'horizontal'</span>
+        <span class="nt">y</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root.height - self.height</span>
+
+        <span class="nt">Label</span><span class="p">:</span>
+            <span class="nt">text</span><span class="p">:</span> <span class="s">'Server</span><span class="nv"> </span><span class="s">IP:'</span>
+            <span class="nt">size_hint</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(0.4, 1)</span>
+        <span class="nt">TextInput</span><span class="p">:</span>
+            <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">server</span>
+            <span class="nt">text</span><span class="p">:</span> <span class="s">'10.211.55.5'</span> <span class="c1"># put your server IP here</span>
+        <span class="nt">Button</span><span class="p">:</span>
+            <span class="nt">text</span><span class="p">:</span> <span class="s">'Connect'</span>
+            <span class="nt">on_press</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">app.connect()</span>
+            <span class="nt">size_hint</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(0.4, 1)</span>
+</pre></div>
+<p>只要一个输入文本框<strong>Server IP</strong>。其实你也可以用服务器名称，但是这需要配置，直接IP省事儿。</p>
+<p>虽然用IP地址不是很直观，但是我们暂时没更好的选择。要做一个自动发现的网络服务来避免IP地址，用着更舒服，但是也更复杂（需要一大堆技术来实现）。</p>
+<blockquote>
+<p>这里，需要掌握基本的网络技能，比如把设备连接到路由器。这些都超出本文的范围，简单说下：</p>
+<ul>
+<li>当你所有的设备都连接到同一网络是测试更容易</li>
+<li>通一台设备上使用虚拟机来测试也行。这样可以避开扫描网络、输密码、连线等等操作。</li>
+<li>要看设备的IP地址，用<code>ipconfig</code>(Windows)或<code>ifconfig</code>。公网IP不会显示出来，但局域网IP会显示。</li>
+</ul>
+</blockquote>
+<p>登录窗口很简单，前面已经学习过，下面让我们来实现远程桌面窗口。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="远程桌面窗口">
+<a class="anchor" href="#%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%AA%97%E5%8F%A3" aria-hidden="true"><span class="octicon octicon-link"></span></a>远程桌面窗口<a class="anchor-link" href="#%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%AA%97%E5%8F%A3"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这个屏幕界面应该有二维的滚动条，可以在不同屏幕上选择位置。我们还按照上一章聊天app的滚动条来实现。不同的是：这里是二维的，这次我们不想让让任何超限再触底反弹的效果以避免冲突，操作系统桌面通常不需要这些效果。</p>
+<p>这个屏幕的<code>remotedesktop.kv</code>文件如下：</p>
+<div class="highlight"><pre><span></span><span class="nt">Screen</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">'desktop'</span>
+
+    <span class="nt">ScrollView</span><span class="p">:</span>
+        <span class="nt">effect_cls</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ScrollEffect</span>
+
+        <span class="nt">Image</span><span class="p">:</span>
+            <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">desktop</span>
+            <span class="nt">nocache</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+            <span class="nt">on_touch_down</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">app.send_click(args[1])</span>
+            <span class="nt">size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.texture_size</span>
+            <span class="nt">size_hint</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(None, None)</span>
+</pre></div>
+<p>在<code>ScrollView</code>里，我们<code>effect_cls: ScrollEffect</code>来禁止超限行为。如果你想要这种行为，可以不用这行。由于<code>ScrollEffect</code>不是默认存在的，需要导入：</p>
+
+<pre><code>#:import ScrollEffect kivy.effects.scroll.ScrollEffect</code></pre>
+<p>关键点是把<code>Image</code>的<code>size_hint</code>属性设置为<code>(None, None)</code>；否则Kivy就会自动放缩图片来适合屏幕尺寸，这样滚动条就没用了，而且在不同比例的屏幕上，桌面会失真。设置为<code>None</code>表示要是手动调节。</p>
+<p>之后，我们把<code>size</code>属性设置成<code>self.texture_size</code>。这样就可以把服务生成的<code>desktop.jpeg</code>的尺寸传递到屏幕了（这是有主机的屏幕决定的，我们不能改变）。</p>
+<p>还有<code>nocache: True</code>属性，是让Kivy取消缓存，不要保存截图的临时文件。最后，<code>Image</code>的<code>on_touch_down</code>属性。我们想传递精确的坐标值和触摸事件的其他属性，就得用<code>args[1]</code>。<code>args[0]</code>是要点击的部件，也就是图片本身（我们只有一个<code>Image</code>实例，所以不需要把它传递到事件handler）。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="截屏在Kivy里的循环">
+<a class="anchor" href="#%E6%88%AA%E5%B1%8F%E5%9C%A8Kivy%E9%87%8C%E7%9A%84%E5%BE%AA%E7%8E%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>截屏在Kivy里的循环<a class="anchor-link" href="#%E6%88%AA%E5%B1%8F%E5%9C%A8Kivy%E9%87%8C%E7%9A%84%E5%BE%AA%E7%8E%AF"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在让我们把前面这些模块集成到Python里。和JavaScript实现相反，我们不用加载图片和相关的功能，所以要写点儿代码；不过这些很容易实现，而且更容易维护。</p>
+<p>为了异步加载图片，我们要用Kivy的<code>Loader</code>类，实现思路如下：</p>
+<ol>
+<li>当用户填好<strong>Server IP</strong>，在登录窗口点击<strong>Connect</strong>后，<code>RemoteDesktopApp.connect()</code>函数启动</li>
+<li>它把控制传递到<code>reload_desktop()</code>，这个函数会从<code>/desktop.jpeg</code>下载图片</li>
+<li>图片加载之后，<code>Loader</code>调用<code>desktop_loaded()</code>，把图片展示到屏幕上，然后调用下一个<code>reload_desktop()</code>。这样我们就通过异步方式实现了截屏的循环</li>
+</ol>
+<p>下面是<code>main.py</code>文件实现代码：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.loader</span> <span class="kn">import</span> <span class="n">Loader</span>
+
+
+<span class="k">class</span> <span class="nc">RemoteDesktopApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="s2">"http://</span><span class="si">%s</span><span class="s2">:7080/desktop.jpeg"</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_url</span> <span class="o">=</span> <span class="s2">"http://</span><span class="si">%s</span><span class="s2">:7080/click?"</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reload_desktop</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>我们保持<code>url</code>（服务器IP和<code>/desktop.jpeg</code>）和<code>send_url</code>（服务器IP和<code>/click</code>），然后传递<code>RemoteDesktopApp.reload_desktop()</code>函数：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">reload_desktop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">desktop</span> <span class="o">=</span> <span class="n">Loader</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">nocache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">desktop</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">on_load</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">desktop_loaded</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>前面函数就是下载图片。图片下载完之后，就把图片加载到<code>RemoteDesktopApp.desktop_loaded()</code>。</p>
+<p>不用忘了用<code>nocache=True</code>禁止缓存，没有这点桌面就只会加载一次，因为URL是一样的。在JavaScript里面，我们解决这个问题是把<code>?timestamp</code>放在URL之后，在Python我们可以不这样做，因为Kivy支持缓存控制功能。</p>
+<p>然后就可以完成桌面加载程序了：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.clock</span> <span class="kn">import</span> <span class="n">Clock</span>
+
+
+<span class="k">def</span> <span class="nf">desktop_loaded</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">desktop</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">desktop</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">texture</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">desktop</span><span class="o">.</span><span class="n">texture</span> <span class="o">=</span> <span class="n">desktop</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">texture</span>
+
+    <span class="n">Clock</span><span class="o">.</span><span class="n">schedule_once</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reload_desktop</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">current</span> <span class="o">==</span> <span class="s2">"login"</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="s2">"desktop"</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>函数接收新图片<code>desktop</code>，更新屏幕，然后每1秒循环一次。</p>
+<blockquote>
+<p>在第一章的时钟app里面，我们讨论过<code>Clock</code>对象的更新问题，当时是用<code>schedule_interval()</code>，类似于JavaScript的<code>setInterval()</code>，这里我们想要持续状态，类似于JavaScript的<code>setTimeout()</code>功能。</p>
+</blockquote>
+<p>现在屏幕更新就实现了，截图如下所示：
+<img src="/images/copied_from_nb/kbpic/5.4desktopserver.png" alt="desktopserver"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="传送点击">
+<a class="anchor" href="#%E4%BC%A0%E9%80%81%E7%82%B9%E5%87%BB" aria-hidden="true"><span class="octicon octicon-link"></span></a>传送点击<a class="anchor-link" href="#%E4%BC%A0%E9%80%81%E7%82%B9%E5%87%BB"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>远程桌面已经完成，下面我们实现点击行为，这就需要监听图片的<code>on_touch_down</code>事件，把触摸的坐标值传递到<code>send_click()</code>函数。在<code>remotedesktop.kv</code>文件里面：</p>
+<div class="highlight"><pre><span></span><span class="nt">Screen</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">'desktop'</span>
+
+    <span class="nt">ScrollView</span><span class="p">:</span>
+        <span class="nt">effect_cls</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ScrollEffect</span>
+        <span class="nt">Image</span><span class="p">:</span>
+            <span class="nt">on_touch_down</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">app.send_click(args[1])</span>
+            <span class="c1"># The rest of the properties unchanged</span>
+</pre></div>
+<p>在Python的<code>class RemoteDesktopApp</code>中实现<code>send_click()</code>函数：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">send_click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"x"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">),</span> <span class="s2">"y"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">desktop</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">)}</span>
+    <span class="n">urlopen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">send_url</span> <span class="o">+</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这里需要注意的是坐标值：在Kivy里面，<code>y</code>轴是向上的，和数学上的概念一致，而Windows和浏览器里面都是向下的。所以我们用桌面高度<code>event.y</code>来转换。</p>
+<p>另一个容易出错的就是Python的<code>urllib</code>模块，Python2和Python3的差别很大，也可以用<a href="http://python-requests.org/"><code>requests</code>模块</a>，不过这里用标准模块。可以通过异常处理开解决版本问题：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">try</span><span class="p">:</span>  <span class="c1"># python 2</span>
+    <span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">urlencode</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># python 3</span>
+    <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlencode</span>
+
+<span class="k">try</span><span class="p">:</span>  <span class="c1"># python 2</span>
+    <span class="kn">from</span> <span class="nn">urllib2</span> <span class="kn">import</span> <span class="n">urlopen</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>  <span class="c1"># python 3</span>
+    <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>虽然代码不是很简洁，但是可以实现兼容性，目前只能这样。连Guido老爹（Python创始人）现在也这么写，还能说啥呢。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="后续任务">
+<a class="anchor" href="#%E5%90%8E%E7%BB%AD%E4%BB%BB%E5%8A%A1" aria-hidden="true"><span class="octicon octicon-link"></span></a>后续任务<a class="anchor-link" href="#%E5%90%8E%E7%BB%AD%E4%BB%BB%E5%8A%A1"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在我们的远程桌面app就搞定了，建议在局域网和网速快的时候使用。当然，还有很多问题需要解决，很多新特性可以加入，如果你感兴趣，下面是一些努力的方向：</p>
+<ul>
+<li>把鼠标行为作为单独事件处理，可以实现双击、拖拽等</li>
+<li>考虑网络延迟。如果用户网速很慢，你可以把图片质量降低来保证流畅性，给用户一个选择</li>
+<li>让服务实现跨平台，包括Mac，Linux，Android和Chrome OS</li>
+</ul>
+<p>另外，这是一个工业级强度的任务，做这种软件很难，更不用说让它完美，具有极快的速度。Kivy帮你在UI设计、图片下载和缓存处理方面省了很多精力，但也只能做这些了。</p>
+<p>所有，如果有些功能无法很快实现，请不要担心——错误和失败都是正常的，可以深入学习一些计算机间相互通信的知识。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="总结">
+<a class="anchor" href="#%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>总结<a class="anchor-link" href="#%E6%80%BB%E7%BB%93"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这就远程桌面app的所有内容。这个app可以处理一下简单任务，比如点击iTunes里面的Play按钮，或者关闭一个程序。更复杂的任务，尤其是一些运维工作时，可能需要更专业的软件。</p>
+<p>我们用Flask建立了服务器实现了对图片的动态处理，主机系统的交互。我们还做了一个轻量级的JavaScript客户端实现了想要的功能，这说明我们的Kivy app并不是非主流方法。而且，在写Kivy代码之前，我们就有了服务器和客户端原型。</p>
+<p>这个原型帮助我们快速实现了我们的想法，可以立刻看到实现的效果。这里不打算讨论测试驱动开发（test-driven development，TDD），它是否成熟值得商榷，也不论事件驱动编程对这个案例是否有益。但是先做好每一个部分，然后把它们组合在一起，这种分而治之的方法还是比一下子写一个整体要更有效率。</p>
+<p>最后，Kivy也能很好的处理网络GUI app。比如，上一章里面与Twisted协作，实现通过网络加载内容的功能——这些都为建立多用户的网络app提供了极大帮助。</p>
+<p>现在，让我们进入另一个领域：Kivy游戏开发。</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="muxuezi/air"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/jupyter/kivy/android/ios/2019/06/01/kivy-ch5-remote-desktop-app.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

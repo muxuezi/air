@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Kivy网络编程 | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Kivy网络编程" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="实现聊天app的客户端-服务器架构，利用Twisted框架实现服务器" />
+<meta property="og:description" content="实现聊天app的客户端-服务器架构，利用Twisted框架实现服务器" />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/05/01/kivy-ch4-chat-app.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/05/01/kivy-ch4-chat-app.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/4.7chatlast.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-05-01T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"实现聊天app的客户端-服务器架构，利用Twisted框架实现服务器","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/05/01/kivy-ch4-chat-app.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/05/01/kivy-ch4-chat-app.html","headline":"Kivy网络编程","dateModified":"2019-05-01T00:00:00-05:00","datePublished":"2019-05-01T00:00:00-05:00","image":"https://asyncfor.com/kbpic/4.7chatlast.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Kivy网络编程 | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Kivy网络编程" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="实现聊天app的客户端-服务器架构，利用Twisted框架实现服务器" />
+<meta property="og:description" content="实现聊天app的客户端-服务器架构，利用Twisted框架实现服务器" />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/05/01/kivy-ch4-chat-app.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/05/01/kivy-ch4-chat-app.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/4.7chatlast.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-05-01T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"实现聊天app的客户端-服务器架构，利用Twisted框架实现服务器","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/05/01/kivy-ch4-chat-app.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/05/01/kivy-ch4-chat-app.html","headline":"Kivy网络编程","dateModified":"2019-05-01T00:00:00-05:00","datePublished":"2019-05-01T00:00:00-05:00","image":"https://asyncfor.com/kbpic/4.7chatlast.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Kivy网络编程</h1><p class="page-description">实现聊天app的客户端-服务器架构，利用Twisted框架实现服务器</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2019-05-01T00:00:00-05:00" itemprop="datePublished">
+        May 1, 2019
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      4 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#jupyter">jupyter</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Kivy">Kivy</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Android">Android</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#iOS">iOS</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/muxuezi/air/tree/master/_notebooks/2019-05-01-kivy-ch4-chat-app.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/muxuezi/air/master?filepath=_notebooks%2F2019-05-01-kivy-ch4-chat-app.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/muxuezi/air/blob/master/_notebooks/2019-05-01-kivy-ch4-chat-app.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#实现聊天服务器">实现聊天服务器 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#协议定义">协议定义 </a></li>
+<li class="toc-entry toc-h3"><a href="#服务器代码">服务器代码 </a></li>
+<li class="toc-entry toc-h3"><a href="#设计原理">设计原理 </a></li>
+<li class="toc-entry toc-h3"><a href="#服务器测试">服务器测试 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#屏幕管理器">屏幕管理器 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#屏幕切换动作">屏幕切换动作 </a></li>
+<li class="toc-entry toc-h3"><a href="#登录界面布局">登录界面布局 </a></li>
+<li class="toc-entry toc-h3"><a href="#聊天界面布局">聊天界面布局 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#滚动模式">滚动模式 </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#连接网络">连接网络 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#一个简单Python客户端">一个简单Python客户端 </a></li>
+<li class="toc-entry toc-h3"><a href="#用Twisted实现">用Twisted实现 </a>
+<ul>
+<li class="toc-entry toc-h4"><a href="#ChatClient和ChatClientFactory">ChatClient和ChatClientFactory </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h3"><a href="#加入UI">加入UI </a></li>
+<li class="toc-entry toc-h3"><a href="#客户端的设计思路">客户端的设计思路 </a></li>
+<li class="toc-entry toc-h3"><a href="#客户端交互">客户端交互 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#增强视觉体验">增强视觉体验 </a></li>
+<li class="toc-entry toc-h2"><a href="#转义字符处理">转义字符处理 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#后续任务">后续任务 </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#总结">总结 </a></li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2019-05-01-kivy-ch4-chat-app.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>前面我们尝试过单一平台Android的Kivy开发，通过原生的底层API来实现。下面我们探索另外一种天生具有跨平台能力的工具来做app——网络。在这一章，我们做一个聊天app，类似于QQ，但是简单版。</p>
+<p>当然这个应用不能替代QQ，不过支持类似QQ群聊天功能，方便临时性的会议建群聊天。</p>
+<p>为了简化，我们不实现认证授权功能，这是为彼此都很熟悉的用户设计的。如果你想让app更安全，自己可以实现一下。</p>
+<p>为了在服务器端支持最大兼容性，这个app用<strong>Telnet</strong>收发消息。虽然不是Kivy的app的图形用户界面，Telnet可以在Windows 95和MS-DOS完美运行。</p>
+<blockquote>
+<p>更严谨的考证一下，其实Telnet在1973年就标准化了，因此它甚至可以在8086 CPU上运行。Windows 95和MS-DOS相比之下已经很新了。</p>
+</blockquote>
+<p>本章教学大纲如下：</p>
+<ul>
+<li>用Python的Twisted框架实现服务器端。</li>
+<li>在不同的抽象层面上开发两个客户端，一个是通过套接字实现命令行程序，一个是通过Twisted的事件驱动客户端实现的程序</li>
+<li>用Kivy的<code>ScreenManager</code>更容易的实现UI</li>
+<li>做一个<code>ScrollView</code>容器实现消息的无限长度</li>
+</ul>
+<p>我们的应用将使用中心化的客户端-服务器架构，很多网站和应用都用这种主流的互联网方法论。与去中心化的P2P网络相比，你很快会发现这种方法是多么的容易。</p>
+<blockquote>
+<p>这里没有区分互联网与局域网（local area network，LAN），但是两者在底层上没啥关系。但是，如果你要把应用发布到应用商店，你还需要准备很多其他的内容，比如设置一个安全网络服务器，配置防火墙来保证你的代码可以扩展到多核处理器和其他设备。实际上这并没有多可怕，但是仍然需要一些努力。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="实现聊天服务器">
+<a class="anchor" href="#%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%9C%8D%E5%8A%A1%E5%99%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>实现聊天服务器<a class="anchor-link" href="#%E5%AE%9E%E7%8E%B0%E8%81%8A%E5%A4%A9%E6%9C%8D%E5%8A%A1%E5%99%A8"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>开始写客户端之前我们先把服务器端做出来。我们用<strong>Twisted</strong>框架来提高效率，通过Python来实现，这样可以避开许多常见的、底层的网络任务。</p>
+<blockquote>
+<p><strong>兼容性提示</strong>
+Twisted目前仍然不能很好的不支持Python3，所以这里得使用Python2.7。其实2to3很容易移植，因为没多少不兼容的设计方式。（不过，我们完全忽视了Unicode相关的问题，因为Python2和Python3的处理方式不同。如果是中文，还是Python3方便。）</p>
+</blockquote>
+<p>Twisted是一个事件驱动的底层的服务器框架，不像<strong>Node.js</strong>（实际上，Node.js的设计受到Twisted的影响）。与Kivy很类似，事件驱动的架构意味着我们不需要把代码构建一个无限循环，相反我们只要为app绑定大量的事件监听器就行。许多底层的网络处理，都可以通过Twisted方便的实现。</p>
+<blockquote>
+<p>和其他Python包一样，用pip就可以安装Twisted：<br>
+<strong>pip install -U twisted</strong></p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="协议定义">
+<a class="anchor" href="#%E5%8D%8F%E8%AE%AE%E5%AE%9A%E4%B9%89" aria-hidden="true"><span class="octicon octicon-link"></span></a>协议定义<a class="anchor-link" href="#%E5%8D%8F%E8%AE%AE%E5%AE%9A%E4%B9%89"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在我们来看下聊天服务器即将使用的通信协议，因为我们的app并不复杂，所以我们不用XMPP那样主流的、功能丰富的程序，我们自己实现一个简单的就行。</p>
+<p>我们实现的协议层就是两条信息在客户端和服务器传递——连接服务器（进入聊天室），对其他人说话。服务器会反馈客户端传递的每件事情；服务器自己不会产生任何事件。</p>
+<p>我们的协议执行原文传递，和很多其他的应用层如HTTP协议一样。这样做很合理，因为调试和实现起来都很方便。字符串协议比二进制码协议更具扩展性和前瞻性（future-proof）。缺点就是包压缩率底，占用资源多；二进制协议可以更紧凑。不过在这个app讨论这样不太重要，也可以通过压缩技术缓解这个不足（这就是为啥很多服务器都是HTTP协议）。</p>
+<p>现在，让我们梳理一下每条消息在应用协议的思路：</p>
+<ul>
+<li>连接到服务器的信息只有用户现在是否在聊天室，每次就用一个单词<code>CONNECT</code>来检测。这个信息不需要参数化，直接用单词。</li>
+<li>在聊天室说话更有趣。有两个参数：用户名和文字信息。让我们把格式定义为<code>A:B</code>，<code>A</code>就是用户名（我们要求用户名不能包含分号<code>:</code>字符）。</li>
+</ul>
+<p>根据这个思路，我们写出下面的算法（伪代码）：</p>
+
+<pre><code>if ':' not in message
+    then
+        // it's a CONNECT message
+        add this connection to user list
+    else
+        // it's a chat message
+        nickname, text := message.split on ':'
+        for each user in user list
+            if not the same user:
+                send "{nickname} said: {text}"</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>对同一个用户的测试就是把向用户自己传递的信息去掉。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="服务器代码">
+<a class="anchor" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BB%A3%E7%A0%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>服务器代码<a class="anchor-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BB%A3%E7%A0%81"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>有了Twisted的帮助，我们的伪代码可以很直接的写出Python代码。下面就是我们应用的<code>server.py</code>文件：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">protocol</span><span class="p">,</span> <span class="n">reactor</span>
+
+<span class="n">transports</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">Chat</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">dataReceived</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">transports</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">":"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">user</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">":"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transports</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="p">:</span>
+                <span class="n">t</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"</span><span class="si">{0}</span><span class="s2"> says: </span><span class="si">{1}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+
+
+<span class="k">class</span> <span class="nc">ChatFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">Factory</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">buildProtocol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addr</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Chat</span><span class="p">()</span>
+
+
+<span class="n">reactor</span><span class="o">.</span><span class="n">listenTCP</span><span class="p">(</span><span class="mi">9096</span><span class="p">,</span> <span class="n">ChatFactory</span><span class="p">())</span>
+<span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="设计原理">
+<a class="anchor" href="#%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>设计原理<a class="anchor-link" href="#%E8%AE%BE%E8%AE%A1%E5%8E%9F%E7%90%86"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面的操作流程可以帮助你理解上面的代码：</p>
+<ul>
+<li>最后一行<code>reactor.run()</code>开启<code>ChatFactory</code>服务器监听9096端口</li>
+<li>当服务器收到请求，就调用<code>dataReceived()</code>响应</li>
+<li>
+<code>dataReceived()</code>方法就是前面伪代码的实现，会把消息发送给其他用户</li>
+</ul>
+<p>每个到客户端的连接构成集合<code>transports</code>。我们无条件的把当前的传递<code>self.transport</code>加入集合。</p>
+<p>然后就是算法的实现。最后，聊天室内除了发消息的每个用户都会收到提示，&lt; <strong>username</strong>&gt;说了&lt;<strong>message text</strong>&gt;。</p>
+<blockquote>
+<p>注意我们并没有用<code>CONNECT</code>来检查连接的信息。这是按照1980年Jon Postel在TCP说明书里面提出的<em>网络稳健性（network robustness）</em>原则设计的：保守的发送，自由的接收。
+另外通过简化代码，我们还获得了更好的兼容性。在未来要发布新版本客户端时，如果我们给协议增加一个新消息，假设叫<code>WHARRGARBL</code>消息，名字看着就很酷。没有崩溃是因为虽然收到来一个格式错误的消息（这是由于版本不匹配），老版本的服务器会直接忽略这些消息继续工作。
+这些具体的版本兼容性问题可以通过许多策略来纠正。但是，还有更多来自网络尤其是公网的难题，包括用户恶意攻击拖垮服务器等等。所以，实际中并没有服务器非常稳定这种可能。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="服务器测试">
+<a class="anchor" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%B5%8B%E8%AF%95" aria-hidden="true"><span class="octicon octicon-link"></span></a>服务器测试<a class="anchor-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%B5%8B%E8%AF%95"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>直接运行Python文件就可以测试服务器：</p>
+<div class="highlight"><pre><span></span>python server.py
+</pre></div>
+<p>这个命令的结果不会直接看到。服务器开始运行，等待客户请求。但是，我们还没客户端程序。那怎么测试呢？</p>
+<p>这种先有服务器还是先有客户端的经典问题有很多方法可以解决——向服务器发信息，然后显示服务器反馈的信息。</p>
+<p>处理字符串协议服务器的一个标准化工具就是Telnet，一般都是命令行，没有图像界面。很多操作系统都带有Telnet。在Windows系统中，打开“控制面板|程序和功能|启动或关闭Windows功能”就可以找到Telnet。</p>
+<p><img src="/images/copied_from_nb/kbpic/4.1Telnet.png" alt="Telnet"></p>
+<p>Telnet有两个参数：服务器地址和端口。为了连接到Telnet，你需要先启动<code>server.py</code>，然后再打开命令行输入：</p>
+<div class="highlight"><pre><span></span>telnet <span class="m">127</span>.0.0.1 <span class="m">9096</span>
+</pre></div>
+<p>另外，你也可以用<code>localhost</code>代替<code>127.0.0.1</code>，在<code>hosts</code>文件中是默认设置。</p>
+<p>现在就可以测试服务器了。你可以根据前面设计流程，向服务器发送内容进行实现测试：</p>
+
+<pre><code>CONNECT
+User A:Hello, world!</code></pre>
+<p>没有出现任何反馈，因为我们没有让服务器向原作者反馈信息。因此，我们需要打开另外一个命令行，然后以一个新的用户登录。就可以看到<code>User A</code>发送的信息了。如下图所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/4.2servertest.png" alt="servertest"></p>
+<blockquote>
+<p>如果你没法儿正常测试Telnet也甭灰心，这不影响咱们app的顺利完成。
+如果用Windows的话，给一点小建议：最好给电脑装个Mac OS或Linux，双系统更适合研发工作，推荐使用虚拟机，切换方便。</p>
+</blockquote>
+<p>这样，我们就知道服务器可以正常工作了。现在我们来做客户端系统的GUI。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="屏幕管理器">
+<a class="anchor" href="#%E5%B1%8F%E5%B9%95%E7%AE%A1%E7%90%86%E5%99%A8" aria-hidden="true"><span class="octicon octicon-link"></span></a>屏幕管理器<a class="anchor-link" href="#%E5%B1%8F%E5%B9%95%E7%AE%A1%E7%90%86%E5%99%A8"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在我们用一个新概念来设计UI，叫屏幕管理器。用来设计我们的app合适。一共是两个UI状态：</p>
+<ul>
+<li>登录界面：包括服务器地址、用户名、登录按钮
+<img src="/images/copied_from_nb/kbpic/4.3uilogin.png" alt="uilogin">
+</li>
+<li>聊天界面：包括信息显示、信息输入、发送信息按钮和端口服务器按钮
+<img src="/images/copied_from_nb/kbpic/4.4uichat.png" alt="uilogin">
+</li>
+</ul>
+<p>从理论上说，我们的app界面就是这样。这种UI分离的设计方法涉及到，对不同UI状态里可见的与隐藏的控件的管理。这样可以快速的组合一堆部件，而不要写任何代码。</p>
+<p>Kivy为我们提供<code>ScreenManager</code>来实现UI设计。另外，<code>ScreenManager</code>还提供了屏幕切换的动态过程，以及大量的内置转换方式。可以完全通过Kivy语言来实现，不需要任何Python代码。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面让我们来实现，首先建立<code>chat.kv</code>文件：</p>
+<div class="highlight"><pre><span></span><span class="nt">ScreenManager</span><span class="p">:</span>
+    <span class="nt">Screen</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="s">'login'</span>
+
+        <span class="nt">BoxLayout</span><span class="p">:</span>
+            <span class="c1"># other UI controls -- not shown</span>
+            <span class="nt">Button</span><span class="p">:</span>
+                <span class="nt">text</span><span class="p">:</span> <span class="s">'Connect'</span>
+                <span class="nt">on_press</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root.current = 'chatroom'</span>
+
+    <span class="nt">Screen</span><span class="p">:</span>
+        <span class="nt">name</span><span class="p">:</span> <span class="s">'chatroom'</span>
+
+        <span class="nt">BoxLayout</span><span class="p">:</span>
+            <span class="c1"># other UI controls -- not shown</span>
+            <span class="nt">Button</span><span class="p">:</span>
+                <span class="nt">text</span><span class="p">:</span> <span class="s">'Disconnect'</span>
+                <span class="nt">on_press</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root.current = 'login'</span>
+</pre></div>
+<p>这是程序的基本结构：我们建立<code>ScreenManager</code>根部件，并为每个状态建立一个<code>Screen</code>容器。容器里面有上面看到的布局、按钮。后面我们会继续完善。</p>
+<p>代码里面看到还包括<code>Screen</code>的按钮。为了切换应用的状态，我们还需要设置<code>ScreenManager</code>的<code>current</code>属性。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="屏幕切换动作">
+<a class="anchor" href="#%E5%B1%8F%E5%B9%95%E5%88%87%E6%8D%A2%E5%8A%A8%E4%BD%9C" aria-hidden="true"><span class="octicon octicon-link"></span></a>屏幕切换动作<a class="anchor-link" href="#%E5%B1%8F%E5%B9%95%E5%88%87%E6%8D%A2%E5%8A%A8%E4%BD%9C"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>前面提到，屏幕可以通过切换动作的动态显示。Kivy提供了许多切换功能，在<code>kivy.uix.screenmanager</code>包里面：</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<table>
+<thead>
+<tr>
+<th>Transition class name</th>
+<th>Visual effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NoTransition</code></td>
+<td>没有动画，直接显示屏幕</td>
+</tr>
+<tr>
+<td><code>SwapTransition</code></td>
+<td>滑到下一屏幕，用上、下、左（默认）、右。</td>
+</tr>
+<tr>
+<td><code>SwapTransition</code></td>
+<td>iOS屏幕切换效果</td>
+</tr>
+<tr>
+<td><code>FadeTransition</code></td>
+<td>褪色方式切换</td>
+</tr>
+<tr>
+<td><code>WipeTransition</code></td>
+<td>用1px的遮挡实现平滑的定向切换</td>
+</tr>
+<tr>
+<td><code>FallOutTransition</code></td>
+<td>将旧屏幕缩小到屏幕中间，渐渐透明，再出现新屏幕</td>
+</tr>
+<tr>
+<td><code>RiseInTransition</code></td>
+<td>与<code>FallOutTransition</code>完全相反，新屏幕从中间出现，放大直到遮住旧屏幕</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在<code>.lv</code>文件里面设置这些切换动作时需要注意一旦：切换需要手动导入。</p>
+<div class="highlight"><pre><span></span><span class="c1">#:import RiseInTransition kivy.uix.screenmanager.RiseInTransition</span>
+</pre></div>
+<p>现在，你就可以配置<code>ScreenManager</code>了。注意这些动作都是Python类的实例，所以后面要加括号：</p>
+<div class="highlight"><pre><span></span><span class="nt">ScreenManager</span><span class="p">:</span>
+    <span class="nt">transition</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">RiseInTransition()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="登录界面布局">
+<a class="anchor" href="#%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80" aria-hidden="true"><span class="octicon octicon-link"></span></a>登录界面布局<a class="anchor-link" href="#%E7%99%BB%E5%BD%95%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>登录界面布局和前一章的录音app类似：用一个<code>GridLayout</code>把各个元素按照网格排列。</p>
+<p>还没用过的部件就是文本框<code>TextInput</code>。Kivy的文本框和按钮基本完全一样，区别就是可以输入文字。默认情况下是多行显示，因为在聊天app里面多行少见（如微信、QQ），所以要设置<code>multiline</code>为<code>False</code>。</p>
+<p>在无键盘设备上运行时，Kivy会调用虚拟键盘，和原生应用一样。下面的代码就是登录界面布局：</p>
+<div class="highlight"><pre><span></span><span class="nt">Screen</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">'login'</span>
+    <span class="nt">BoxLayout</span><span class="p">:</span>
+        <span class="nt">orientation</span><span class="p">:</span> <span class="s">'vertical'</span>
+        <span class="nt">GridLayout</span><span class="p">:</span>
+            <span class="nt">Label</span><span class="p">:</span>
+                <span class="nt">text</span><span class="p">:</span> <span class="s">'Server:'</span>
+            <span class="nt">TextInput</span><span class="p">:</span>
+                <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">server</span>
+                <span class="nt">text</span><span class="p">:</span> <span class="s">'127.0.0.1'</span>
+            <span class="nt">Label</span><span class="p">:</span>
+                <span class="nt">text</span><span class="p">:</span> <span class="s">'Nickname:'</span>
+            <span class="nt">TextInput</span><span class="p">:</span>
+                <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">nickname</span>
+                <span class="nt">text</span><span class="p">:</span> <span class="s">'Kivy'</span>
+        <span class="nt">Button</span><span class="p">:</span>
+            <span class="nt">text</span><span class="p">:</span> <span class="s">'Connect'</span>
+            <span class="nt">on_press</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root.current = 'chatroom'</span>
+</pre></div>
+<p>这里，我们增加了<code>Server</code>和<code>Nickname</code>两个文本框，对应的标签和按钮。按钮的事件handler还有没有任何功能，后面会实现。</p>
+<p>可以让单行的<code>TextInput</code>更好看点，我们让文本框里面的文字垂直居中：</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;TextInput&gt;</span><span class="p">:</span>
+    <span class="nt">multiline</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">False</span>
+    <span class="nt">padding</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="nv">10</span><span class="p p-Indicator">,</span> <span class="nv">0.5 * (self.height – self.line_height)</span><span class="p p-Indicator">]</span>
+</pre></div>
+<p><code>padding</code>属性设置了左右的边距都是10，上面和下面的边距是文本框高度与一行文本高度之差的一半。下面就是效果图，可前面app的界面类似：</p>
+<p><img src="/images/copied_from_nb/kbpic/4.5loginscreen.png" alt="loginscreen"></p>
+<p>现在我们可以写代码来连接服务器了，不过之前我们先把聊天主界面做出来。这样我们就可以直接在上面测试了。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="聊天界面布局">
+<a class="anchor" href="#%E8%81%8A%E5%A4%A9%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80" aria-hidden="true"><span class="octicon octicon-link"></span></a>聊天界面布局<a class="anchor-link" href="#%E8%81%8A%E5%A4%A9%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>聊天界面布局使用了<code>ScrollView</code>实现对话长度的切换，因为是第一次说这个空间，下面会详细介绍：</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;ChatLabel@Label&gt;</span><span class="p">:</span>
+    <span class="nt">text_size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(self.width, None)</span> <span class="c1"># Step 1</span>
+    <span class="nt">halign</span><span class="p">:</span> <span class="s">'left'</span>
+    <span class="nt">valign</span><span class="p">:</span> <span class="s">'top'</span>
+    <span class="nt">size_hint</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(1, None)</span> <span class="c1"># Step 2</span>
+    <span class="nt">height</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.texture_size[1]</span> <span class="c1"># Step 3</span>
+<span class="nt">ScrollView</span><span class="p">:</span>
+    <span class="nt">ChatLabel</span><span class="p">:</span>
+        <span class="nt">text</span><span class="p">:</span> <span class="s">'Insert</span><span class="nv"> </span><span class="s">very</span><span class="nv"> </span><span class="s">long</span><span class="nv"> </span><span class="s">text</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">line\nbreaks'</span>
+</pre></div>
+<p>文字满屏之后，滚动条会出现，类似于在Android和iOS里面看到的。具体的设计流程如下：</p>
+<ol>
+<li>我们用<code>text_size</code>属性设置<code>Label</code>子类的宽度，把第二个参数高度设置成<code>None</code>，允许无限长度</li>
+<li>把<code>size_hint</code>属性第二个参数设置为<code>None</code>，允许无限长度，迫使其高度与它的容器<code>ScrollView</code>独立。但是，它的长度会受到上一层的元素的限制，因此不会滚动。</li>
+<li>设置部件的高度等于<code>texture_size</code>属性高度（注意索引都从0开始，因此第二个元素是<code>texture_size[1]</code>）。这就迫使<code>ChatLabel</code>比包含它的<code>ScrollView</code>部件大</li>
+<li>当<code>ScrollView</code>部件发现它的子部件比它的空间大时，滚动条就出现了。这和手机上看到的一样，桌面系统也支持鼠标滚轮操作。</li>
+</ol>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="滚动模式">
+<a class="anchor" href="#%E6%BB%9A%E5%8A%A8%E6%A8%A1%E5%BC%8F" aria-hidden="true"><span class="octicon octicon-link"></span></a>滚动模式<a class="anchor-link" href="#%E6%BB%9A%E5%8A%A8%E6%A8%A1%E5%BC%8F"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>你还可以为<code>ScrollView</code>设置滚动的效果来模仿原生平台的特点（不过和原生的效果还是有差别）。可以实现的效果如下：</p>
+<ul>
+<li>
+<code>ScrollEffect</code>：当触及最底部的时候可以停止滚动，类似于桌面应用常见的功能</li>
+<li>
+<code>DampedScrollEffect</code>：这是默认的效果，类似于iOS，非常适合移动设备</li>
+<li>
+<code>OpacityScrollEffect</code>：与<code>DampedScrollEffect</code>效果类似，滚动时增加了滚动条的透明度，不会遮挡内容</li>
+</ul>
+<p>要使用这些效果，从<code>kivy.effects</code>模块导入效果，然后配置到<code>ScrollView.effect_cls</code>属性，与<code>ScreenManager</code>切换效果类似。本章app不改，就用默认效果，可以自行设置。</p>
+<p>把上述内容综合起来，<code>chat.kv</code>文件代码如下：</p>
+<div class="highlight"><pre><span></span><span class="nt">Screen</span><span class="p">:</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">'chatroom'</span>
+    <span class="nt">BoxLayout</span><span class="p">:</span>
+        <span class="nt">orientation</span><span class="p">:</span> <span class="s">'vertical'</span>
+        <span class="nt">Button</span><span class="p">:</span>
+            <span class="nt">text</span><span class="p">:</span> <span class="s">'Disconnect'</span>
+            <span class="nt">on_press</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">root.current = 'login'</span>
+        <span class="nt">ScrollView</span><span class="p">:</span>
+            <span class="nt">ChatLabel</span><span class="p">:</span>
+                <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">chat_logs</span>
+                <span class="nt">text</span><span class="p">:</span> <span class="s">'User</span><span class="nv"> </span><span class="s">says:</span><span class="nv"> </span><span class="s">foo\nUser</span><span class="nv"> </span><span class="s">says:</span><span class="nv"> </span><span class="s">bar'</span>
+        <span class="nt">BoxLayout</span><span class="p">:</span>
+            <span class="nt">height</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">90</span>
+            <span class="nt">orientation</span><span class="p">:</span> <span class="s">'horizontal'</span>
+            <span class="nt">padding</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+            <span class="nt">size_hint</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(1, None)</span>
+            <span class="nt">TextInput</span><span class="p">:</span>
+                <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">message</span>
+            <span class="nt">Button</span><span class="p">:</span>
+                <span class="nt">text</span><span class="p">:</span> <span class="s">'Send'</span>
+                <span class="nt">size_hint</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">(0.3, 1)</span>
+</pre></div>
+<p>最后一行的<code>size_hint</code>属性设置了按钮的水平比例为0.3，默认的是1。这就会让发送按钮比文本框小。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>为了把消息的背景色设置成白色的，我们可以这样：</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;ScrollView&gt;</span><span class="p">:</span>
+    <span class="nt">canvas.before</span><span class="p">:</span>
+        <span class="nt">Color</span><span class="p">:</span>
+            <span class="nt">rgb</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1, 1, 1</span>
+        <span class="nt">Rectangle</span><span class="p">:</span>
+            <span class="nt">pos</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.pos</span>
+            <span class="nt">size</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">self.size</span>
+</pre></div>
+<p>这就在其他元素绘制之前为<code>ScrollView</code>铺上了白色。别忘记了调整一下<code>&lt;ChatLabel&gt;</code>类，把背景色设置成浅色背景：</p>
+<div class="highlight"><pre><span></span><span class="c1">#:import C kivy.utils.get_color_from_hex</span>
+
+<span class="nt">&lt;ChatLabel@Label&gt;</span><span class="p">:</span>
+    <span class="nt">color</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">C('#101010')</span>
+</pre></div>
+<p>效果图如下：
+<img src="/images/copied_from_nb/kbpic/4.6Chatroomscreen.png" alt="Chatroomscreen"></p>
+<p>这里Disconnect按钮就是断开网络连接。这是下一章的内容，到时候你会发现，用Python实现简单网络程序的难度，与用Kivy建立简单的UI没啥区别。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="连接网络">
+<a class="anchor" href="#%E8%BF%9E%E6%8E%A5%E7%BD%91%E7%BB%9C" aria-hidden="true"><span class="octicon octicon-link"></span></a>连接网络<a class="anchor-link" href="#%E8%BF%9E%E6%8E%A5%E7%BD%91%E7%BB%9C"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面我们连接服务器来收发消息，并显示给用户。</p>
+<p>首先，我们看一个纯Python实现的聊天客户端，用套接字就可以实现。不过还是推荐用高级工具，如Twisted；如果你对这类知识没有一点儿概念，可能有点小困难，坚持一下就会好，多试几次准明白。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="一个简单Python客户端">
+<a class="anchor" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95Python%E5%AE%A2%E6%88%B7%E7%AB%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>一个简单Python客户端<a class="anchor-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95Python%E5%AE%A2%E6%88%B7%E7%AB%AF"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面我们将用<code>readline()</code>函数读取用户的消息，然后通过<code>print()</code>函数显示在命令行上。这和Telnet没啥区别——都是命令行界面显示消息——只是我们从底层的套接字开始做起。</p>
+<p>这需要一些标准模块：<code>socket</code>，<code>sys</code>（<code>sys.stdin</code>提供输入文件接口）和<code>select</code>模块等待消息出现。新建一个客户端文件<code>client.py</code>：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">select</span><span class="o">,</span> <span class="nn">socket</span><span class="o">,</span> <span class="nn">sys</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这个程序没有其他依赖关系；所有平台的Python都支持。</p>
+<blockquote>
+<p>不过Windows里面的<code>select</code>，由于其代码实现方式不同，不能把文件描述器调整为套接字接受的样式。所以这个客户端就不能运行了，不过这个客户端我们最后也不会用，所以不要担心，如果你用的是Windows。</p>
+</blockquote>
+<p>现在，我们来连接服务然后用<code>CONNECT</code>对接：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">s</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+<span class="n">s</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="mi">9096</span><span class="p">))</span>
+<span class="n">s</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s2">"CONNECT"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>然后就是等待两类消息，一类是标准输入（用户输入的文字），一类<code>s</code>套接字（服务器发送消息）。等待可以用<code>select.select()</code>实现：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rlist</span> <span class="o">=</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">read</span><span class="p">,</span> <span class="n">write</span><span class="p">,</span> <span class="n">fail</span> <span class="o">=</span> <span class="n">select</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">rlist</span><span class="p">,</span> <span class="p">(),</span> <span class="p">())</span>
+    <span class="k">for</span> <span class="n">sock</span> <span class="ow">in</span> <span class="n">read</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sock</span> <span class="o">==</span> <span class="n">s</span><span class="p">:</span>  <span class="c1"># receive message from server</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># send message entered by user</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="n">s</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>然后，服务器根据收到的最新数据进行反馈，我们可以把服务器发送的信息显示到屏幕上，或者如果是用户发送的消息就发送到服务器。其实这就是Telnet做的事情，只是缺少错误异常检测部分。</p>
+<p>你会发现底层的模块实现客户端并没有我们想象的困难。但是相比高级模块如Twisted，原始套接字代码还是冗长的。但是这里显示了客户端工作的原理，其他任何高级工具都是这里实现的，高级工具也不过是通过底层的套接字实现，然后加上方便使用的API而已。</p>
+<blockquote>
+<p>注意这里我们没有加异常检测部分，因为代码可能增加2-3倍，感兴趣的可以练习一下。
+网络是非常容易出错的；比其他IO都脆弱。因此，如果你打算做一个类似于Skype那样的商业软件，你的代码里面将充斥异常检测和测试：比如丢包，防火墙问题等等。不论你的架构设计的多么好，网络服务想获得极高的可靠性很难。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="用Twisted实现">
+<a class="anchor" href="#%E7%94%A8Twisted%E5%AE%9E%E7%8E%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>用Twisted实现<a class="anchor-link" href="#%E7%94%A8Twisted%E5%AE%9E%E7%8E%B0"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>纯Python代码写的客户端不太适合Kivy，原因就是主循环部分（<code>while True:</code>）。要让这个循环与Kivy的事件循环协同运作，还得做些事情。</p>
+<p>不过，Twisted的优势可以很好的弥补这一点，实现同样的网络模块可以同时作用于服务器和客户端，使得代码更统一。关键在于Twisted可以与Kivy的事件循环协同运作，首先让我们把Twisted相关模块导入：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.support</span> <span class="kn">import</span> <span class="n">install_twisted_reactor</span>
+
+<span class="n">install_twisted_reactor</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span><span class="p">,</span> <span class="n">protocol</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这段代码要放在<code>main.py</code>文件的最上面。下面我们用Twisted来实现：</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="ChatClient和ChatClientFactory">
+<a class="anchor" href="#ChatClient%E5%92%8CChatClientFactory" aria-hidden="true"><span class="octicon octicon-link"></span></a>ChatClient和ChatClientFactory<a class="anchor-link" href="#ChatClient%E5%92%8CChatClientFactory"> </a>
+</h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>用Twisted实现工作量很少，因为这个框架为网络相关的每一件事情都做了很好的接口，这些类通过简单的连接就可以完成工作。</p>
+<p><code>ClientFactory</code>的子类<code>ChatClientFactory</code>可以在初始化阶段储存Kivy app的实例，这样我们就可以向它传递事件。代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">ChatClientFactory</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">ClientFactory</span><span class="p">):</span>
+    <span class="n">protocol</span> <span class="o">=</span> <span class="n">ChatClient</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">app</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>ChatClient</code>类监听Twisted的<code>connectionMade</code>和<code>dataReceived</code>事件，然后发送到Kivy app：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">ChatClient</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">connectionMade</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"CONNECT"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">on_connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">dataReceived</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">on_message</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>注意那个无所不在的<code>CONNECT</code>握手信号。</p>
+<p>这和前面的套接字写法很不同，是吧？而且和前面的<code>server.py</code>很像。但是，我们只是把事件传递给aoo对象，并没有处理事件。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="加入UI">
+<a class="anchor" href="#%E5%8A%A0%E5%85%A5UI" aria-hidden="true"><span class="octicon octicon-link"></span></a>加入UI<a class="anchor-link" href="#%E5%8A%A0%E5%85%A5UI"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>要看到app的全貌，我们还要把UI也加进来。<code>chat.kv</code>文件如下：</p>
+<div class="highlight"><pre><span></span><span class="nt">Button</span><span class="p">:</span> <span class="c1"># Connect button, found on login screen</span>
+    <span class="nt">text</span><span class="p">:</span> <span class="s">'Connect'</span>
+    <span class="nt">on_press</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">app.connect()</span>
+<span class="nt">Button</span><span class="p">:</span> <span class="c1"># Disconnect button, on chatroom screen</span>
+    <span class="nt">text</span><span class="p">:</span> <span class="s">'Disconnect'</span>
+    <span class="nt">on_press</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">app.disconnect()</span>
+<span class="nt">TextInput</span><span class="p">:</span> <span class="c1"># Message input, on chatroom screen</span>
+    <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">message</span>
+    <span class="nt">on_text_validate</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">app.send_msg()</span>
+<span class="nt">Button</span><span class="p">:</span> <span class="c1"># Message send button, on chatroom screen</span>
+    <span class="nt">text</span><span class="p">:</span> <span class="s">'Send'</span>
+    <span class="nt">on_press</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">app.send_msg()</span>
+</pre></div>
+<p>注意按钮不会再切换屏幕了，相反它们调用<code>app</code>的方法，类似于<code>ChatClient</code>事件处理。</p>
+<p>完成这些之后，我们需要实现Kivy应用类里面的5个方法：两个是Twisted代码中的服务器生成事件（<code>on_connect</code>和<code>on_message</code>），三个是用户接口事件（<code>connect</code>，<code>disconnect</code>和<code>send_msg</code>）。这样才能让聊天app真正可以用。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="客户端的设计思路">
+<a class="anchor" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF" aria-hidden="true"><span class="octicon octicon-link"></span></a>客户端的设计思路<a class="anchor-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%80%9D%E8%B7%AF"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>当我们简单写一些程序运行逻辑：从<code>connect()</code>到<code>disconnect()</code>。</p>
+<p>在<code>connect()</code>方法里面，我们把<strong>Server</strong>和<strong>Nickname</strong>参数作为用户输入。<strong>Nickname</strong>参数被储存到<code>self.nick</code>，Twisted客户端连接到具体的服务器地址：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">ChatApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">host</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nick</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">nickname</span><span class="o">.</span><span class="n">text</span>
+        <span class="n">reactor</span><span class="o">.</span><span class="n">connectTCP</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="mi">9096</span><span class="p">,</span> <span class="n">ChatClientFactory</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>调用<code>ChatClient.connectionMade()</code>函数，把控件传递到<code>on_connect()</code>方法上。我们将用事件来储存<code>self.conn</code>连接，然后切换屏幕。前面提到过，按钮不再直接切换屏幕，而且通过事件handler实现：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># From here on these are methods of the ChatApp class</span>
+<span class="k">def</span> <span class="nf">on_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">conn</span> <span class="o">=</span> <span class="n">conn</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="s2">"chatroom"</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在主要部分就是收发信息。很简单，就是从<code>TextInput</code>发信息，把<code>self.nick</code>加上，发送给服务器。最后把信息显示出来，并且清空<code>TextInput</code>。</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">send_msg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">text</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nick</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">chat_logs</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="s2">"</span><span class="si">%s</span><span class="s2"> says: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nick</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">""</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>接受消息更简单，因为我们不会保持这些内容，所有就是把消息显示到屏幕上：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">on_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">chat_logs</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="n">msg</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>最后一个方法就是<code>disconnect()</code>：关闭连接，清理所有内容回到初始界面。这样用户就可以重新连接其他服务器了。</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">loseConnection</span><span class="p">()</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">conn</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="s2">"login"</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">chat_logs</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">""</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这样程序就搞定了。</p>
+<blockquote>
+<p>提示：
+测试的时候，<code>server.py</code>文件应该持续运行，但是我们的app就不能终止连接了。最终结果就是app停留在登录界面，不再调用<code>on_connect()</code>，用户也不能到聊天室界面。
+还有，在Android上面测试的时候，确定你的服务器IP地址，不是<code>127.0.0.1</code>，只要局域网设备才这样，在Android设备上不一样。可以用<code>ifconfig</code>查询（Windows上是<code>ipconfig</code>）。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="客户端交互">
+<a class="anchor" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BA%A4%E4%BA%92" aria-hidden="true"><span class="octicon octicon-link"></span></a>客户端交互<a class="anchor-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BA%A4%E4%BA%92"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>前面做的Telnet、两个客户端虽然实现方式不同，却可以通信，因为其底层的原理基本一致。</p>
+<p>类似于互联网的处理方式：只要你用HTTP协议，相关的服务器和客户端就可以交互：网页服务器、浏览器、搜索引擎等等。</p>
+<p>协议是更高级的API，与语言、系统无关，应该选一个流行的用。并不是每个网络开发者都熟悉微软2007年发布的Silverlight协议，但大家都知道1991年发布的HTTP。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="增强视觉体验">
+<a class="anchor" href="#%E5%A2%9E%E5%BC%BA%E8%A7%86%E8%A7%89%E4%BD%93%E9%AA%8C" aria-hidden="true"><span class="octicon octicon-link"></span></a>增强视觉体验<a class="anchor-link" href="#%E5%A2%9E%E5%BC%BA%E8%A7%86%E8%A7%89%E4%BD%93%E9%AA%8C"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在app已经可以运行了，我们把聊天窗口改善一下。可以用Kivy的<strong>BBCode</strong>来修饰。</p>
+<p>让我们给每个用户加个颜色，这样方便用户区分所有人。我们同样使用<strong>扁平化UI</strong>的配色方式。</p>
+<p>当前用户发送的信息不会从服务器发给自己，是通过客户端代码添加到对话内容里的。所以，我们要把当前用户名加一个固定的颜色。</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"7F8C8D"</span><span class="p">,</span> <span class="s2">"C0392B"</span><span class="p">,</span> <span class="s2">"2C3E50"</span><span class="p">,</span> <span class="s2">"8E44AD"</span><span class="p">,</span> <span class="s2">"27AE60"</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">Chat</span><span class="p">(</span><span class="n">protocol</span><span class="o">.</span><span class="n">Protocol</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">connectionMade</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">colors</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>通过一个无限循序，我们把颜色依次加到用户名上，循环使用。如果你熟悉Python的<code>itertools</code>模块，你可以这么写：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">itertools</span>
+
+<span class="n">colors</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">cycle</span><span class="p">((</span><span class="s2">"7F8C8D"</span><span class="p">,</span> <span class="s2">"C0392B"</span><span class="p">,</span> <span class="s2">"2C3E50"</span><span class="p">,</span> <span class="s2">"8E44AD"</span><span class="p">,</span> <span class="s2">"27AE60"</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">connectionMade</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+    <span class="c1"># next(colors) in Python 3</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在，我们再把颜色添加到用户名上，很简单，就是<code>[b][color]Nickname[/
+color][/b]</code>。</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">transports</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">t</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="p">:</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"[b][color=</span><span class="si">{}</span><span class="s2">]</span><span class="si">{}</span><span class="s2">:[/color][/b] </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><code>main.py</code>里面的客户端也同时更新了。我们还要为当前发消息的用户增加一个固定的颜色：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">send_msg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">text</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">conn</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nick</span><span class="p">,</span> <span class="n">msg</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">chat_logs</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="s2">"[b][color=2980B9]</span><span class="si">{}</span><span class="s2">:[/color][/b] </span><span class="si">{}</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nick</span><span class="p">,</span> <span class="n">msg</span>
+    <span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>然后，我们把聊天记录部件<code>ChatLabel</code>的<code>markup</code>属性设置为<code>True</code>：</p>
+<div class="highlight"><pre><span></span><span class="nt">&lt;ChatLabel@Label&gt;</span><span class="p">:</span>
+    <span class="nt">markup</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">True</span>
+</pre></div>
+<p>这样就可以了。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="转义字符处理">
+<a class="anchor" href="#%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%E5%A4%84%E7%90%86" aria-hidden="true"><span class="octicon octicon-link"></span></a>转义字符处理<a class="anchor-link" href="#%E8%BD%AC%E4%B9%89%E5%AD%97%E7%AC%A6%E5%A4%84%E7%90%86"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>和HTML一样，用户发送的消息可以会出现转义字符。比如BBCode之类的符号。要解决这个问题，我们可以用Kivy的<code>kivy.utils.escape_markup</code>来解决。但是还不是很完整，我们可以稍微调整一下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">esc_markup</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">msg</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"&amp;"</span><span class="p">,</span> <span class="s2">"&amp;amp;"</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"["</span><span class="p">,</span> <span class="s2">"&amp;bl;"</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"]"</span><span class="p">,</span> <span class="s2">"&amp;br;"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这样所有的Kivy里面的转义字符转变成HTML字符替代，这样遇到这些字符时就会不会发生转义。在<code>server.py</code>文件里面，相应的代码需要改变：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">t</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"[b][color=</span><span class="si">{}</span><span class="s2">]</span><span class="si">{}</span><span class="s2">:[/color][/b] </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">esc_markup</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>在<code>main.py</code>里面，实现是类似的：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">ids</span><span class="o">.</span><span class="n">chat_logs</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="s2">"[b][color=2980B9]</span><span class="si">{}</span><span class="s2">:[/color][/b] </span><span class="si">{}</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">nick</span><span class="p">,</span> <span class="n">esc_markup</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>现在bug修复了，用户可以安全的发从BBCode消息了。</p>
+<p><img src="/images/copied_from_nb/kbpic/4.7chatlast.png" alt="chatlast"></p>
+<blockquote>
+<p>其实这类bug在互联网产品中很常见。类似于跨站脚本（cross-site
+scripting，XSS），可以造成比修改字体更恐怖的结果。
+不要忘了净化所有产品的用户输入，因为用户一不小心用了命令行就麻烦了。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="后续任务">
+<a class="anchor" href="#%E5%90%8E%E7%BB%AD%E4%BB%BB%E5%8A%A1" aria-hidden="true"><span class="octicon octicon-link"></span></a>后续任务<a class="anchor-link" href="#%E5%90%8E%E7%BB%AD%E4%BB%BB%E5%8A%A1"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这些都只是开始，还有很多必须的事情没做。比如用户名唯一，没有历史记录和离线消息的支持。如果网络质量不好的话，消息总会丢失。</p>
+<p>但是更重要的是，这些问题都可以解决，我们已经有了产品原型。在产品开始阶段，原型是非常具有吸引力，先让轮子转起来，就有了动力；如果你因为好玩而编程，这种感觉更明显，因为你看到了一个可以使用的产品了（相反如果只是一块块代码，不能使用，那感觉很糟糕）。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="总结">
+<a class="anchor" href="#%E6%80%BB%E7%BB%93" aria-hidden="true"><span class="octicon octicon-link"></span></a>总结<a class="anchor-link" href="#%E6%80%BB%E7%BB%93"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>这一章我们看到了CS架构的应用开发（其实就网络编程）其实也不复杂。甚至底层的套接字代码也很容易搞定。</p>
+<p>当然，涉及到网络时会遇到很多灰色地带不容易搞定。包括高时延的处理，中断连接的恢复和多节点的数据同步等（尤其是点对点或多主机时，每一个机器只有一部分数据）。</p>
+<p>另一个目前比较新的网络问题就是政治方面的，政府已经开始实施互联网管制，包括出于安全的原因（比如，封杀恐怖主义网络资源）到完全无厘头（封杀教育网站像维基百科，主要的新闻网站或视频游戏网站）。这种连接问题会产生很高的间接伤害，如果CDN（content delivery network）挂了，很多使用CDN链接的网站就不能正常显示了。你懂的。</p>
+<p>但是，只要踏踏实实的坚持下去，一定可以克服重重困难把优质产品发布给客户。而且，Python丰富的特性可以减轻你的负担，本章的聊天app已经充分体现了这点：很多底层的细节都可以通过Kivy和Twisted轻松搞定。</p>
+<p>互联网领域有无限可能，永无止境。下一章我们继续网络相关的尝试，敬请期待。</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="muxuezi/air"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/jupyter/kivy/android/ios/2019/05/01/kivy-ch4-chat-app.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

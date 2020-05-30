@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Kivy指南（Kivy Blueprints） | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Kivy指南（Kivy Blueprints）" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Kivy是一个图形用户界面（graphical user interface，GUI）工具用来轻松创建跨平台的Python应用" />
+<meta property="og:description" content="Kivy是一个图形用户界面（graphical user interface，GUI）工具用来轻松创建跨平台的Python应用" />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/01/01/kivy-perface.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/01/01/kivy-perface.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/0.2.hellokivy.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-01-01T00:00:00-06:00" />
+<script type="application/ld+json">
+{"description":"Kivy是一个图形用户界面（graphical user interface，GUI）工具用来轻松创建跨平台的Python应用","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/01/01/kivy-perface.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/01/01/kivy-perface.html","headline":"Kivy指南（Kivy Blueprints）","dateModified":"2019-01-01T00:00:00-06:00","datePublished":"2019-01-01T00:00:00-06:00","image":"https://asyncfor.com/kbpic/0.2.hellokivy.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Kivy指南（Kivy Blueprints） | fastpages</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Kivy指南（Kivy Blueprints）" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Kivy是一个图形用户界面（graphical user interface，GUI）工具用来轻松创建跨平台的Python应用" />
+<meta property="og:description" content="Kivy是一个图形用户界面（graphical user interface，GUI）工具用来轻松创建跨平台的Python应用" />
+<link rel="canonical" href="https://asyncfor.com/jupyter/kivy/android/ios/2019/01/01/kivy-perface.html" />
+<meta property="og:url" content="https://asyncfor.com/jupyter/kivy/android/ios/2019/01/01/kivy-perface.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:image" content="https://asyncfor.com/kbpic/0.2.hellokivy.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-01-01T00:00:00-06:00" />
+<script type="application/ld+json">
+{"description":"Kivy是一个图形用户界面（graphical user interface，GUI）工具用来轻松创建跨平台的Python应用","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/kivy/android/ios/2019/01/01/kivy-perface.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/kivy/android/ios/2019/01/01/kivy-perface.html","headline":"Kivy指南（Kivy Blueprints）","dateModified":"2019-01-01T00:00:00-06:00","datePublished":"2019-01-01T00:00:00-06:00","image":"https://asyncfor.com/kbpic/0.2.hellokivy.png","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="fastpages" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head><body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About Me</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Kivy指南（Kivy Blueprints）</h1><p class="page-description">Kivy是一个图形用户界面（graphical user interface，GUI）工具用来轻松创建跨平台的Python应用</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2019-01-01T00:00:00-06:00" itemprop="datePublished">
+        Jan 1, 2019
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/categories/#jupyter">jupyter</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Kivy">Kivy</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#Android">Android</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/categories/#iOS">iOS</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/muxuezi/air/tree/master/_notebooks/2019-01-01-kivy-perface.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/muxuezi/air/master?filepath=_notebooks%2F2019-01-01-kivy-perface.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/muxuezi/air/blob/master/_notebooks/2019-01-01-kivy-perface.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h2"><a href="#前言">前言 </a></li>
+<li class="toc-entry toc-h2"><a href="#一次编写，到处运行">一次编写，到处运行 </a></li>
+<li class="toc-entry toc-h2"><a href="#本书内容简介">本书内容简介 </a></li>
+<li class="toc-entry toc-h2"><a href="#环境设置">环境设置 </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#Python">Python </a></li>
+<li class="toc-entry toc-h3"><a href="#安装并运行Kivy">安装并运行Kivy </a></li>
+</ul>
+</li>
+<li class="toc-entry toc-h2"><a href="#Hello,-Kivy">Hello, Kivy </a>
+<ul>
+<li class="toc-entry toc-h3"><a href="#代码">代码 </a></li>
+<li class="toc-entry toc-h3"><a href="#布局">布局 </a></li>
+</ul>
+</li>
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2019-01-01-kivy-perface.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>作者：<a href="https://github.com/mvasilkov">Mark Vasilkov</a></p>
+<p>中文译者：<a href="https://github.com/muxuezi">Todd Tao</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="前言">
+<a class="anchor" href="#%E5%89%8D%E8%A8%80" aria-hidden="true"><span class="octicon octicon-link"></span></a>前言<a class="anchor-link" href="#%E5%89%8D%E8%A8%80"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>移动应用开发几年前就是热点了，现在是个软件用户就想要移动版。桌面操作系统也受到影响，跨平台的软件成为新常态。甚至通常局限于微软桌面操作系统的游戏开发者也开始找一些Mac和Linux平台上的工作了（比如Steam，目前有Mac游戏近4000个，SteamOS+Linux游戏2000多个）。</p>
+<p>这对新手和个人开发者是大利好：跨平台的支持可以增加用户，销售量自然会更好。</p>
+<p>但是，写可移植的软件是非常耗费资源的过程，对小公司和个人开发者的影响比大公司更甚。</p>
+<p>尤其是许多平台都有不同语言的SDK：iOS用Objective-C和Swift，Android用Java，MS用.Net，更多是C#来开发软件。</p>
+<p>使用这些工具可以通过系统功能来制作相应的原生应用，但是跨平台的代码重用变得十分困难。就算你精通所有语言和相关的操作，代码的移植仍然是一件复杂的事情。</p>
+<!-- TEASER_END-->
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="一次编写，到处运行">
+<a class="anchor" href="#%E4%B8%80%E6%AC%A1%E7%BC%96%E5%86%99%EF%BC%8C%E5%88%B0%E5%A4%84%E8%BF%90%E8%A1%8C" aria-hidden="true"><span class="octicon octicon-link"></span></a>一次编写，到处运行<a class="anchor-link" href="#%E4%B8%80%E6%AC%A1%E7%BC%96%E5%86%99%EF%BC%8C%E5%88%B0%E5%A4%84%E8%BF%90%E8%A1%8C"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>因此，统一多平台支持开发工具呼之欲出。无独有偶，1995年的Sun公司就为解决类似问题发明了Java。其口号为“Write once, run anywhere”（一次编写，到处运行，WORA），虽然Java已经20年了，很多人都在各种纪念。但是其啰嗦的代码仍然没能实现当年的豪言壮语，一些程序员的改编版本更能表达人们的感受——“write once, run away”（一次编写，到处跑偏），有一些放弃Java转向了更好的程序语言，比如Python。</p>
+<p>本书主题Kivy是一个图形用户界面（graphical user interface，GUI）工具用来轻松创建跨平台的Python应用。其主要特征如下：</p>
+<ul>
+<li>
+<strong>兼容性</strong>：Kivy支持多平台，包括Windows，MacOS，Linux，Android和iOS，均出自一个工具</li>
+<li>
+<strong>原生界面</strong>：Kivy填补了不同输入方式间的缝隙，允许你用相同的代码处理不同的输入方式，包括鼠标和触摸屏</li>
+<li>
+<strong>快速图形硬件加速</strong>：OpenGL渲染让Kivy可以胜任图形需求高的应用，如视频游戏，还可以通过平滑变换改善用户体验</li>
+<li>
+<strong>使用Python开发</strong>：Kivy的app是用Python写的，轻松简单，可移植性良好，Python的标准库和<a href="https://pypi.python.org/pypi">PyPI</a>第三方丰富模块都可以使用</li>
+</ul>
+<p>Kivy可以看作许多模块的超集：许多知名的模块如Pygame，SDL，GStreamer都是Kivy的组成部分。但是，Kivy的API更加高级、统一，方便使用。</p>
+<p>Kivy是开源的，其源代码在<a href="https://github.com/kivy/kivy">GitHub上</a>。你可以fork一下，帮忙打补丁，也可以增加新特性。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="本书内容简介">
+<a class="anchor" href="#%E6%9C%AC%E4%B9%A6%E5%86%85%E5%AE%B9%E7%AE%80%E4%BB%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>本书内容简介<a class="anchor-link" href="#%E6%9C%AC%E4%B9%A6%E5%86%85%E5%AE%B9%E7%AE%80%E4%BB%8B"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>本书分9章。</p>
+<ul>
+<li>
+<a href="kivy-ch1-clock-app.html"><em>第1章，时钟app</em></a>对Kivy应用开发做简要介绍。包括Kivy语言、布局、部件和计时器。本章会做一个时钟app，与手机上的时钟应用类似</li>
+<li>
+<a href="kivy-ch2-paint-app.html"><em>第2章，画图app</em></a>对Kivy框架的部件和功能进一步挖掘。通过制作画图app学习自定义部件，在画布上画任意形状，处理多点触控事件等</li>
+<li>
+<a href="kivy-ch3-sound-recorder-for-android.html"><em>第3章，Android录音app</em></a>是用Kivy开发一个Android应用。通过Pyjnius模块实现Python与Java的交互，调用Android的API来实现Kivy用户界面</li>
+<li>
+<a href="kivy-ch4-chat-app.html"><em>第4章，聊天app</em></a>介绍Kivy的网络应用开发，用Python写一个简单通信协议，利用Twisted框架建立服务器-客户端模型，实现一个Kivy聊天app</li>
+<li>
+<a href="kivy-ch5-remote-desktop-app.html"><em>第5章，远程桌面app</em></a>用另一种方式写服务器-客户端应用。这章通过HTTP协议来构建模型。首先建立命令行模式的HTTP服务器，然后再用Kivy实现远程桌面app</li>
+<li>
+<a href="kivy-ch6-2048-app.html"><em>第6章，2048 app</em></a>是实现一个2048游戏。我们将演示Kivy更复杂的功能，用Kivy属性实现数据绑定和触摸手势处理来创建自定义部件</li>
+<li>
+<a href="kivy-ch7-flappy-bird-app.html"><em>第7章，飞翔的小鸟app</em></a>是另一个Kivy游戏，实现著名的Flappy Bird游戏。我们会学习纹理坐标的使用，声音效果和碰撞检测等知识</li>
+<li>
+<a href="kivy-ch8-shaders-app.html"><em>第8章，着色器app</em></a>介绍Kivy应用中如何GLSL着色器。这一章首先介绍OpenGL原始类型的概念，如索引和顶点，然后写出可以直接在GPU上运行代码，最后实现一个满天星屏保app</li>
+<li>
+<a href="kivy-ch9-shmup-app.html"><em>第9章，射击app</em></a>延续上一章的内容，用GLSL着色器做游戏。首先实现一个可重用的粒子系统，然后通过粒子系统构建游戏角色。前面介绍过的许多内容在这个游戏中都会得到体现，如碰撞检测，触摸屏控制，声音效果等</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="环境设置">
+<a class="anchor" href="#%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE" aria-hidden="true"><span class="octicon octicon-link"></span></a>环境设置<a class="anchor-link" href="#%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面简要介绍Kivy的安装方法，包括Mac，Linux和Windows系统。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Python">
+<a class="anchor" href="#Python" aria-hidden="true"><span class="octicon octicon-link"></span></a>Python<a class="anchor-link" href="#Python"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Kivy同时支持Python2和Python3，2020年Python2停止维护，建议使用Python3。</p>
+<blockquote>
+<p>许多平台不需要单独安装Python：比如Mac OS上自带Python2，Windows上和Kivy打包在一起，Linux（尤其是Ubuntu）支持<code>apt-get</code>安装。</p>
+</blockquote>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="安装并运行Kivy">
+<a class="anchor" href="#%E5%AE%89%E8%A3%85%E5%B9%B6%E8%BF%90%E8%A1%8CKivy" aria-hidden="true"><span class="octicon octicon-link"></span></a>安装并运行Kivy<a class="anchor-link" href="#%E5%AE%89%E8%A3%85%E5%B9%B6%E8%BF%90%E8%A1%8CKivy"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Kviy的最新稳定版本可以在<a href="http://kivy.org/">官方网站</a>找到。如下图所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/0.1.kivydownload.png" alt="kivydownload"></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下载安装包后，具体平台安装方法可以看图中第三列指令，简要介绍如下：</p>
+<ul>
+<li>Mac：<ol>
+<li>打开命令行窗口</li>
+<li>执行<code>kivy</code>
+</li>
+<li>Python提示符出现后输入<code>import kivy</code>
+</li>
+<li>如果安装顺利会出现<code>[INFO] Kivy v1.9.0</code>
+</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li>Linux：<ol>
+<li>打开命令行窗口</li>
+<li>执行<code>python</code>
+</li>
+<li>Python提示符出现后输入<code>import kivy</code>
+</li>
+<li>如果安装顺利会出现<code>[INFO] Kivy v1.9.0</code>
+</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li>Windows：<ol>
+<li>双击<strong>kivy.bat</strong>文件</li>
+<li>执行<code>python</code>
+</li>
+<li>Python提示符出现后输入<code>import kivy</code>
+</li>
+<li>如果安装顺利会出现<code>[INFO] Kivy v1.9.0</code>    </li>
+</ol>
+</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>运行Kivy应用很简单：</p>
+<ul>
+<li>Mac上用<code>kivy main.py</code>
+</li>
+<li>Linux上用<code>python main.py</code>
+</li>
+<li>Windows上用<code>kivy.bat main.py</code>（或者把<strong>main.py</strong>拖到<strong>kivy.bat</strong>上运行）</li>
+</ul>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Hello,-Kivy">
+<a class="anchor" href="#Hello,-Kivy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hello, Kivy<a class="anchor-link" href="#Hello,-Kivy"> </a>
+</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>下面我们演示一个Kivy app的<code>hello world</code>版。</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="代码">
+<a class="anchor" href="#%E4%BB%A3%E7%A0%81" aria-hidden="true"><span class="octicon octicon-link"></span></a>代码<a class="anchor-link" href="#%E4%BB%A3%E7%A0%81"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>程序的入口是<code>main.py</code>，代码如下：</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">kivy.app</span> <span class="kn">import</span> <span class="n">App</span>
+
+
+<span class="k">class</span> <span class="nc">HelloApp</span><span class="p">(</span><span class="n">App</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">HelloApp</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="布局">
+<a class="anchor" href="#%E5%B8%83%E5%B1%80" aria-hidden="true"><span class="octicon octicon-link"></span></a>布局<a class="anchor-link" href="#%E5%B8%83%E5%B1%80"> </a>
+</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>布局文件是应用类名的去掉<code>App</code>的小写部分加<code>.kv</code>，也就是<code>hello.kv</code>，代码如下所示：</p>
+<div class="highlight"><pre><span></span><span class="nt">Label</span><span class="p">:</span>
+    <span class="nt">text</span><span class="p">:</span> <span class="s">'Hello,</span><span class="nv"> </span><span class="s">Kivy'</span>
+</pre></div>
+<p>这里只用了一个Kivy标签部件<code>Label</code>，属性是<code>text</code>。布局文件用一种简洁、声明式的语言定义复杂的布局，后面会介绍。</p>
+<p>运行程序，看到的界面如下所示：</p>
+<p><img src="/images/copied_from_nb/kbpic/0.2.hellokivy.png" alt="kivydownload"></p>
+<p>下面就让我们开始Kivy之旅吧！Enjoy</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="muxuezi/air"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/jupyter/kivy/android/ios/2019/01/01/kivy-perface.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
