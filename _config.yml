@@ -7,7 +7,7 @@
 # https://learnxinyminutes.com/docs/yaml/
 
 title: 神烦小宝
-description: 用Jupyter Notebooks写博客
+description: 用Jupyter Notebook写博客
 github_username: muxuezi
 # you can comment the below line out if your repo name is not different than your baseurl
 github_repo: "air"

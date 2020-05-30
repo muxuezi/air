@@ -4,7 +4,7 @@ title: About Me
 permalink: /about/
 ---
 
-奶爸，Pythonista一枚，数据从业者（爬虫、ETL、EDA、Web）
+奶爸，Pythonista，数据从业者（爬虫、ETL、EDA、Web）
 
 热爱生活，喜欢翻译，擅长看文档
 
