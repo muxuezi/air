@@ -1,1 +1,1 @@
-Sitemap: https://asyncfor.com/air/sitemap.xml
+Sitemap: https://asyncfor.com/sitemap.xml
