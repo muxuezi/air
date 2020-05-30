@@ -1,1 +1,1 @@
-Sitemap: https://asyncfor.com/sitemap.xml
+Sitemap: https://asyncfor.com/blog/sitemap.xml
