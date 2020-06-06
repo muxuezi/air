@@ -1,64 +1,67 @@
 ---
 toc: true
 layout: post
-description: A minimal example of using markdown with fastpages.
+description: fastpages实现markdown文章示例
 categories: [markdown]
-title: An Example Markdown Post
+
+title: Markdown文章示例
 ---
-# Example Markdown Post
 
-## Basic setup
+# Markdown文章示例
 
-Jekyll requires blog post files to be named according to the following format:
+## 基本设置
+
+Jekyll要求文件名称进行如下配置：
 
 `YEAR-MONTH-DAY-filename.md`
 
-Where `YEAR` is a four-digit number, `MONTH` and `DAY` are both two-digit numbers, and `filename` is whatever file name you choose, to remind yourself what this post is about. `.md` is the file extension for markdown files.
+其中`YEAR`是4位年份(2020)，`MONTH`(06) 和 `DAY`(04) 都是两位数字，`filename`文件名随便取，方便查询即可。`.md` 是markdown文件后缀。
 
-The first line of the file should start with a single hash character, then a space, then your title. This is how you create a "*level 1 heading*" in markdown. Then you can create level 2, 3, etc headings as you wish but repeating the hash character, such as you see in the line `## File names` above.
+文件正文第一行标题需要用`#`开始，后面跟空格，在增加标题内容。这样就实现了markdown的*一级标题*。然后也可以用多个`#`创建2、3级等标题，例如上面的二级标题`## 基本设置`。
 
-## Basic formatting
 
-You can use *italics*, **bold**, `code font text`, and create [links](https://www.markdownguide.org/cheat-sheet/). Here's a footnote [^1]. Here's a horizontal rule:
+## 基本样式
+
+可以实现 *斜体*, **加粗**, `代码字体`，还有[链接](https://www.markdownguide.org/cheat-sheet/)，以及尾注[^1]和水平线：
 
 ---
 
-## Lists
+## 列表
 
-Here's a list:
+一个列表
 
 - item 1
 - item 2
 
-And a numbered list:
+带序号列表
 
 1. item 1
 1. item 2
 
-## Boxes and stuff
+## 提示文字（Boxes and stuff）
 
-> This is a quotation
+> 这是提示文字
 
 {% include alert.html text="You can include alert boxes" %}
 
-...and...
+...以及...
 
 {% include info.html text="You can include info boxes" %}
 
-## Images
+## 图像
 
 ![]({{ site.baseurl }}/images/logo.png "fast.ai's logo")
 
-## Code
+## 代码
 
-You can format text and code per usual 
+可以配置文字和代码格式
 
-General preformatted text:
+一般文字：
 
     # Do a thing
     do_thing()
 
-Python code and output:
+Python代码和输出：
 
 ```python
 # Prints '2'
@@ -67,7 +70,7 @@ print(1+1)
 
     2
 
-Formatting text as shell commands:
+shell命令格式：
 
 ```shell
 echo "hello world"
@@ -75,7 +78,7 @@ echo "hello world"
 wget https://example.com/cat_photo1.png
 ```
 
-Formatting text as YAML:
+YAML格式：
 
 ```yaml
 key: value
@@ -83,19 +86,19 @@ key: value
 ```
 
 
-## Tables
+## 表格
 
 | Column 1 | Column 2 |
 |-|-|
 | A thing | Another thing |
 
 
-## Tweetcards
+## Tweet卡片
 
 {% twitter https://twitter.com/jakevdp/status/1204765621767901185?s=20 %}
 
 
-## Footnotes
+## 尾注
 
 
 
