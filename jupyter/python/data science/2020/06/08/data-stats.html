@@ -7,30 +7,30 @@
 <meta name="generator" content="Jekyll v4.0.0" />
 <meta property="og:title" content="Python数据科学分享系列——4.数理统计" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="用Jupyter Notebook写博客" />
-<meta property="og:description" content="用Jupyter Notebook写博客" />
+<meta name="description" content="Python与概率论、数理统计的碰撞，发扬了概率编程的范式，让贝叶斯推断、统计模型更精彩，新工具方兴未艾——pymc4、edward2、numpyro" />
+<meta property="og:description" content="Python与概率论、数理统计的碰撞，发扬了概率编程的范式，让贝叶斯推断、统计模型更精彩，新工具方兴未艾——pymc4、edward2、numpyro" />
 <link rel="canonical" href="https://asyncfor.com/jupyter/python/data%20science/2020/06/08/data-stats.html" />
 <meta property="og:url" content="https://asyncfor.com/jupyter/python/data%20science/2020/06/08/data-stats.html" />
 <meta property="og:site_name" content="神烦小宝" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-08T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"用Jupyter Notebook写博客","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/python/data%20science/2020/06/08/data-stats.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/python/data%20science/2020/06/08/data-stats.html","headline":"Python数据科学分享系列——4.数理统计","dateModified":"2020-06-08T00:00:00-05:00","datePublished":"2020-06-08T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"description":"Python与概率论、数理统计的碰撞，发扬了概率编程的范式，让贝叶斯推断、统计模型更精彩，新工具方兴未艾——pymc4、edward2、numpyro","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/python/data%20science/2020/06/08/data-stats.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/python/data%20science/2020/06/08/data-stats.html","headline":"Python数据科学分享系列——4.数理统计","dateModified":"2020-06-08T00:00:00-05:00","datePublished":"2020-06-08T00:00:00-05:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://asyncfor.com/feed.xml" title="神烦小宝" /><link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>Python数据科学分享系列——4.数理统计 | 神烦小宝</title>
 <meta name="generator" content="Jekyll v4.0.0" />
 <meta property="og:title" content="Python数据科学分享系列——4.数理统计" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="用Jupyter Notebook写博客" />
-<meta property="og:description" content="用Jupyter Notebook写博客" />
+<meta name="description" content="Python与概率论、数理统计的碰撞，发扬了概率编程的范式，让贝叶斯推断、统计模型更精彩，新工具方兴未艾——pymc4、edward2、numpyro" />
+<meta property="og:description" content="Python与概率论、数理统计的碰撞，发扬了概率编程的范式，让贝叶斯推断、统计模型更精彩，新工具方兴未艾——pymc4、edward2、numpyro" />
 <link rel="canonical" href="https://asyncfor.com/jupyter/python/data%20science/2020/06/08/data-stats.html" />
 <meta property="og:url" content="https://asyncfor.com/jupyter/python/data%20science/2020/06/08/data-stats.html" />
 <meta property="og:site_name" content="神烦小宝" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-06-08T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"用Jupyter Notebook写博客","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/python/data%20science/2020/06/08/data-stats.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/python/data%20science/2020/06/08/data-stats.html","headline":"Python数据科学分享系列——4.数理统计","dateModified":"2020-06-08T00:00:00-05:00","datePublished":"2020-06-08T00:00:00-05:00","@context":"https://schema.org"}</script>
+{"description":"Python与概率论、数理统计的碰撞，发扬了概率编程的范式，让贝叶斯推断、统计模型更精彩，新工具方兴未艾——pymc4、edward2、numpyro","mainEntityOfPage":{"@type":"WebPage","@id":"https://asyncfor.com/jupyter/python/data%20science/2020/06/08/data-stats.html"},"@type":"BlogPosting","url":"https://asyncfor.com/jupyter/python/data%20science/2020/06/08/data-stats.html","headline":"Python数据科学分享系列——4.数理统计","dateModified":"2020-06-08T00:00:00-05:00","datePublished":"2020-06-08T00:00:00-05:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <!-- <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" /> -->
@@ -108,7 +108,7 @@ window.onload = wrap_img;
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Python数据科学分享系列——4.数理统计</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-06-08T00:00:00-05:00" itemprop="datePublished">
+    <h1 class="post-title p-name" itemprop="name headline">Python数据科学分享系列——4.数理统计</h1><p class="page-description">Python与概率论、数理统计的碰撞，发扬了概率编程的范式，让贝叶斯推断、统计模型更精彩，新工具方兴未艾——pymc4、edward2、numpyro</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-06-08T00:00:00-05:00" itemprop="datePublished">
         Jun 8, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
