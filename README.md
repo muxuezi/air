@@ -9,7 +9,7 @@ https://asyncfor.com/
 # My Blog
 
 
-_powered by [fastpages](https://github.com/fastai/fastpages)_
+_powered by [fastpages](https://github.com/fastai/fastpages)_!
 
 
 ## What To Do Next?
